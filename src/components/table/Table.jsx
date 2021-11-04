@@ -1,60 +1,65 @@
 import React from 'react';
+import {useTable} from 'react-table';
 
-function Table() {
+/* import makeData from './makeData'; */
+
+function Table({columns, data, deleteItem, updateItem}) {
+    // Use the state and functions returned from useTable to build your UI
+    const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} =
+        useTable({
+            columns,
+            data
+        });
+
+    // Render the UI for your table
     return (
-        <>
-            <section className="content" id="nav-profile">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="card">
-                                <div className="card-body">
-                                    <table
-                                        id="example2"
-                                        className="table table-bordered table-hover"
-                                    >
-                                        <thead>
-                                            <tr>
-                                                <th>Rendering engine</th>
-                                                <th>Browser</th>
-                                                <th>Platform(s)</th>
-                                                <th>Engine version</th>
-                                                <th>CSS grade</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Trident</td>
-                                                <td>Internet Explorer 4.0</td>
-                                                <td>Win 95+</td>
-                                                <td> 4</td>
-                                                <td>X</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Rendering engine</th>
-                                                <th>Browser</th>
-                                                <th>Platform(s)</th>
-                                                <th>Engine version</th>
-                                                <th>CSS grade</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                {/* <!-- /.card-body --> */}
-                            </div>
-                            {/* <!-- /.card --> */}
-                        </div>
-                        {/* /.col --> */}
-                    </div>
-                    {/* /.row --> */}
-                </div>
-                {/* /.container-fluid --> */}
-            </section>
-            {/* /.content --> */}
-        </>
+        <table className="table" {...getTableProps()}>
+            <thead>
+                {headerGroups.map((headerGroup) => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column) => (
+                            <th {...column.getHeaderProps()}>
+                                {column.render('Header')}
+                            </th>
+                        ))}
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                    prepareRow(row);
+                    return (
+                        <tr {...row.getRowProps()}>
+                            {row.cells.map((cell) => {
+                                return (
+                                    <td {...cell.getCellProps()}>
+                                        {cell.render('Cell')}
+                                    </td>
+                                );
+                            })}
+                            <td>
+                                <input
+                                    type="submit"
+                                    value="Update"
+                                    className="btn btn-warning"
+                                    onClick={() => updateItem(row.original.id)}
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="submit"
+                                    value="Delete"
+                                    className="btn btn-danger"
+                                    onClick={() => deleteItem(row.original.id)}
+                                />
+                            </td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
     );
 }
-
 export default Table;

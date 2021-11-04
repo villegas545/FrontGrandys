@@ -30,7 +30,7 @@ function Checks() {
                                 <input
                                     type="submit"
                                     value="Search"
-                                    className="form-control btn btn-primary btn-sm mr-3 text-lg"
+                                    className="form-control btn btn-danger btn-sm mr-3 text-lg"
                                 />
                             </div>
                         </div>

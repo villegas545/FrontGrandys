@@ -3,7 +3,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import Modaladduser from '@app/components/addusermodal/Modaladduser';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {getUsersAction} from '@app/store/reducers/usersDucks';
 import Table from '../components/table/Table';
 
@@ -30,7 +30,7 @@ function MyVerticallyCenteredModal(props) {
 function Users() {
     const [modalShow, setModalShow] = React.useState(false);
     const dispatch = useDispatch();
-    /* 
+
     const headers = [
         {
             col: 'Name'
@@ -42,37 +42,12 @@ function Users() {
             col: 'Password'
         },
         {col: 'Role'}
-    ]; */
-    const columns = [
-        {
-            Header: 'Name',
-            accessor: 'name'
-        },
-        {
-            Header: 'Email',
-            accessor: 'email'
-        },
-        {
-            Header: 'Password',
-            accessor: 'password'
-        },
-        {
-            Header: 'Role',
-            accessor: 'roles'
-        }
     ];
     dispatch(getUsersAction());
-    const users = useSelector((store) => store.users.array);
-    const updateItem = (id) => {
-        console.log(id);
-    };
-    const deleteItem = (id) => {
-        console.log(id);
-    };
-    /* React.useEffect(async () => {}, []); */
-    /*  const prueba = () => {
+    React.useEffect(async () => {}, []);
+    const prueba = () => {
         console.log('chido');
-    }; */
+    };
     return (
         <>
             <section className="content-header">
@@ -99,14 +74,8 @@ function Users() {
                 </div>
                 {/* <!-- /.container-fluid --> */}
             </section>
-            <Table
-                columns={columns}
-                data={users}
-                deleteItem={deleteItem}
-                updateItem={updateItem}
-            />
-            {/* <Table headers={headers} prueba={prueba} /> */}
-            {/* <input type="submit" value="test" onClick={() => prueba()} /> */}
+            <Table headers={headers} prueba={prueba} />
+            <input type="submit" value="test" onClick={() => prueba()} />
         </>
     );
 }

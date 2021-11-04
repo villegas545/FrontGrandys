@@ -6,6 +6,7 @@ function Modaladduser() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [roles, setRole] = React.useState('Employee');
+    const [message, setMessage] = React.useState(false);
 
     const submit = async (e) => {
         e.preventDefault();
@@ -16,6 +17,7 @@ function Modaladduser() {
             roles
         };
         await axios.post('http://localhost:5000/api/user', records);
+        setMessage(true);
     };
 
     return (
@@ -61,12 +63,13 @@ function Modaladduser() {
                 <div className="form-group">
                     <input
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn btn-danger"
                         value="Submit"
                     />
                 </div>
             </div>
             {/* <!-- /.card-body --> */}
+            {message ? <div>Registered</div> : null}
         </form>
     );
 }
