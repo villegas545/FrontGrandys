@@ -4,24 +4,33 @@ import {Modal} from 'react-bootstrap';
 import Modaladduser from '@app/components/addusermodal/Modaladduser';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getUsersAction} from '@app/store/reducers/usersDucks';
+import {
+    addUsersAction,
+    getUsersAction,
+    updateUsersAction,
+    deleteUsersAction,
+    recordsUpdate
+} from '@app/store/reducers/usersDucks';
 import Table from '../components/table/Table';
 
 function MyVerticallyCenteredModal(props) {
+    console.log(props);
+    const {action} = props;
     return (
         <Modal
-            {...props}
+            onHide={props.onHide}
+            show={props.show}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Register User
+                    User
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Modaladduser />
+                <Modaladduser action={action} />
             </Modal.Body>
         </Modal>
     );
@@ -29,20 +38,8 @@ function MyVerticallyCenteredModal(props) {
 
 function Users() {
     const [modalShow, setModalShow] = React.useState(false);
+    const [idState, setIdState] = React.useState(0);
     const dispatch = useDispatch();
-    /* 
-    const headers = [
-        {
-            col: 'Name'
-        },
-        {
-            col: 'Email'
-        },
-        {
-            col: 'Password'
-        },
-        {col: 'Role'}
-    ]; */
     const columns = [
         {
             Header: 'Name',
@@ -61,18 +58,37 @@ function Users() {
             accessor: 'roles'
         }
     ];
-    dispatch(getUsersAction());
+
     const users = useSelector((store) => store.users.array);
+    const [action, setAction] = React.useState(true);
+    const emptyRecords = {
+        name: '',
+        email: '',
+        password: '',
+        role: ''
+    };
+
+    const addUser = async (records) => {
+        await dispatch(addUsersAction(records));
+    };
+    const updateUser = async (records) => {
+        await dispatch(updateUsersAction(records, idState));
+    };
     const updateItem = (id) => {
+        setIdState(id);
+        setAction(false);
+        setModalShow(true);
         console.log(id);
     };
-    const deleteItem = (id) => {
-        console.log(id);
+    const deleteItem = async (id) => {
+        await dispatch(deleteUsersAction(id));
     };
-    /* React.useEffect(async () => {}, []); */
+    React.useEffect(async () => {
+        await dispatch(getUsersAction());
+    }, []);
     /*  const prueba = () => {
         console.log('chido');
-    }; */
+    };  */
     return (
         <>
             <section className="content-header">
@@ -86,12 +102,27 @@ function Users() {
                                         type="submit"
                                         value="Add User"
                                         className="form-control btn btn-danger btn-sm mr-3 text-lg"
-                                        onClick={() => setModalShow(true)}
+                                        onClick={() => {
+                                            dispatch(
+                                                recordsUpdate(emptyRecords)
+                                            );
+                                            setModalShow(true);
+                                            setAction(true);
+                                        }}
                                     />
-                                    <MyVerticallyCenteredModal
-                                        show={modalShow}
-                                        onHide={() => setModalShow(false)}
-                                    />
+                                    {action ? (
+                                        <MyVerticallyCenteredModal
+                                            show={modalShow}
+                                            onHide={() => setModalShow(false)}
+                                            action={addUser}
+                                        />
+                                    ) : (
+                                        <MyVerticallyCenteredModal
+                                            show={modalShow}
+                                            onHide={() => setModalShow(false)}
+                                            action={updateUser}
+                                        />
+                                    )}
                                 </span>
                             </div>
                         </div>

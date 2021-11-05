@@ -1,9 +1,12 @@
 import React from 'react';
 import {useTable} from 'react-table';
+import {useDispatch} from 'react-redux';
+import {recordsUpdate} from '../../store/reducers/usersDucks';
 
 /* import makeData from './makeData'; */
 
 function Table({columns, data, deleteItem, updateItem}) {
+    const dispatch = useDispatch();
     // Use the state and functions returned from useTable to build your UI
     const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} =
         useTable({
@@ -44,7 +47,10 @@ function Table({columns, data, deleteItem, updateItem}) {
                                     type="submit"
                                     value="Update"
                                     className="btn btn-warning"
-                                    onClick={() => updateItem(row.original.id)}
+                                    onClick={() => {
+                                        dispatch(recordsUpdate(row.original));
+                                        updateItem(row.original.id);
+                                    }}
                                 />
                             </td>
                             <td>

@@ -1,11 +1,12 @@
 import React from 'react';
-import axios from 'axios';
+import {useSelector} from 'react-redux';
 
-function Modaladduser() {
-    const [name, setName] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [roles, setRole] = React.useState('Employee');
+function Modaladduser({action}) {
+    const registros = useSelector((store) => store.users.records);
+    const [name, setName] = React.useState(registros.name);
+    const [email, setEmail] = React.useState(registros.email);
+    const [password, setPassword] = React.useState(registros.password);
+    const [roles, setRole] = React.useState(registros.roles);
     const [message, setMessage] = React.useState(false);
 
     const submit = async (e) => {
@@ -16,7 +17,8 @@ function Modaladduser() {
             password,
             roles
         };
-        await axios.post('http://localhost:5000/api/user', records);
+        action(records);
+        /* await axios.post('http://localhost:5000/api/user', records); */
         setMessage(true);
     };
 
@@ -30,6 +32,7 @@ function Modaladduser() {
                         type="text"
                         className="form-control"
                         placeholder="Enter Name"
+                        value={name}
                     />
                 </div>
                 <div className="form-group">
@@ -39,6 +42,7 @@ function Modaladduser() {
                         type="email"
                         className="form-control"
                         placeholder="Enter email"
+                        value={email}
                     />
                 </div>
                 <div className="form-group">
@@ -48,6 +52,7 @@ function Modaladduser() {
                         type="password"
                         className="form-control"
                         placeholder="Password"
+                        value={password}
                     />
                 </div>
                 <div className="form-group">
@@ -55,21 +60,30 @@ function Modaladduser() {
                     <select
                         onChange={(e) => setRole(e.target.value)}
                         className="form-control"
+                        value={roles}
                     >
                         <option>Employee</option>
                         <option>Admin</option>
                     </select>
                 </div>
                 <div className="form-group">
-                    <input
-                        type="submit"
-                        className="btn btn-danger"
-                        value="Submit"
-                    />
+                    {registros.name === '' ? (
+                        <input
+                            type="submit"
+                            className="btn btn-danger"
+                            value="Add user"
+                        />
+                    ) : (
+                        <input
+                            type="submit"
+                            className="btn btn-warning"
+                            value="Update"
+                        />
+                    )}
                 </div>
             </div>
             {/* <!-- /.card-body --> */}
-            {message ? <div>Registered</div> : null}
+            {message ? <div className="text-success">Success</div> : null}
         </form>
     );
 }

@@ -8,14 +8,37 @@ const url = `${urlconf}user`;
 // constantes
 const dataInicial = {
     array: [],
-    offset: 0
+    offset: 0,
+    recordsUpdate: []
 };
 
 // types
+const ADD_USERS_SUCCESS = 'ADD_USERS_SUCCESS';
 const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
 const DELETE_USERS_SUCCESS = 'DELETE_USERS_SUCCESS';
+const UPDATE_USERS_SUCCESS = 'UPDATE_USERS_SUCCESS';
+const RECORDS_UPDATE = 'RECORDS_UPDATE';
 
 // acciones
+export const recordsUpdate = (records) => async (dispatch) => {
+    dispatch({
+        type: RECORDS_UPDATE,
+        payload: records
+    });
+};
+export const addUsersAction = (records) => async (dispatch, getState) => {
+    try {
+        await axios.post(`${url}`, records);
+        const res = await axios.get(`${url}`);
+        dispatch({
+            type: ADD_USERS_SUCCESS,
+            payload: res.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getUsersAction = () => async (dispatch, getState) => {
     /* console.log('getState', getState().users.offset); */
     const {offset} = getState().users;
@@ -30,6 +53,7 @@ export const getUsersAction = () => async (dispatch, getState) => {
         console.log(error);
     }
 };
+
 export const deleteUsersAction = (id) => async (dispatch, getState) => {
     try {
         await axios.delete(`${url}/${id}`);
@@ -43,13 +67,33 @@ export const deleteUsersAction = (id) => async (dispatch, getState) => {
     }
 };
 
+export const updateUsersAction =
+    (records, id) => async (dispatch, getState) => {
+        try {
+            await axios.put(`${url}/${id}`, records);
+            const res = await axios.get(`${url}`);
+            dispatch({
+                type: UPDATE_USERS_SUCCESS,
+                payload: res.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 // reducer
 export default function usersReducer(state = dataInicial, action) {
     switch (action.type) {
+        case ADD_USERS_SUCCESS:
+            return {...state, array: action.payload};
         case DELETE_USERS_SUCCESS:
+            return {...state, array: action.payload};
+        case UPDATE_USERS_SUCCESS:
             return {...state, array: action.payload};
         case GET_USERS_SUCCESS:
             return {...state, array: action.payload};
+        case RECORDS_UPDATE:
+            return {...state, records: action.payload};
         default:
             return state;
     }
