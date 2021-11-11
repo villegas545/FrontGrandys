@@ -9,8 +9,9 @@ import Dashboard from '@pages/Dashboard';
 import Blank from '@pages/Blank';
 import SubMenu from '@pages/SubMenu';
 import Profile from '@pages/profile/Profile';
-import Checks from '@pages/Checks';
+import Checks from '@app/pages/Checks';
 import Users from '@app/pages/Users';
+import Rests from '@app/pages/Rests';
 import Csv from '@app/pages/Csv';
 
 import Header from './header/Header';
@@ -93,6 +94,11 @@ const Main = () => {
                             <Route exact path="/blank" component={Blank} />
                             <Route exact path="/profile" component={Profile} />
                             <Route exact path="/users" component={Users} />
+                            <Route
+                                exact
+                                path="/Restaurants"
+                                component={Rests}
+                            />
                             <Route exact path="/" component={Dashboard} />
                             <Route exact path="/Checks" component={Checks} />
                             <Route exact path="/Csv" component={Csv} />

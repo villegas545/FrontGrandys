@@ -8,7 +8,10 @@ export const MENU = [
         name: 'Users',
         path: '/Users'
     },
-
+    {
+        name: 'Restaurants',
+        path: '/Restaurants'
+    },
     {
         name: 'Reports',
         path: '/checks'
