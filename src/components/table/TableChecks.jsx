@@ -15,25 +15,30 @@ function TableChecks({columns, data}) {
 
     // Render the UI for your table
     return (
-        <table className="table mx-5" {...getTableProps()}>
+        <table
+            className="table table-hover table-sm table-bordered table-responsive transponertabla"
+            {...getTableProps()}
+        >
             <thead>
                 {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
-                        <th>#</th>
+                        {' '}
                         {headerGroup.headers.map((column) => (
-                            <th {...column.getHeaderProps()}>
+                            <td
+                                className="font-weight-bold"
+                                {...column.getHeaderProps()}
+                            >
                                 {column.render('Header')}
-                            </th>
+                            </td>
                         ))}
                     </tr>
                 ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-                {rows.map((row, index) => {
+                {rows.map((row) => {
                     prepareRow(row);
                     return (
                         <tr {...row.getRowProps()}>
-                            <td>{index + 1}</td>
                             {row.cells.map((cell) => {
                                 return (
                                     <td {...cell.getCellProps()}>

@@ -9,9 +9,31 @@ import Languages from './languages-dropdown/LanguagesDropdown'; */
 const Header = ({toggleMenuSidebar}) => {
     const [t] = useTranslation();
     return (
-        <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav className="main-header navbar sticky-top navbar-expand navbar-white navbar-light">
             {/* Left navbar links */}
             <ul className="navbar-nav">
+                {/*  <li className="nav-item">
+                    <button
+                        onClick={() => toggleMenuSidebar()}
+                        type="button"
+                        className="nav-link"
+                    >
+                        <i className="fas fa-bars" />
+                    </button>
+                </li> */}
+                <li className="nav-item d-none d-sm-inline-block">
+                    <Link to="/" className="nav-link">
+                        {t('Dashboard')}
+                    </Link>
+                </li>
+
+                {/* <li className="nav-item d-none d-sm-inline-block">
+                    <Link to="/" className="nav-link">
+                        {t('header.label.contact')}
+                    </Link>
+                </li> */}
+            </ul>
+            <ul className="navbar-nav d-flex ml-auto">
                 <li className="nav-item">
                     <button
                         onClick={() => toggleMenuSidebar()}
@@ -21,19 +43,15 @@ const Header = ({toggleMenuSidebar}) => {
                         <i className="fas fa-bars" />
                     </button>
                 </li>
-                <li className="nav-item d-none d-sm-inline-block">
-                    <Link to="/" className="nav-link">
-                        {t('Dashboard')}
-                    </Link>
-                </li>
-                {/* <li className="nav-item d-none d-sm-inline-block">
-                    <Link to="/" className="nav-link">
-                        {t('header.label.contact')}
-                    </Link>
-                </li> */}
+                <buttton
+                    value="Transpose"
+                    className="btn btn-dark mx-5 botontransponer"
+                >
+                    Transpose
+                </buttton>
             </ul>
-            <ul className="navbar-nav ml-auto">
-                {/* <li className="nav-item">
+            {/* <ul className="navbar-nav ml-auto"> */}
+            {/* <li className="nav-item">
                     <button className="nav-link" type="button">
                         <i className="fas fa-search" />
                     </button>
@@ -65,11 +83,11 @@ const Header = ({toggleMenuSidebar}) => {
                         </form>
                     </div>
                 </li> */}
-                {/* <Messages />
+            {/* <Messages />
                 <Notifications />
                 <Languages /> */}
-                {/*  <User /> */}
-            </ul>
+            {/*  <User /> */}
+            {/*  </ul> */}
         </nav>
     );
 };

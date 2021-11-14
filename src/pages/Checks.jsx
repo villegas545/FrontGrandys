@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import TableChecks from '@app/components/table/TableChecks';
 import {useSelector, useDispatch} from 'react-redux';
@@ -9,7 +10,7 @@ function Checks() {
     const columns = [
         {Header: 'Trading Day', accessor: 'traidingDay'},
         {Header: 'Date', accessor: 'date'},
-        {Header: 'Id Rest', accessor: 'restaurantId'},
+        /*  {Header: 'Id Rest', accessor: 'restaurantId'}, */
         {Header: 'Temp', accessor: 'weatherTemp'},
         {Header: 'Weather', accessor: 'weatherW'},
         {Header: 'Last Year Sales', accessor: 'lySales'},
@@ -55,7 +56,7 @@ function Checks() {
     ];
 
     const checks = useSelector((store) => store.checks.array);
-    console.log(checks);
+
     React.useEffect(async () => {
         await dispatch(getChecksAction());
     }, []);
@@ -70,21 +71,29 @@ function Checks() {
                             <h1>DataTables</h1>
                             <div className="input-group mb-3">
                                 <span className="input-group-text">
-                                    Start Date
+                                    Start Week
                                 </span>
                                 <input
-                                    title="Start Date"
-                                    type="date"
+                                    title="Start Week"
+                                    type="number"
                                     className="form-control input-sm mr-3"
+                                    min="1"
+                                    max="52"
                                 />
                                 <span className="input-group-text">
-                                    End Date
+                                    End Week
                                 </span>
                                 <input
-                                    title="End Date"
-                                    type="date"
+                                    title="End Week"
+                                    type="number"
                                     className="form-control mr-3"
+                                    min="1"
+                                    max="52"
                                 />
+                                <select className="form-control mr-3">
+                                    <option selected>By Day</option>
+                                    <option>By Week</option>
+                                </select>
                                 <input
                                     type="submit"
                                     value="Search"
@@ -98,50 +107,67 @@ function Checks() {
             </section>
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button
-                        className="nav-link active"
-                        id="nav-home-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#nav-home"
-                        type="button"
-                        role="tab"
-                        aria-controls="nav-home"
-                        aria-selected="true"
-                    >
-                        Home
-                    </button>
-                    <button
-                        className="nav-link"
-                        id="nav-profile-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#nav-profile"
-                        type="button"
-                        role="tab"
-                        aria-controls="nav-profile"
-                        aria-selected="false"
-                    >
-                        Profile
-                    </button>
+                    {checks.map((item, index) => (
+                        <button
+                            key={item.id}
+                            className={`nav-link btn-danger font-weight-bold text-uppercase ${
+                                index === 0 ? 'active' : ''
+                            }`}
+                            id={`nav-${item.id}-tab`}
+                            data-bs-toggle="tab"
+                            data-bs-target={`#nav-${item.id}`}
+                            type="button"
+                            role="tab"
+                            aria-controls={`nav-${item.id}`}
+                            aria-selected={index === 0 ? 'true' : 'false'}
+                        >
+                            {item.name}
+                        </button>
+                    ))}
                 </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
                 {/* <!-- Main content --> */}
-                <div
-                    className="tab-pane fade  show active"
+
+                {checks.map((item, index) => (
+                    <div
+                        key={item.id}
+                        id={`nav-${item.id}`}
+                        role="tabpanel"
+                        aria-labelledby={`nav-${item.id}-tab`}
+                        className={`tab-pane fade ${
+                            index === 0 ? 'show active' : ''
+                        }`}
+                    >
+                        {' '}
+                        <TableChecks columns={columns} data={item.Checks} />
+                        {/*  <buttton
+                            value="Transpose"
+                            className="btn btn-dark botontransponer"
+                        >
+                            Transpose
+                        </buttton> */}
+                        {/*  <input
+                            value="Transpose"
+                            className="btn btn-danger botontransponer"
+                            onChange={() => console.log(item.id)}
+                        /> */}
+                    </div>
+                ))}
+                {/*    <div
+                    className="tab-pane fade"
                     id="nav-profile"
                     role="tabpanel"
                     aria-labelledby="nav-home-tab"
-                >
-                    <TableChecks columns={columns} data={checks} />{' '}
-                </div>
+                />
                 <div
-                    className="tab-pane fade"
+                    className="tab-pane fade  show active"
                     id="nav-home"
                     role="tabpanel"
                     aria-labelledby="nav-home-tab"
                 >
-                    hola Mundo2
-                </div>
+                    <TableChecks columns={columns} data={checks} />{' '}
+                </div> */}
             </div>
         </>
     );

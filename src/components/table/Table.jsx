@@ -52,7 +52,10 @@ function Table({columns, data, deleteItem, updateItem}) {
     // Render the UI for your table
     return (
         <>
-            <table className="table mx-5" {...getTableProps()}>
+            <table
+                className="table table-hover table-bordered table-responsive-sm  mx-2"
+                {...getTableProps()}
+            >
                 <thead>
                     {headerGroups.map((headerGroup) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
