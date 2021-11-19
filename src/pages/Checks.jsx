@@ -1,8 +1,12 @@
+/* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import TableChecks from '@app/components/table/TableChecks';
 import {useSelector, useDispatch} from 'react-redux';
-import {getChecksAction} from '@app/store/reducers/checksDucks';
+import {
+    getChecksAction,
+    getChecksActionClean
+} from '@app/store/reducers/checksDucks';
 
 function Checks() {
     const dispatch = useDispatch();
@@ -56,11 +60,16 @@ function Checks() {
     ];
 
     const checks = useSelector((store) => store.checks.array);
+    const [startWeek, setStartWeek] = React.useState(1);
+    const [endWeek, setEndWeek] = React.useState(1);
 
-    React.useEffect(async () => {
-        await dispatch(getChecksAction());
-    }, []);
+    React.useEffect(async () => {}, []);
 
+    const weekSelector = async (e) => {
+        e.preventDefault();
+        await dispatch(getChecksActionClean());
+        await dispatch(getChecksAction(startWeek, endWeek));
+    };
     return (
         <>
             {/* <!-- Content Header (Page header) --> */}
@@ -79,6 +88,10 @@ function Checks() {
                                     className="form-control input-sm mr-3"
                                     min="1"
                                     max="52"
+                                    value={startWeek}
+                                    onChange={(e) =>
+                                        setStartWeek(e.target.value)
+                                    }
                                 />
                                 <span className="input-group-text">
                                     End Week
@@ -89,6 +102,8 @@ function Checks() {
                                     className="form-control mr-3"
                                     min="1"
                                     max="52"
+                                    value={endWeek}
+                                    onChange={(e) => setEndWeek(e.target.value)}
                                 />
                                 <select className="form-control mr-3">
                                     <option selected>By Day</option>
@@ -97,6 +112,7 @@ function Checks() {
                                 <input
                                     type="submit"
                                     value="Search"
+                                    onClick={(e) => weekSelector(e)}
                                     className="form-control btn btn-danger btn-sm mr-3 text-lg"
                                 />
                             </div>
@@ -107,53 +123,60 @@ function Checks() {
             </section>
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                    {checks.map((item, index) => (
-                        <button
-                            key={item.id}
-                            className={`nav-link btn-danger font-weight-bold text-uppercase ${
-                                index === 0 ? 'active' : ''
-                            }`}
-                            id={`nav-${item.id}-tab`}
-                            data-bs-toggle="tab"
-                            data-bs-target={`#nav-${item.id}`}
-                            type="button"
-                            role="tab"
-                            aria-controls={`nav-${item.id}`}
-                            aria-selected={index === 0 ? 'true' : 'false'}
-                        >
-                            {item.name}
-                        </button>
-                    ))}
+                    {checks === []
+                        ? null
+                        : checks.map((item, index) => (
+                              <button
+                                  key={item.id}
+                                  className={`nav-link btn-danger font-weight-bold text-uppercase ${
+                                      index === 0 ? 'active' : ''
+                                  }`}
+                                  id={`nav-${item.id}-tab`}
+                                  data-bs-toggle="tab"
+                                  data-bs-target={`#nav-${item.id}`}
+                                  type="button"
+                                  role="tab"
+                                  aria-controls={`nav-${item.id}`}
+                                  aria-selected={index === 0 ? 'true' : 'false'}
+                              >
+                                  {item.name}
+                              </button>
+                          ))}
                 </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
                 {/* <!-- Main content --> */}
 
-                {checks.map((item, index) => (
-                    <div
-                        key={item.id}
-                        id={`nav-${item.id}`}
-                        role="tabpanel"
-                        aria-labelledby={`nav-${item.id}-tab`}
-                        className={`tab-pane fade ${
-                            index === 0 ? 'show active' : ''
-                        }`}
-                    >
-                        {' '}
-                        <TableChecks columns={columns} data={item.Checks} />
-                        {/*  <buttton
+                {checks === []
+                    ? null
+                    : checks.map((item, index) => (
+                          <div
+                              key={item.id}
+                              id={`nav-${item.id}`}
+                              role="tabpanel"
+                              aria-labelledby={`nav-${item.id}-tab`}
+                              className={`tab-pane fade ${
+                                  index === 0 ? 'show active' : ''
+                              }`}
+                          >
+                              {' '}
+                              <TableChecks
+                                  columns={columns}
+                                  data={item.Checks}
+                              />
+                              {/*  <buttton
                             value="Transpose"
                             className="btn btn-dark botontransponer"
                         >
                             Transpose
                         </buttton> */}
-                        {/*  <input
+                              {/*  <input
                             value="Transpose"
                             className="btn btn-danger botontransponer"
                             onChange={() => console.log(item.id)}
                         /> */}
-                    </div>
-                ))}
+                          </div>
+                      ))}
                 {/*    <div
                     className="tab-pane fade"
                     id="nav-profile"
