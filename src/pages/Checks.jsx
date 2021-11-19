@@ -160,10 +160,10 @@ function Checks() {
                               }`}
                           >
                               {' '}
-                              <TableChecks
+                              {/*    <TableChecks
                                   columns={columns}
                                   data={item.Checks}
-                              />
+                              /> */}
                               {/*  <buttton
                             value="Transpose"
                             className="btn btn-dark botontransponer"
