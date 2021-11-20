@@ -1,17 +1,17 @@
 /* eslint-disable react/destructuring-assignment */
-import React, {Fragment} from 'react';
+import React from 'react';
 import {Modal} from 'react-bootstrap';
-import Modaladduser from '@app/components/addusermodal/Modaladduser';
+import Modaladdrest from '@app/components/addusermodal/Modaladdrest';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {
-    addUsersAction,
-    getUsersAction,
-    updateUsersAction,
-    deleteUsersAction,
+    addRestAction,
+    getRestAction,
+    updateRestAction,
+    deleteRestAction,
     recordsUpdate,
     modalClose
-} from '@app/store/reducers/usersDucks';
+} from '@app/store/reducers/restsDucks';
 import Table from '../components/table/Table';
 
 function MyVerticallyCenteredModal(props) {
@@ -27,17 +27,17 @@ function MyVerticallyCenteredModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    User
+                    Rest
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Modaladduser action={action} />
+                <Modaladdrest action={action} />
             </Modal.Body>
         </Modal>
     );
 }
 
-function Users() {
+function Rest() {
     const [modalShow, setModalShow] = React.useState(false);
     const [idState, setIdState] = React.useState(0);
     const dispatch = useDispatch();
@@ -48,21 +48,25 @@ function Users() {
             accessor: 'name'
         },
         {
-            Header: 'Email',
-            accessor: 'email'
+            Header: 'Location',
+            accessor: 'location'
+        },
+        {
+            Header: 'Api',
+            accessor: 'api'
         },
         {
             Header: 'Password',
             accessor: 'password'
         },
         {
-            Header: 'Role',
-            accessor: 'roles'
+            Header: 'User Name',
+            accessor: 'userName'
         }
     ];
 
-    const closeModal = useSelector((store) => store.users.modalClose);
-    const users = useSelector((store) => store.users.array);
+    const closeModal = useSelector((store) => store.rest.modalClose);
+    const rest = useSelector((store) => store.rest.array);
     const [action, setAction] = React.useState(true);
     /*    const emptyRecords = {
         name: '',
@@ -71,11 +75,11 @@ function Users() {
         role: ''
     }; */
 
-    const addUser = async (records) => {
-        await dispatch(addUsersAction(records));
+    const addRest = async (records) => {
+        await dispatch(addRestAction(records));
     };
-    const updateUser = async (records) => {
-        await dispatch(updateUsersAction(records, idState));
+    const updateRest = async (records) => {
+        await dispatch(updateRestAction(records, idState));
     };
     const updateItem = async (id) => {
         await dispatch(recordsUpdate(id));
@@ -85,10 +89,10 @@ function Users() {
         console.log(id);
     };
     const deleteItem = async (id) => {
-        await dispatch(deleteUsersAction(id));
+        await dispatch(deleteRestAction(id));
     };
     React.useEffect(async () => {
-        await dispatch(getUsersAction());
+        await dispatch(getRestAction());
         if (closeModal === true) {
             setModalShow(false);
             dispatch(modalClose(false));
@@ -108,7 +112,7 @@ function Users() {
                                 <span>
                                     <input
                                         type="submit"
-                                        value="Add User"
+                                        value="Add Restaurant Api"
                                         className="form-control btn btn-danger btn-sm mr-3 text-lg"
                                         onClick={async () => {
                                             await dispatch(
@@ -122,13 +126,13 @@ function Users() {
                                         <MyVerticallyCenteredModal
                                             show={modalShow}
                                             onHide={() => setModalShow(false)}
-                                            action={addUser}
+                                            action={addRest}
                                         />
                                     ) : (
                                         <MyVerticallyCenteredModal
                                             show={modalShow}
                                             onHide={() => setModalShow(false)}
-                                            action={updateUser}
+                                            action={updateRest}
                                         />
                                     )}
                                 </span>
@@ -140,7 +144,7 @@ function Users() {
             </section>
             <Table
                 columns={columns}
-                data={users}
+                data={rest}
                 deleteItem={deleteItem}
                 updateItem={updateItem}
             />
@@ -150,4 +154,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default Rest;

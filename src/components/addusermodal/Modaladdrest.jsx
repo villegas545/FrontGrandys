@@ -2,31 +2,28 @@ import React from 'react';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector, useDispatch} from 'react-redux';
-import {modalClose} from '@app/store/reducers/usersDucks';
+import {modalClose} from '@app/store/reducers/restsDucks';
 
-function Modaladduser({action}) {
-    const registros = useSelector((store) => store.users.records);
+function Modaladdrest({action}) {
+    const registros = useSelector((store) => store.rest.records);
     const [name, setName] = React.useState(registros.name);
-    const [email, setEmail] = React.useState(registros.email);
+    const [location, setLocation] = React.useState(registros.location);
+    const [api, setApi] = React.useState(registros.api);
     const [password, setPassword] = React.useState(registros.password);
-    const [repeatPassword, setRepeatPassword] = React.useState('');
-    const [roles, setRole] = React.useState(registros.roles);
+    const [userName, setUserName] = React.useState(registros.userName);
     const dispatch = useDispatch();
 
     const validate = () => {
         if (
             name === '' ||
-            email === '' ||
+            location === '' ||
+            api === '' ||
             password === '' ||
-            repeatPassword === '' ||
-            roles === '' ||
-            roles === 'Empty'
+            userName === ''
         ) {
             return false;
         }
-        if (password !== repeatPassword) {
-            return false;
-        }
+
         return true;
     };
 
@@ -61,9 +58,10 @@ function Modaladduser({action}) {
         if (await validate()) {
             const records = {
                 name,
-                email,
+                location,
+                api,
                 password,
-                roles
+                userName
             };
             action(records);
             /* await axios.post('http://localhost:5000/api/user', records); */
@@ -88,60 +86,51 @@ function Modaladduser({action}) {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <label htmlFor="exampleInputEmail1">Location</label>
                     <input
-                        onChange={(e) => setEmail(e.target.value)}
-                        type="email"
+                        onChange={(e) => setLocation(e.target.value)}
+                        type="text"
                         className="form-control"
-                        placeholder="Enter email"
-                        value={email}
+                        placeholder="Enter Location"
+                        value={location}
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Password </label>
+                    <label htmlFor="exampleInputPassword1">Api </label>
+                    <input
+                        onChange={(e) => setApi(e.target.value)}
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter Api"
+                        value={api}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="exampleInputPassword1">Password</label>
                     <input
                         onChange={(e) => setPassword(e.target.value)}
-                        type="password"
+                        type="text"
                         className="form-control"
-                        placeholder="Password"
+                        placeholder="Enter Password"
                         value={password}
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">
-                        Repeat Password
-                    </label>
+                    <label htmlFor="exampleInputPassword1">User Name</label>
                     <input
-                        onChange={(e) => setRepeatPassword(e.target.value)}
-                        type="password"
+                        onChange={(e) => setUserName(e.target.value)}
+                        type="text"
                         className="form-control"
-                        placeholder="Password"
-                        value={repeatPassword}
+                        placeholder="Enter User Name"
+                        value={userName}
                     />
-                    {password !== repeatPassword ? (
-                        <div className="text-form text-danger">
-                            Password fields doesn´t match
-                        </div>
-                    ) : null}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Role</label>
-                    <select
-                        onChange={(e) => setRole(e.target.value)}
-                        className="form-control"
-                        value={roles}
-                    >
-                        <option value="Empty">Select</option>
-                        <option value="Employee">Employee</option>
-                        <option value="Admin">Admin</option>
-                    </select>
                 </div>
                 <div className="form-group">
                     {registros.name === '' ? (
                         <input
                             type="submit"
                             className="btn btn-danger"
-                            value="Add user"
+                            value="Add Restaurant Api"
                         />
                     ) : (
                         <input
@@ -158,4 +147,4 @@ function Modaladduser({action}) {
     );
 }
 
-export default Modaladduser;
+export default Modaladdrest;

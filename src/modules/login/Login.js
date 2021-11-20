@@ -123,6 +123,7 @@ const Login = () => {
                                 type="email"
                                 formik={formik}
                                 formikFieldProps={formik.getFieldProps('email')}
+                                value="maocan@gmail.com"
                             />
                         </div>
                         <div className="mb-3">
@@ -134,6 +135,7 @@ const Login = () => {
                                 formikFieldProps={formik.getFieldProps(
                                     'password'
                                 )}
+                                value="12345"
                             />
                         </div>
 
