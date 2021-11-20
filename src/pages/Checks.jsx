@@ -12,7 +12,6 @@ function Checks() {
     const dispatch = useDispatch();
 
     const columns = [
-        {Header: 'Trading Day', accessor: 'traidingDay'},
         {Header: 'Date', accessor: 'date'},
         /*  {Header: 'Id Rest', accessor: 'restaurantId'}, */
         {Header: 'Temp', accessor: 'weatherTemp'},
@@ -160,10 +159,10 @@ function Checks() {
                               }`}
                           >
                               {' '}
-                              {/*    <TableChecks
+                              <TableChecks
                                   columns={columns}
                                   data={item.Checks}
-                              /> */}
+                              />
                               {/*  <buttton
                             value="Transpose"
                             className="btn btn-dark botontransponer"

@@ -22,6 +22,7 @@ export const getChecksAction = (startWeek, endWeek) => async (dispatch) => {
 
     try {
         const res = await axios.get(`${url}/${startWeek}/${endWeek}`);
+
         console.log(res.data);
         dispatch({
             type: GET_CHECKS_SUCCESS,
