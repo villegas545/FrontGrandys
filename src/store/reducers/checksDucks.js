@@ -7,12 +7,14 @@ const url = `${urlconf}check`;
 
 // constantes
 const dataInicial = {
-    array: []
+    array: [],
+    dates: []
 };
 
 // types
 
 const GET_CHECKS_SUCCESS = 'GET_CHECKS_SUCCESS';
+const GET_CHECKS_DATES_SUCCESS = 'GET_CHECKS_DATES_SUCCESS';
 const GET_CHECKS_SUCCESS_CLEAN = 'GET_CHECKS_SUCCESS_CLEAN';
 
 // acciones
@@ -25,12 +27,18 @@ export const getChecksAction =
             const res = await axios.get(
                 `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}`
             );
-
+            if (res.data.message === 'datos') {
+                dispatch({
+                    type: GET_CHECKS_SUCCESS,
+                    payload: res.data.response
+                });
+            } else {
+                dispatch({
+                    type: GET_CHECKS_DATES_SUCCESS,
+                    payload: res.data.respuesta
+                });
+            }
             console.log(res.data);
-            dispatch({
-                type: GET_CHECKS_SUCCESS,
-                payload: res.data
-            });
         } catch (error) {
             console.log(error);
         }
@@ -56,6 +64,8 @@ export default function usersReducer(state = dataInicial, action) {
     switch (action.type) {
         case GET_CHECKS_SUCCESS:
             return {...state, array: action.payload};
+        case GET_CHECKS_DATES_SUCCESS:
+            return {...state, dates: action.payload};
         case GET_CHECKS_SUCCESS_CLEAN:
             return {...state, array: action.payload};
         default:

@@ -3,10 +3,15 @@
 import React from 'react';
 import TableChecks from '@app/components/table/TableChecks';
 import {useSelector, useDispatch} from 'react-redux';
+import {isEmpty} from 'lodash';
+import ReactLoading from 'react-loading';
+
 import {
     getChecksAction,
     getChecksActionClean
 } from '@app/store/reducers/checksDucks';
+import {confirmAlert} from 'react-confirm-alert';
+import {nodeName} from 'jquery';
 
 function Checks() {
     const dispatch = useDispatch();
@@ -59,16 +64,42 @@ function Checks() {
     ];
 
     const checks = useSelector((store) => store.checks.array);
+    const dates = useSelector((store) => store.checks.dates);
     const [startWeek, setStartWeek] = React.useState(1);
     const [endWeek, setEndWeek] = React.useState(1);
     const [startYear, setStartYear] = React.useState(1);
     const [endYear, setEndYear] = React.useState(1);
-
+    const [cargando, setCargando] = React.useState(false);
+    const datePopulate = async (recibeDates) => {
+        console.log(recibeDates);
+        // setCargando(false);
+    };
     React.useEffect(async () => {
         const yearSelect = new Date().getFullYear();
         setStartYear(yearSelect);
         setEndYear(yearSelect);
-    }, []);
+        if (isEmpty(dates)) {
+            console.log('empty dates');
+        } else {
+            const numberDates = dates.length;
+            confirmAlert({
+                title: `${numberDates} dates are missing`,
+                message: `Do you want to download them? This may take about ${numberDates} minutes, please be patient`,
+                buttons: [
+                    {
+                        label: 'Yes',
+                        onClick: () => {
+                            setCargando(true);
+                            datePopulate(dates);
+                        }
+                    },
+                    {
+                        label: 'No'
+                    }
+                ]
+            });
+        }
+    }, [dates]);
 
     const weekSelector = async (e) => {
         e.preventDefault();
@@ -78,6 +109,22 @@ function Checks() {
     return (
         <>
             {/* <!-- Content Header (Page header) --> */}
+            <ReactLoading
+                style={{
+                    display: cargando ? 'block' : 'none',
+                    position: 'absolute',
+                    zIndex: '9999',
+                    top: '30%',
+                    left: '50%',
+                    height: '150px',
+                    width: '150px',
+                    color: '#D11F1F'
+                }}
+                color="#D11F1F"
+                width="300px"
+                type="spinningBubbles"
+                height="100px"
+            />
             <section className="content-header">
                 <div className="container-fluid">
                     <div className="row mb-2">
