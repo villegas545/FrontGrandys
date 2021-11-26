@@ -17,21 +17,24 @@ const GET_CHECKS_SUCCESS_CLEAN = 'GET_CHECKS_SUCCESS_CLEAN';
 
 // acciones
 
-export const getChecksAction = (startWeek, endWeek) => async (dispatch) => {
-    /* console.log('getState', getState().rest.offset); */
+export const getChecksAction =
+    (startWeek, endWeek, startYear, endYear) => async (dispatch) => {
+        /* console.log('getState', getState().rest.offset); */
 
-    try {
-        const res = await axios.get(`${url}/${startWeek}/${endWeek}`);
+        try {
+            const res = await axios.get(
+                `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}`
+            );
 
-        console.log(res.data);
-        dispatch({
-            type: GET_CHECKS_SUCCESS,
-            payload: res.data
-        });
-    } catch (error) {
-        console.log(error);
-    }
-};
+            console.log(res.data);
+            dispatch({
+                type: GET_CHECKS_SUCCESS,
+                payload: res.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 export const getChecksActionClean = () => async (dispatch) => {
     /* console.log('getState', getState().rest.offset); */

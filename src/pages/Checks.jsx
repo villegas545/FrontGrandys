@@ -61,13 +61,19 @@ function Checks() {
     const checks = useSelector((store) => store.checks.array);
     const [startWeek, setStartWeek] = React.useState(1);
     const [endWeek, setEndWeek] = React.useState(1);
+    const [startYear, setStartYear] = React.useState(1);
+    const [endYear, setEndYear] = React.useState(1);
 
-    React.useEffect(async () => {}, []);
+    React.useEffect(async () => {
+        const yearSelect = new Date().getFullYear();
+        setStartYear(yearSelect);
+        setEndYear(yearSelect);
+    }, []);
 
     const weekSelector = async (e) => {
         e.preventDefault();
         await dispatch(getChecksActionClean());
-        await dispatch(getChecksAction(startWeek, endWeek));
+        await dispatch(getChecksAction(startWeek, endWeek, startYear, endYear));
     };
     return (
         <>
@@ -103,6 +109,32 @@ function Checks() {
                                     max="52"
                                     value={endWeek}
                                     onChange={(e) => setEndWeek(e.target.value)}
+                                />
+                                <span className="input-group-text">
+                                    Start Year
+                                </span>
+                                <input
+                                    title="Start Year"
+                                    type="number"
+                                    className="form-control mr-3"
+                                    min="2015"
+                                    max="2999"
+                                    value={startYear}
+                                    onChange={(e) =>
+                                        setStartYear(e.target.value)
+                                    }
+                                />
+                                <span className="input-group-text">
+                                    End Year
+                                </span>
+                                <input
+                                    title="End Year"
+                                    type="number"
+                                    className="form-control mr-3"
+                                    min="2015"
+                                    max="2999"
+                                    value={endYear}
+                                    onChange={(e) => setEndYear(e.target.value)}
                                 />
                                 <select className="form-control mr-3">
                                     <option selected>By Day</option>
