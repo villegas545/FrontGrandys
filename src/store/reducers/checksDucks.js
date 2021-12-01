@@ -15,6 +15,7 @@ const dataInicial = {
 
 const GET_CHECKS_SUCCESS = 'GET_CHECKS_SUCCESS';
 const GET_CHECKS_DATES_SUCCESS = 'GET_CHECKS_DATES_SUCCESS';
+const GET_CHECKS_CLEANDATES_SUCCESS = 'GET_CHECKS_CLEANDATES_SUCCESS';
 const GET_CHECKS_SUCCESS_CLEAN = 'GET_CHECKS_SUCCESS_CLEAN';
 
 // acciones
@@ -44,6 +45,24 @@ export const getChecksAction =
         }
     };
 
+/* ______________________________________________________ */
+
+export const getChecksCleanDatesSuccess = () => async (dispatch) => {
+    /* console.log('getState', getState().rest.offset); */
+
+    try {
+        const res = [];
+
+        dispatch({
+            type: GET_CHECKS_CLEANDATES_SUCCESS,
+            payload: res
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+/* ___________________________________________________________ */
+
 export const getChecksActionClean = () => async (dispatch) => {
     /* console.log('getState', getState().rest.offset); */
 
@@ -65,6 +84,8 @@ export default function usersReducer(state = dataInicial, action) {
         case GET_CHECKS_SUCCESS:
             return {...state, array: action.payload};
         case GET_CHECKS_DATES_SUCCESS:
+            return {...state, dates: action.payload};
+        case GET_CHECKS_CLEANDATES_SUCCESS:
             return {...state, dates: action.payload};
         case GET_CHECKS_SUCCESS_CLEAN:
             return {...state, array: action.payload};
