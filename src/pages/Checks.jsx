@@ -5,13 +5,14 @@ import TableChecks from '@app/components/table/TableChecks';
 import {useSelector, useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import ReactLoading from 'react-loading';
-
+import axios from 'axios';
 import {
     getChecksAction,
     getChecksActionClean
 } from '@app/store/reducers/checksDucks';
 import {confirmAlert} from 'react-confirm-alert';
 import {nodeName} from 'jquery';
+import {url as urlconf} from '../config/index';
 
 function Checks() {
     const dispatch = useDispatch();
@@ -70,10 +71,22 @@ function Checks() {
     const [startYear, setStartYear] = React.useState(1);
     const [endYear, setEndYear] = React.useState(1);
     const [cargando, setCargando] = React.useState(false);
+
     const datePopulate = async (recibeDates) => {
         console.log(recibeDates);
-        // setCargando(false);
+        try {
+            const respuesta = await axios.post(
+                `${urlconf}datepopulate`,
+                recibeDates
+            );
+            console.log(respuesta);
+            alert('listo');
+        } catch (err) {
+            console.log('todo salio mal');
+        }
+        setCargando(false);
     };
+
     React.useEffect(async () => {
         const yearSelect = new Date().getFullYear();
         setStartYear(yearSelect);

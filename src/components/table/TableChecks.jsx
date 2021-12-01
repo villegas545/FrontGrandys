@@ -5,11 +5,11 @@ import {useTable} from 'react-table';
 
 function TableChecks({columns, data}) {
     // notificacion tostify
-    const rows2 = data.sort(function (a, b) {
+    data.sort(function (a, b) {
         return new Date(a.date) - new Date(b.date);
     });
-    console.log(rows2);
-    console.log(data);
+    /*     console.log(rows2);
+    console.log(data); */
     // Use the state and functions returned from useTable to build your UI
     const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} =
         useTable({
