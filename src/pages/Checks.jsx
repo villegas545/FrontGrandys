@@ -2,13 +2,16 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import TableChecks from '@app/components/table/TableChecks';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {useSelector, useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import ReactLoading from 'react-loading';
 import axios from 'axios';
 import {
     getChecksAction,
-    getChecksActionClean
+    getChecksActionClean,
+    getChecksCleanDatesSuccess
 } from '@app/store/reducers/checksDucks';
 import {confirmAlert} from 'react-confirm-alert';
 import {nodeName} from 'jquery';
@@ -16,6 +19,18 @@ import round from 'round';
 import {url as urlconf} from '../config/index';
 
 function Checks() {
+    const notify = () =>
+        toast('Downloaded!!!!, Please press "Search Button" again', {
+            theme: 'colored',
+            type: 'success',
+            position: 'top-center',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+        });
+
     const dispatch = useDispatch();
 
     const columns = [
@@ -81,7 +96,8 @@ function Checks() {
                 recibeDates
             );
             console.log(respuesta);
-            alert('listo');
+            notify();
+            dispatch(getChecksCleanDatesSuccess());
         } catch (err) {
             console.log('todo salio mal');
         }
@@ -284,6 +300,7 @@ function Checks() {
                     <TableChecks columns={columns} data={checks} />{' '}
                 </div> */}
             </div>
+            <ToastContainer />
         </>
     );
 }
