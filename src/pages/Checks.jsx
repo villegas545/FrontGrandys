@@ -12,6 +12,7 @@ import {
 } from '@app/store/reducers/checksDucks';
 import {confirmAlert} from 'react-confirm-alert';
 import {nodeName} from 'jquery';
+import round from 'round';
 import {url as urlconf} from '../config/index';
 
 function Checks() {

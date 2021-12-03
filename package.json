@@ -65,6 +65,7 @@
         "redux": "^4.1.1",
         "redux-devtools-extension": "^2.13.9",
         "redux-thunk": "^2.4.0",
+        "round": "^2.0.1",
         "uuid": "^8.3.2",
         "window": "^4.2.7",
         "yup": "0.32.9"

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTable} from 'react-table';
-
+import round from 'round';
 /* import makeData from './makeData'; */
 
 function TableChecks({columns, data}) {
@@ -11,6 +11,16 @@ function TableChecks({columns, data}) {
     /*     console.log(rows2);
     console.log(data); */
     // Use the state and functions returned from useTable to build your UI
+    const nuevo = [];
+    data.map((row) => {
+        if (typeof row === 'number') {
+            row = round(row, 0.01);
+        }
+        nuevo.push(row);
+        console.log(nuevo);
+        return row;
+    });
+    data = nuevo;
     const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} =
         useTable({
             columns,
