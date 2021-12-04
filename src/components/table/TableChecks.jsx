@@ -5,8 +5,14 @@ import round from 'round';
 
 function TableChecks({columns, data}) {
     // notificacion tostify
+
     data.sort(function (a, b) {
-        return new Date(a.date) - new Date(b.date);
+        console.log(a.date);
+        try {
+            return new Date(a.date) - new Date(b.date);
+        } catch {
+            return a.date - b.date;
+        }
     });
     /*     console.log(rows2);
     console.log(data); */

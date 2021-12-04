@@ -21,12 +21,12 @@ const GET_CHECKS_SUCCESS_CLEAN = 'GET_CHECKS_SUCCESS_CLEAN';
 // acciones
 
 export const getChecksAction =
-    (startWeek, endWeek, startYear, endYear) => async (dispatch) => {
+    (startWeek, endWeek, startYear, endYear, byWeek) => async (dispatch) => {
         /* console.log('getState', getState().rest.offset); */
 
         try {
             const res = await axios.get(
-                `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}`
+                `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}/${byWeek}`
             );
             if (res.data.message === 'datos') {
                 dispatch({

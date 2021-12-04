@@ -86,6 +86,7 @@ function Checks() {
     const [endWeek, setEndWeek] = React.useState(1);
     const [startYear, setStartYear] = React.useState(1);
     const [endYear, setEndYear] = React.useState(1);
+    const [byWeek, setByWeek] = React.useState('byDay');
     const [cargando, setCargando] = React.useState(false);
 
     const datePopulate = async (recibeDates) => {
@@ -134,7 +135,9 @@ function Checks() {
     const weekSelector = async (e) => {
         e.preventDefault();
         await dispatch(getChecksActionClean());
-        await dispatch(getChecksAction(startWeek, endWeek, startYear, endYear));
+        await dispatch(
+            getChecksAction(startWeek, endWeek, startYear, endYear, byWeek)
+        );
     };
     return (
         <>
@@ -213,9 +216,15 @@ function Checks() {
                                     value={endYear}
                                     onChange={(e) => setEndYear(e.target.value)}
                                 />
-                                <select className="form-control mr-3">
-                                    <option selected>By Day</option>
-                                    <option>By Week</option>
+                                <select
+                                    className="form-control mr-3"
+                                    value={byWeek}
+                                    onChange={(e) => setByWeek(e.target.value)}
+                                >
+                                    <option selected value="byDay">
+                                        By Day
+                                    </option>
+                                    <option value="byWeek">By Week</option>
                                 </select>
                                 <input
                                     type="submit"
