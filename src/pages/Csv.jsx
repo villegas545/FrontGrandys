@@ -37,6 +37,9 @@ function Csv() {
                 value="Submit"
                 onClick={(e) => altaCsv(e.target.file)}
             />
+            <a href="../archivo.csv" className="btn btn-danger m-3">
+                Download Form File
+            </a>
         </>
     );
 }

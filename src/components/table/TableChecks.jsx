@@ -1,6 +1,9 @@
 import React from 'react';
 import {useTable} from 'react-table';
 import round from 'round';
+
+// eslint-disable-next-line no-unused-vars
+
 /* import makeData from './makeData'; */
 
 function TableChecks({columns, data}) {
@@ -34,43 +37,46 @@ function TableChecks({columns, data}) {
         });
 
     // Render the UI for your table
+
     return (
-        <table
-            className="table table-hover table-sm table-bordered table-responsive transponertabla"
-            {...getTableProps()}
-        >
-            <thead>
-                {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {' '}
-                        {headerGroup.headers.map((column) => (
-                            <td
-                                className="font-weight-bold"
-                                {...column.getHeaderProps()}
-                            >
-                                {column.render('Header')}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                        <tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => {
-                                return (
-                                    <td {...cell.getCellProps()}>
-                                        {cell.render('Cell')}
-                                    </td>
-                                );
-                            })}
+        <>
+            <table
+                className="table table-hover table-sm table-bordered table-responsive transponertabla"
+                {...getTableProps()}
+            >
+                <thead>
+                    {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                            {' '}
+                            {headerGroup.headers.map((column) => (
+                                <td
+                                    className="font-weight-bold"
+                                    {...column.getHeaderProps()}
+                                >
+                                    {column.render('Header')}
+                                </td>
+                            ))}
                         </tr>
-                    );
-                })}
-            </tbody>
-        </table>
+                    ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                    {rows.map((row) => {
+                        prepareRow(row);
+                        return (
+                            <tr {...row.getRowProps()}>
+                                {row.cells.map((cell) => {
+                                    return (
+                                        <td {...cell.getCellProps()}>
+                                            {cell.render('Cell')}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </>
     );
 }
 export default TableChecks;
