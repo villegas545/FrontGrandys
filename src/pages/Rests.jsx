@@ -43,6 +43,7 @@ function Rest() {
     const dispatch = useDispatch();
 
     const columns = [
+        {Header: 'Id', accessor: 'id'},
         {
             Header: 'Name',
             accessor: 'name'

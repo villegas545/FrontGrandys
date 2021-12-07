@@ -6,19 +6,23 @@ import {MenuItem} from '@components';
 export const MENU = [
     {
         name: 'Users',
-        path: '/Users'
+        path: '/Users',
+        icon: 'fa-users'
     },
     {
         name: 'Restaurants',
-        path: '/Restaurants'
+        path: '/Restaurants',
+        icon: 'fa-home'
     },
     {
         name: 'Reports',
-        path: '/checks'
+        path: '/checks',
+        icon: 'fa-chart-bar'
     },
     {
         name: 'CSV_Load',
-        path: '/Csv'
+        path: '/Csv',
+        icon: 'fa-file-excel'
     }
 ];
 

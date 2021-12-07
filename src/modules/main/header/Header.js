@@ -43,12 +43,6 @@ const Header = ({toggleMenuSidebar}) => {
                         <i className="fas fa-bars" />
                     </button>
                 </li>
-                <buttton
-                    value="Transpose"
-                    className="btn btn-dark mx-5 botontransponer"
-                >
-                    Transpose
-                </buttton>
             </ul>
             {/* <ul className="navbar-nav ml-auto"> */}
             {/* <li className="nav-item">

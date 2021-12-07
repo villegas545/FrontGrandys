@@ -280,6 +280,7 @@ function Checks() {
                               <TableChecks
                                   columns={columns}
                                   data={item.Checks}
+                                  id={item.id}
                               />
                               {/*  <buttton
                             value="Transpose"
