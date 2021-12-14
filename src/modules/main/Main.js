@@ -5,7 +5,7 @@ import {Gatekeeper} from 'gatekeeper-client-sdk';
 import {loadUser, logoutUser} from '@store/reducers/auth';
 import {toggleSidebarMenu} from '@app/store/reducers/ui';
 
-import Dashboard from '@pages/Dashboard';
+// import Dashboard from '@pages/Dashboard';
 import Blank from '@pages/Blank';
 import SubMenu from '@pages/SubMenu';
 import Profile from '@pages/profile/Profile';
@@ -70,11 +70,15 @@ const Main = () => {
             document.getElementById('root').classList.add('sidebar-collapse');
         }
     }, [screenSize, isSidebarMenuCollapsed]);
-
+    const logoutFunction = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    };
     const getAppTemplate = useCallback(() => {
         if (!isAppLoaded) {
             return <PageLoading />;
         }
+
         return (
             <>
                 <Header toggleMenuSidebar={handleToggleMenuSidebar} />
@@ -99,9 +103,15 @@ const Main = () => {
                                 path="/Restaurants"
                                 component={Rests}
                             />
-                            <Route exact path="/" component={Dashboard} />
+                            <Route exact path="/" component={Checks} />
                             <Route exact path="/Checks" component={Checks} />
                             <Route exact path="/Csv" component={Csv} />
+                            <Route
+                                exact
+                                path="/logout"
+                                component={logoutFunction}
+                                onEnter={() => logoutFunction()}
+                            />
                         </Switch>
                     </section>
                 </div>

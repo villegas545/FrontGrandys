@@ -23,9 +23,14 @@ export const MENU = [
         name: 'Daily load',
         path: '/Csv',
         icon: 'fa-file-excel'
+    },
+    {
+        name: 'Logout',
+        path: '/logout',
+        icon: 'fa-sign-out-alt'
     }
 ];
-
+const userGrandys = localStorage.getItem('user');
 const MenuSidebar = () => {
     const user = useSelector((state) => state.auth.currentUser);
 
@@ -38,7 +43,9 @@ const MenuSidebar = () => {
                     className="brand-image img-circle elevation-3"
                     style={{opacity: '.8'}}
                 />
-                <span className="brand-text font-weight-light">Admin</span>
+                <span className="brand-text font-weight-light">
+                    randy´s Chicken
+                </span>
             </Link>
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -50,9 +57,9 @@ const MenuSidebar = () => {
                         />
                     </div>
                     <div className="info">
-                        <Link to="/profile" className="d-block">
-                            {user.name}
-                        </Link>
+                        <span className="d-block text-light">
+                            {userGrandys}
+                        </span>
                     </div>
                 </div>
                 <nav className="mt-2" style={{overflowY: 'hidden'}}>

@@ -23,7 +23,7 @@ const GET_CHECKS_SUCCESS_CLEAN = 'GET_CHECKS_SUCCESS_CLEAN';
 export const getChecksAction =
     (startWeek, endWeek, startYear, endYear, byWeek) => async (dispatch) => {
         /* console.log('getState', getState().rest.offset); */
-
+        console.log('estas recargando el duckChecks');
         try {
             const res = await axios.get(
                 `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}/${byWeek}`

@@ -19,66 +19,73 @@ import round from 'round';
 import {url as urlconf} from '../config/index';
 
 function Checks() {
-    const notify = () =>
-        toast('Downloaded!!!!, Please press "Search Button" again', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true
-        });
+    console.log('pagina checks recargada');
+    const notify = React.useCallback(
+        () =>
+            toast('Downloaded!!!!, Please press "Search Button" again', {
+                theme: 'colored',
+                type: 'success',
+                position: 'top-center',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            }),
+        []
+    );
 
     const dispatch = useDispatch();
 
-    const columns = [
-        {Header: 'Date', accessor: 'date'},
-        /*  {Header: 'Id Rest', accessor: 'restaurantId'}, */
-        {Header: 'Temp', accessor: 'weatherTemp'},
-        {Header: 'Weather', accessor: 'weatherW'},
-        {Header: 'Last Year Sales', accessor: 'lySales'},
-        {Header: 'Projeted Sales', accessor: 'projectedSales'},
-        {Header: 'Gross Sales', accessor: 'grossSales'},
-        {Header: 'Net Sales', accessor: 'netSales'},
-        {Header: 'NS comp', accessor: 'netSalesComp'},
-        {Header: 'Last Year % +/-', accessor: 'lyPercent'},
-        {Header: 'Projeted Sales +-', accessor: 'projSalesComp'},
-        {Header: '% Projected Sales +/-', accessor: 'psPercent'},
-        {Header: 'Sales Tax', accessor: 'salesTax'},
-        {Header: 'Tax Exempt', accessor: 'taxExempt'},
-        {Header: 'Ts Count', accessor: 'transCount'},
-        {Header: 'Averag Trans', accessor: 'averageTrans'},
-        {Header: 'Coupons ($)', accessor: 'coupons'},
-        {Header: 'Coupons', accessor: 'coupQuant'},
-        {Header: 'Discounts ($)', accessor: 'discounts'},
-        {Header: 'Discounts', accessor: 'discQuant'},
-        {Header: 'Door Dash …', accessor: 'outOrderQuant'},
-        {Header: '($) Door Dash …', accessor: 'outOrderAmm'},
-        {Header: 'Single Steaks', accessor: 'singleSteaks'},
-        {Header: 'Double Steaks', accessor: 'doubleSteaks'},
-        {Header: 'Nugget Meal', accessor: 'nuggetMeal'},
-        {Header: 'Quarterly Promo 1', accessor: 'quarterlyProm1'},
-        {Header: 'Quarterly Promo 2', accessor: 'quarterlyProm2'},
-        {Header: 'Cash Received', accessor: 'cashReceived'},
-        {Header: 'Deposit 1', accessor: 'Dep1'},
-        {Header: 'Deposit 2', accessor: 'Dep2'},
-        {Header: 'Total Deposit', accessor: 'totalDep '},
-        {Header: 'Cash', accessor: 'cash'},
-        {Header: 'Credit Cards', accessor: 'creditCards'},
-        {Header: 'Hours Allowed', accessor: 'hrsAllow'},
-        {Header: 'Actual Labor Hrs.', accessor: 'actualLabor'},
-        {Header: 'Labor Comp', accessor: 'laborComp'},
-        {Header: 'Interviewed', accessor: 'candidatesInt'},
-        {Header: 'On Board', accessor: 'candidatesOnb'},
-        {Header: 'Terminated', accessor: 'candidatesTerm'},
-        {Header: 'Truck', accessor: 'truck'},
-        {Header: 'House Charges', accessor: 'houseCharges'},
-        {Header: 'Paid Outs', accessor: 'paidOuts'},
-        {Header: 'Transfer', accessor: 'transfer'},
-        {Header: 'Store CC Pursh', accessor: 'storeCreditCardPursh'}
-    ];
+    const columns = React.useCallback(
+        [
+            {Header: 'Date', accessor: 'date'},
+            /*  {Header: 'Id Rest', accessor: 'restaurantId'}, */
+            {Header: 'Temp', accessor: 'weatherTemp'},
+            {Header: 'Weather', accessor: 'weatherW'},
+            {Header: 'Last Year Sales', accessor: 'lySales'},
+            {Header: 'Projeted Sales', accessor: 'projectedSales'},
+            {Header: 'Gross Sales', accessor: 'grossSales'},
+            {Header: 'Net Sales', accessor: 'netSales'},
+            {Header: 'NS comp', accessor: 'netSalesComp'},
+            {Header: 'Last Year % +/-', accessor: 'lyPercent'},
+            {Header: 'Projeted Sales +-', accessor: 'projSalesComp'},
+            {Header: '% Projected Sales +/-', accessor: 'psPercent'},
+            {Header: 'Sales Tax', accessor: 'salesTax'},
+            {Header: 'Tax Exempt', accessor: 'taxExempt'},
+            {Header: 'Ts Count', accessor: 'transCount'},
+            {Header: 'Averag Trans', accessor: 'averageTrans'},
+            {Header: 'Coupons ($)', accessor: 'coupons'},
+            {Header: 'Coupons', accessor: 'coupQuant'},
+            {Header: 'Discounts ($)', accessor: 'discounts'},
+            {Header: 'Discounts', accessor: 'discQuant'},
+            {Header: 'Door Dash …', accessor: 'outOrderQuant'},
+            {Header: '($) Door Dash …', accessor: 'outOrderAmm'},
+            {Header: 'Single Steaks', accessor: 'singleSteaks'},
+            {Header: 'Double Steaks', accessor: 'doubleSteaks'},
+            {Header: 'Nugget Meal', accessor: 'nuggetMeal'},
+            {Header: 'Quarterly Promo 1', accessor: 'quarterlyProm1'},
+            {Header: 'Quarterly Promo 2', accessor: 'quarterlyProm2'},
+            {Header: 'Cash Received', accessor: 'cashReceived'},
+            {Header: 'Deposit 1', accessor: 'Dep1'},
+            {Header: 'Deposit 2', accessor: 'Dep2'},
+            {Header: 'Total Deposit', accessor: 'totalDep '},
+            {Header: 'Cash', accessor: 'cash'},
+            {Header: 'Credit Cards', accessor: 'creditCards'},
+            {Header: 'Hours Allowed', accessor: 'hrsAllow'},
+            {Header: 'Actual Labor Hrs.', accessor: 'actualLabor'},
+            {Header: 'Labor Comp', accessor: 'laborComp'},
+            {Header: 'Interviewed', accessor: 'candidatesInt'},
+            {Header: 'On Board', accessor: 'candidatesOnb'},
+            {Header: 'Terminated', accessor: 'candidatesTerm'},
+            {Header: 'Truck', accessor: 'truck'},
+            {Header: 'House Charges', accessor: 'houseCharges'},
+            {Header: 'Paid Outs', accessor: 'paidOuts'},
+            {Header: 'Transfer', accessor: 'transfer'},
+            {Header: 'Store CC Pursh', accessor: 'storeCreditCardPursh'}
+        ],
+        []
+    );
 
     const checks = useSelector((store) => store.checks.array);
     const dates = useSelector((store) => store.checks.dates);
@@ -315,4 +322,4 @@ function Checks() {
     );
 }
 
-export default Checks;
+export default React.memo(Checks);

@@ -11,6 +11,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 /* import makeData from './makeData'; */
 
 function TableChecks({columns, data, id}) {
+    console.log('estas en tabla checks');
     // const referencia = [];
 
     // referencia[id] = useRef(null);
@@ -98,4 +99,4 @@ function TableChecks({columns, data, id}) {
         </>
     );
 }
-export default TableChecks;
+export default React.memo(TableChecks);

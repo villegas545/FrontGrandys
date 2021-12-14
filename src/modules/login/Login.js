@@ -7,10 +7,11 @@ import {useTranslation} from 'react-i18next';
 import {loginUser} from '@store/reducers/auth';
 import {Checkbox, Button, Input} from '@components';
 import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
-
+import axios from 'axios';
 import * as Yup from 'yup';
+import {url} from '../../config';
 
-import * as AuthService from '../../services/auth';
+// import * as AuthService from '../../services/auth';
 
 const Login = () => {
     const [isAuthLoading, setAuthLoading] = useState(false);
@@ -24,10 +25,16 @@ const Login = () => {
     const login = async (email, password) => {
         try {
             setAuthLoading(true);
-            const token = await AuthService.loginByAuth(email, password);
+            // const token = await AuthService.loginByAuth(email, password);
+            const response = await axios.post(`${url}login`, {
+                email,
+                password
+            });
+            console.log(response);
             toast.success('Login is succeed!');
+            localStorage.setItem('user', response.data.user);
             setAuthLoading(false);
-            dispatch(loginUser(token));
+            dispatch(loginUser(response.data.token));
             history.push('/');
         } catch (error) {
             setAuthLoading(false);
