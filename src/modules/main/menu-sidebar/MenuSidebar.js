@@ -20,7 +20,7 @@ export const MENU = [
         icon: 'fa-chart-bar'
     },
     {
-        name: 'CSV_Load',
+        name: 'Daily load',
         path: '/Csv',
         icon: 'fa-file-excel'
     }

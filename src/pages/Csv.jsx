@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
-import {FileUploader} from 'react-drag-drop-files';
+/* eslint-disable prettier/prettier */
+import React, { useState } from 'react';
+import { FileUploader } from 'react-drag-drop-files';
 import axios from 'axios';
-import {confirmAlert} from 'react-confirm-alert';
+import { confirmAlert } from 'react-confirm-alert';
 import ReactLoading from 'react-loading';
-import {ToastContainer, toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useDispatch, useSelector} from 'react-redux';
-import {getRestAction} from '@app/store/reducers/restsDucks';
-import {url as urlconf} from '../config';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRestAction } from '@app/store/reducers/restsDucks';
+import { url as urlconf } from '../config';
 
 const fileTypes = ['only csv files', 'vnd.ms-excel'];
 
@@ -41,10 +42,11 @@ function Csv() {
     const [restCCP, setRestCCP] = useState(null);
 
     const rest = useSelector((store) => store.rest.array);
-    const url = `${urlconf}csvToJson`;
+    const urlFile = `${urlconf}csvToJson`;
     // __________llamar restaurantes
     React.useEffect(async () => {
         await dispatch(getRestAction());
+     
     }, []);
 
     const handleChange = (_file) => {
@@ -68,7 +70,7 @@ function Csv() {
     const altaCsv = async () => {
         const f = new FormData();
         f.append('archivo', file);
-        const respuesta = await axios.post(url, f);
+        const respuesta = await axios.post(`${urlFile}/file`, f);
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
             alert('Archivo cargado correctamente');
@@ -93,20 +95,31 @@ function Csv() {
         }
     };
 
-    const submit = async () => {
-        const respuesta = await axios.post(url, {
-            restName,
-            restDate,
-            restTemp,
-            restWeat,
-            restCash,
-            restInter,
-            restOnb,
-            restTerm,
-            restTruck,
-            restTrans,
-            restCCP
-        });
+    const submit = async (e) => {
+        e.preventDefault();
+        if(restName==null || restName==='empty' || restDate==null || restTemp==null || 
+            restWeat==null || restCash==null || restInter==null || 
+            restOnb==null || restTerm==null || restTruck==null || 
+            restTrans==null || restCCP==null){
+            alert('Please fill all the fields');
+            return;
+        }
+
+    
+        const data=[{
+            restaurantId: restName,
+            date:restDate,
+            weatherTemp:restTemp,
+            weatherW:restWeat,
+            cash:restCash,
+            candidatesInt:restInter,
+            candidatesOnb:restOnb,
+            candidatesTerm:restTerm,
+            truck:restTruck,
+            transfer:restTrans,
+            storeCreditCardPursh:restCCP
+        }];
+        const respuesta = await axios.post(`${urlFile}/form`, {data});
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
             alert('Archivo cargado correctamente');
@@ -135,7 +148,7 @@ function Csv() {
         <div className="">
             <div className="row align-items-start">
                 <div className="col-8">
-                    <form onSubmit={submit}>
+                    <form onSubmit={(e) => submit(e)}>
                         <div className="card-body">
                             <div className="form-group">
                                 <label htmlFor="Restaurant">Restaurant</label>
@@ -147,6 +160,7 @@ function Csv() {
                                     value={restName}
                                     required
                                 >
+                                    <option value="empty">Seleccione una opcion</option>
                                     {rest.map((restaurant) => (
                                         <option
                                             value={restaurant.id}
