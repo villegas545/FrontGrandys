@@ -210,14 +210,14 @@ function Csv() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="Cash">Cash</label>
+                                <label htmlFor="Cash">Cash +/-</label>
                                 <input
                                     onChange={(e) =>
                                         setRestCash(e.target.value)
                                     }
                                     type="text"
                                     className="form-control"
-                                    placeholder="Cash"
+                                    placeholder="Cash +/-"
                                     value={restCash}
                                     required
                                 />
@@ -252,7 +252,7 @@ function Csv() {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="Candidates Terminated">
-                                    Candidates Terminated
+                                    Employees Terminated
                                 </label>
                                 <input
                                     onChange={(e) =>
@@ -260,7 +260,7 @@ function Csv() {
                                     }
                                     type="text"
                                     className="form-control"
-                                    placeholder="Candidates Terminated"
+                                    placeholder="Employees Terminated"
                                     value={restTerm}
                                     required
                                 />
@@ -279,7 +279,11 @@ function Csv() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="Transfer">Transfer</label>
+                                <label htmlFor="Transfer" >Transfer</label>
+                                <select name="" id="" className='form-control'>
+                                    <option value="+">In</option>
+                                    <option value="-">Out</option>
+                                </select>
                                 <input
                                     onChange={(e) =>
                                         setRestTrans(e.target.value)

@@ -47,8 +47,8 @@ function Checks() {
             {Header: 'Projeted Sales', accessor: 'projectedSales'},
             {Header: 'Gross Sales', accessor: 'grossSales'},
             {Header: 'Net Sales', accessor: 'netSales'},
-            {Header: 'NS comp', accessor: 'netSalesComp'},
-            {Header: 'Last Year % +/-', accessor: 'lyPercent'},
+            {Header: 'Net $ales  +/-', accessor: 'netSalesComp'}, // net sales - last years sales
+            {Header: 'Last Year % +/-', accessor: 'lyPercent'}, // net sales +/- *100 / last years sales ...... netsales por 100 entre lasy years  sales
             {Header: 'Projeted Sales +-', accessor: 'projSalesComp'},
             {Header: '% Projected Sales +/-', accessor: 'psPercent'},
             {Header: 'Sales Tax', accessor: 'salesTax'},
