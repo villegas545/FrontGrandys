@@ -43,13 +43,13 @@ function Checks() {
             /*  {Header: 'Id Rest', accessor: 'restaurantId'}, */
             {Header: 'Temp', accessor: 'weatherTemp'},
             {Header: 'Weather', accessor: 'weatherW'},
-            {Header: 'Last Year Sales', accessor: 'lySales'},
+            {Header: 'Last Year Sales', accessor: 'lySales'}, // es el netsales de el año anterior
             {Header: 'Projeted Sales', accessor: 'projectedSales'},
             {Header: 'Gross Sales', accessor: 'grossSales'},
-            {Header: 'Net Sales', accessor: 'netSales'},
-            {Header: 'Net $ales  +/-', accessor: 'netSalesComp'}, // net sales - last years sales
+            {Header: 'Net Sales', accessor: 'netSales'}, // es el netsales de el año actual
+            {Header: 'Net $ales  +/-', accessor: 'netSalesComp'}, // net sales actual menos el netsales del año anterior
             {Header: 'Last Year % +/-', accessor: 'lyPercent'}, // net sales +/- *100 / last years sales ...... netsales por 100 entre lasy years  sales
-            {Header: 'Projeted Sales +-', accessor: 'projSalesComp'},
+            {Header: 'Projeted Sales +-', accessor: 'projSalesComp'}, // sumar el dia que corresponda de 5 semanas atras y dividirlo entre 5
             {Header: '% Projected Sales +/-', accessor: 'psPercent'},
             {Header: 'Sales Tax', accessor: 'salesTax'},
             {Header: 'Tax Exempt', accessor: 'taxExempt'},
@@ -65,11 +65,9 @@ function Checks() {
             {Header: 'Double Steaks', accessor: 'doubleSteaks'},
             {Header: 'Nugget Meal', accessor: 'nuggetMeal'},
             {Header: 'Quarterly Promo 1', accessor: 'quarterlyProm1'},
-            {Header: 'Quarterly Promo 2', accessor: 'quarterlyProm2'},
             {Header: 'Cash Received', accessor: 'cashReceived'},
-            {Header: 'Deposit 1', accessor: 'Dep1'},
-            {Header: 'Deposit 2', accessor: 'Dep2'},
-            {Header: 'Total Deposit', accessor: 'totalDep '},
+            {Header: 'Tips', accessor: 'Dep1'},
+            {Header: 'Total Deposit', accessor: 'totalDep '}, //= cash received + tips + cash+/- -paidouts
             {Header: 'Cash', accessor: 'cash'},
             {Header: 'Credit Cards', accessor: 'creditCards'},
             {Header: 'Hours Allowed', accessor: 'hrsAllow'},
