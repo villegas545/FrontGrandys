@@ -44,12 +44,12 @@ function Checks() {
             {Header: 'Temp', accessor: 'weatherTemp'},
             {Header: 'Weather', accessor: 'weatherW'},
             {Header: 'Last Year Sales', accessor: 'lySales'}, // es el netsales de el año anterior
-            {Header: 'Projeted Sales', accessor: 'projectedSales'},
+            {Header: 'Projeted Sales', accessor: 'projectedSales'}, // sumar el dia que corresponda de 5 semanas atras y dividirlo entre 5
             {Header: 'Gross Sales', accessor: 'grossSales'},
             {Header: 'Net Sales', accessor: 'netSales'}, // es el netsales de el año actual
             {Header: 'Net $ales  +/-', accessor: 'netSalesComp'}, // net sales actual menos el netsales del año anterior
             {Header: 'Last Year % +/-', accessor: 'lyPercent'}, // net sales +/- *100 / last years sales ...... netsales por 100 entre lasy years  sales
-            {Header: 'Projeted Sales +-', accessor: 'projSalesComp'}, // sumar el dia que corresponda de 5 semanas atras y dividirlo entre 5
+            {Header: 'Projeted Sales +-', accessor: 'projSalesComp'}, // de projected sales restar las ventas netas del dia actual
             {Header: '% Projected Sales +/-', accessor: 'psPercent'},
             {Header: 'Sales Tax', accessor: 'salesTax'},
             {Header: 'Tax Exempt', accessor: 'taxExempt'},
@@ -70,9 +70,9 @@ function Checks() {
             {Header: 'Total Deposit', accessor: 'totalDep '}, //= cash received + tips + cash+/- -paidouts
             {Header: 'Cash', accessor: 'cash'},
             {Header: 'Credit Cards', accessor: 'creditCards'},
-            {Header: 'Hours Allowed', accessor: 'hrsAllow'},
+            // {Header: 'Hours Allowed', accessor: 'hrsAllow'},
             {Header: 'Actual Labor Hrs.', accessor: 'actualLabor'},
-            {Header: 'Labor Comp', accessor: 'laborComp'},
+            // {Header: 'Labor Comp', accessor: 'laborComp'},
             {Header: 'Interviewed', accessor: 'candidatesInt'},
             {Header: 'On Board', accessor: 'candidatesOnb'},
             {Header: 'Terminated', accessor: 'candidatesTerm'},

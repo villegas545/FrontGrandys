@@ -19,6 +19,7 @@ function TableChecks({columns, data, id}) {
 
     // notificacion tostify
 
+    // ordena fechas en la tabla, pero no toma encuenta la columna total en la ordenacion
     const ordenarFechas = () => {};
     data.sort(function (a, b) {
         try {
@@ -27,6 +28,7 @@ function TableChecks({columns, data, id}) {
             return a.date - b.date;
         }
     });
+
     React.useEffect(() => {
         ordenarFechas();
     }, []);
