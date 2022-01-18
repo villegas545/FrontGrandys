@@ -67,7 +67,7 @@ function Checks() {
             {Header: 'Quarterly Promo 1', accessor: 'quarterlyProm1'},
             {Header: 'Cash Received', accessor: 'cashReceived'},
             {Header: 'Tips', accessor: 'Dep1'},
-            {Header: 'Total Deposit', accessor: 'totalDep '}, //= cash received + tips + cash+/- -paidouts
+            {Header: 'Total Deposit', accessor: 'totalDep'}, //= cash received + tips + cash+/- -paidouts
             {Header: 'Cash', accessor: 'cash'},
             {Header: 'Credit Cards', accessor: 'creditCards'},
             // {Header: 'Hours Allowed', accessor: 'hrsAllow'},
