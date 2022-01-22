@@ -43,7 +43,6 @@ function Rest() {
     const dispatch = useDispatch();
 
     const columns = [
-        {Header: 'Id', accessor: 'id'},
         {
             Header: 'Name',
             accessor: 'name'
@@ -51,18 +50,6 @@ function Rest() {
         {
             Header: 'Location',
             accessor: 'location'
-        },
-        {
-            Header: 'Api',
-            accessor: 'api'
-        },
-        {
-            Header: 'Password',
-            accessor: 'password'
-        },
-        {
-            Header: 'User Name',
-            accessor: 'userName'
         }
     ];
 

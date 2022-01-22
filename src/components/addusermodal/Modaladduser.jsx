@@ -97,33 +97,42 @@ function Modaladduser({action}) {
                         value={email}
                     />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Password </label>
-                    <input
-                        onChange={(e) => setPassword(e.target.value)}
-                        type="password"
-                        className="form-control"
-                        placeholder="Password"
-                        value={password}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">
-                        Repeat Password
-                    </label>
-                    <input
-                        onChange={(e) => setRepeatPassword(e.target.value)}
-                        type="password"
-                        className="form-control"
-                        placeholder="Password"
-                        value={repeatPassword}
-                    />
-                    {password !== repeatPassword ? (
-                        <div className="text-form text-danger">
-                            Password fields doesn´t match
+                {registros.name === '' ? (
+                    <div>
+                        <div className="form-group">
+                            <label htmlFor="exampleInputPassword1">
+                                Password{' '}
+                            </label>
+                            <input
+                                onChange={(e) => setPassword(e.target.value)}
+                                type="password"
+                                className="form-control"
+                                placeholder="Password"
+                                value={password}
+                            />
                         </div>
-                    ) : null}
-                </div>
+                        <div className="form-group">
+                            <label htmlFor="exampleInputPassword1">
+                                Repeat Password
+                            </label>
+                            <input
+                                onChange={(e) =>
+                                    setRepeatPassword(e.target.value)
+                                }
+                                type="password"
+                                className="form-control"
+                                placeholder="Password"
+                                value={repeatPassword}
+                            />
+                            {password !== repeatPassword ? (
+                                <div className="text-form text-danger">
+                                    Password fields doesn´t match
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                ) : null}
+
                 <div className="form-group">
                     <label htmlFor="exampleInputPassword1">Role</label>
                     <select

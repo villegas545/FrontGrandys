@@ -52,10 +52,6 @@ function Users() {
             accessor: 'email'
         },
         {
-            Header: 'Password',
-            accessor: 'password'
-        },
-        {
             Header: 'Role',
             accessor: 'roles'
         }
