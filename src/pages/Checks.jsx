@@ -99,7 +99,14 @@ function Checks() {
         try {
             const respuesta = await axios.post(
                 `${urlconf}datepopulate`,
-                recibeDates
+                recibeDates,
+                {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                }
             );
             console.log(respuesta);
             notify();

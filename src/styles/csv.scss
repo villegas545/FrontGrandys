@@ -1,13 +1,28 @@
 
 .wraper{
-    width: 100%;
+/*     width: 100%; */
     display: flex;
    flex-flow: row wrap;
-    column-count:2;
+   justify-content: space-around;
   
-   > * {
-       flex: 1;
-       width: 100%;
-       color:white;
-   }
+ 
+}
+.ownform{
+    width:40%;
+    min-width: 300px;
+}
+
+
+
+.ownformcsv{
+    width: 70%;
+    min-width: 300px;
+}
+.ownform > .btn{
+    
+    width: 100%;
+}
+.fullwidth{
+    
+    width: 100%;
 }

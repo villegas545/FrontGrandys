@@ -45,7 +45,13 @@ export const recordsUpdate = (id) => async (dispatch) => {
                 roles: 'Empty'
             };
         } else {
-            res = await axios.get(`${url}/${id}`);
+            res = await axios.get(`${url}/${id}`, {
+                headers: {
+                    authorization: `bearerHeader: ${localStorage.getItem(
+                        'token'
+                    )}`
+                }
+            });
             res = res.data;
         }
 
@@ -60,7 +66,11 @@ export const recordsUpdate = (id) => async (dispatch) => {
 export const addUsersAction = (records) => async (dispatch, getState) => {
     try {
         await axios.post(`${url}`, records);
-        const res = await axios.get(`${url}`);
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         dispatch({
             type: ADD_USERS_SUCCESS,
             payload: res.data
@@ -75,7 +85,11 @@ export const getUsersAction = () => async (dispatch, getState) => {
     const {offset} = getState().users;
 
     try {
-        const res = await axios.get(`${url}`);
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         dispatch({
             type: GET_USERS_SUCCESS,
             payload: res.data
@@ -87,8 +101,16 @@ export const getUsersAction = () => async (dispatch, getState) => {
 
 export const deleteUsersAction = (id) => async (dispatch, getState) => {
     try {
-        await axios.delete(`${url}/${id}`);
-        const res = await axios.get(`${url}`);
+        await axios.delete(`${url}/${id}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         dispatch({
             type: DELETE_USERS_SUCCESS,
             payload: res.data
@@ -101,8 +123,20 @@ export const deleteUsersAction = (id) => async (dispatch, getState) => {
 export const updateUsersAction =
     (records, id) => async (dispatch, getState) => {
         try {
-            await axios.put(`${url}/${id}`, records);
-            const res = await axios.get(`${url}`);
+            await axios.put(`${url}/${id}`, records, {
+                headers: {
+                    authorization: `bearerHeader: ${localStorage.getItem(
+                        'token'
+                    )}`
+                }
+            });
+            const res = await axios.get(`${url}`, {
+                headers: {
+                    authorization: `bearerHeader: ${localStorage.getItem(
+                        'token'
+                    )}`
+                }
+            });
             dispatch({
                 type: UPDATE_USERS_SUCCESS,
                 payload: res.data

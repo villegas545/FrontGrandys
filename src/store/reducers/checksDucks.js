@@ -26,7 +26,14 @@ export const getChecksAction =
         console.log('estas recargando el duckChecks');
         try {
             const res = await axios.get(
-                `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}/${byWeek}`
+                `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}/${byWeek}`,
+                {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                }
             );
             if (res.data.message === 'datos') {
                 dispatch({

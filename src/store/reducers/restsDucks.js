@@ -47,7 +47,13 @@ export const recordsUpdate = (id) => async (dispatch) => {
                 userName: ''
             };
         } else {
-            res = await axios.get(`${url}/${id}`);
+            res = await axios.get(`${url}/${id}`, {
+                headers: {
+                    authorization: `bearerHeader: ${localStorage.getItem(
+                        'token'
+                    )}`
+                }
+            });
             res = res.data;
         }
 
@@ -61,8 +67,16 @@ export const recordsUpdate = (id) => async (dispatch) => {
 };
 export const addRestAction = (records) => async (dispatch, getState) => {
     try {
-        await axios.post(`${url}`, records);
-        const res = await axios.get(`${url}`);
+        await axios.post(`${url}`, records, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         dispatch({
             type: ADD_REST_SUCCESS,
             payload: res.data
@@ -77,7 +91,11 @@ export const getRestAction = () => async (dispatch, getState) => {
     const {offset} = getState().rest;
 
     try {
-        const res = await axios.get(`${url}`);
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         console.log(res);
         dispatch({
             type: GET_REST_SUCCESS,
@@ -90,8 +108,16 @@ export const getRestAction = () => async (dispatch, getState) => {
 
 export const deleteRestAction = (id) => async (dispatch, getState) => {
     try {
-        await axios.delete(`${url}/${id}`);
-        const res = await axios.get(`${url}`);
+        await axios.delete(`${url}/${id}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         dispatch({
             type: DELETE_REST_SUCCESS,
             payload: res.data
@@ -103,8 +129,16 @@ export const deleteRestAction = (id) => async (dispatch, getState) => {
 
 export const updateRestAction = (records, id) => async (dispatch, getState) => {
     try {
-        await axios.put(`${url}/${id}`, records);
-        const res = await axios.get(`${url}`);
+        await axios.put(`${url}/${id}`, records, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         dispatch({
             type: UPDATE_REST_SUCCESS,
             payload: res.data
