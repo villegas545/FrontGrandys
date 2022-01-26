@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestAction} from '@app/store/reducers/restsDucks';
 import {url as urlconf} from '../config';
+import '../styles/csv.scss';
 
 const fileTypes = ['only csv files', 'vnd.ms-excel'];
 
@@ -164,7 +165,7 @@ function Csv() {
     };
 
     return (
-        <div className="">
+        <div className="wraper">
             <div className="row align-items-start">
                 <div className="col-9">
                     <form onSubmit={(e) => submit(e)}>

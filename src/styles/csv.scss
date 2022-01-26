@@ -1,0 +1,13 @@
+
+.wraper{
+    width: 100%;
+    display: flex;
+   flex-flow: row wrap;
+    column-count:2;
+  
+   > * {
+       flex: 1;
+       width: 100%;
+       color:white;
+   }
+}

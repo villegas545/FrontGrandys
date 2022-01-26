@@ -123,7 +123,14 @@ const Login = () => {
             document.getElementById('root').classList.remove('login-page');
             document.getElementById('root').classList.remove('hold-transition');
             setAuthLoading(false);
-            dispatch(loginUser(token2.data.token));
+            console.log(token2.data);
+            dispatch(
+                loginUser({
+                    token: token2.data.token,
+                    name: token2.data.user,
+                    role: token2.data.role
+                })
+            );
             history.push('/');
             /* dispatch(loginUser(token2.data.token));
             history.push('/'); */
