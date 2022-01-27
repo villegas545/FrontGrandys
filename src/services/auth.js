@@ -2,9 +2,10 @@ import {Gatekeeper} from 'gatekeeper-client-sdk';
 
 export const loginByAuth = async (email, password) => {
     const token = await Gatekeeper.loginByAuth(email, password);
+    console.log(`este token`, token);
     localStorage.setItem('token', token);
-    document.getElementById('root').classList.remove('login-page');
-    document.getElementById('root').classList.remove('hold-transition');
+    /* document.getElementById('root').classList.remove('login-page');
+    document.getElementById('root').classList.remove('hold-transition'); */
     return token;
 };
 

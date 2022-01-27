@@ -109,6 +109,41 @@ const Login = () => {
 
     document.getElementById('root').classList = 'hold-transition login-page';
 
+    const functionLogin = async (e) => {
+        try {
+            e.preventDefault();
+            const token2 = await axios.post(`${url}login`, {
+                email: formik.values.email,
+                password: formik.values.password
+            });
+            // eslint-disable-next-line no-constant-condition
+            // eslint-disable-next-line no-cond-assign
+            console.log(token2.data.token);
+            toast.success('Login is succeed!');
+            document.getElementById('root').classList.remove('login-page');
+            document.getElementById('root').classList.remove('hold-transition');
+            setAuthLoading(false);
+            console.log(token2.data);
+            dispatch(
+                loginUser({
+                    token: token2.data.token,
+                    name: token2.data.user,
+                    role: token2.data.role
+                })
+            );
+            history.push('/');
+            /* dispatch(loginUser(token2.data.token));
+            history.push('/'); */
+        } catch (error) {
+            console.log('errir', error);
+            toast.error(
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                    'Failed'
+            );
+        }
+    };
     return (
         <div className="login-box">
             <div className="card card-outline card-primary">
@@ -125,7 +160,7 @@ const Login = () => {
                 </div>
                 <div className="card-body">
                     <p className="login-box-msg">{t('login.label.signIn')}</p>
-                    <form onSubmit={formik.handleSubmit}>
+                    <form onSubmit={(e) => functionLogin(e)}>
                         <div className="mb-3">
                             <Input
                                 icon={faEnvelope}

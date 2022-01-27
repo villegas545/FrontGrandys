@@ -1,0 +1,28 @@
+
+.wraper{
+/*     width: 100%; */
+    display: flex;
+   flex-flow: row wrap;
+   justify-content: space-around;
+  
+ 
+}
+.ownform{
+    width:40%;
+    min-width: 300px;
+}
+
+
+
+.ownformcsv{
+    width: 70%;
+    min-width: 300px;
+}
+.ownform > .btn{
+    
+    width: 100%;
+}
+.fullwidth{
+    
+    width: 100%;
+}

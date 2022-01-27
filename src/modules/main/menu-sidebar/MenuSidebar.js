@@ -1,9 +1,22 @@
-import React from 'react';
+/* eslint-disable indent */
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {MenuItem} from '@components';
 
 export const MENU = [
+    {
+        name: 'Daily load',
+        path: '/Csv',
+        icon: 'fa-file-excel'
+    },
+    {
+        name: 'Logout',
+        path: '/logout',
+        icon: 'fa-sign-out-alt'
+    }
+];
+export const MENUADMIN = [
     {
         name: 'Users',
         path: '/Users',
@@ -30,8 +43,14 @@ export const MENU = [
         icon: 'fa-sign-out-alt'
     }
 ];
-const userGrandys = localStorage.getItem('user');
+
 const MenuSidebar = () => {
+    const [userGrandys, setUser] = React.useState('');
+    const [role, setRole] = React.useState('');
+    useEffect(() => {
+        setRole(localStorage.getItem('role'));
+        setUser(localStorage.getItem('user'));
+    }, []);
     const user = useSelector((state) => state.auth.currentUser);
 
     return (
@@ -67,9 +86,19 @@ const MenuSidebar = () => {
                         className="nav nav-pills nav-sidebar flex-column"
                         role="menu"
                     >
-                        {MENU.map((menuItem) => (
-                            <MenuItem key={menuItem.name} menuItem={menuItem} />
-                        ))}
+                        {role === 'Admin'
+                            ? MENUADMIN.map((menuItem) => (
+                                  <MenuItem
+                                      key={menuItem.name}
+                                      menuItem={menuItem}
+                                  />
+                              ))
+                            : MENU.map((menuItem) => (
+                                  <MenuItem
+                                      key={menuItem.name}
+                                      menuItem={menuItem}
+                                  />
+                              ))}
                     </ul>
                 </nav>
             </div>

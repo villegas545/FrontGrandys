@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestAction} from '@app/store/reducers/restsDucks';
 import {url as urlconf} from '../config';
+import '../styles/csv.scss';
 
 const fileTypes = ['only csv files', 'vnd.ms-excel'];
 
@@ -60,7 +61,11 @@ function Csv() {
         try {
             const respuesta = await axios.post(
                 `${urlconf}datepopulate`,
-                recibeDates
+                recibeDates, {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem('token')}`
+                    }
+                }
             );
             console.log(respuesta);
             notify();
@@ -72,7 +77,11 @@ function Csv() {
     const altaCsv = async () => {
         const f = new FormData();
         f.append('archivo', file);
-        const respuesta = await axios.post(`${urlFile}/file`, f);
+        const respuesta = await axios.post(`${urlFile}/file`, f, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
             alert('Archivo cargado correctamente');
@@ -138,7 +147,11 @@ function Csv() {
             }
         ];
 
-        const respuesta = await axios.post(`${urlFile}/form`, {data});
+        const respuesta = await axios.post(`${urlFile}/form`, {data}, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
             alert('Archivo cargado correctamente');
@@ -164,274 +177,319 @@ function Csv() {
     };
 
     return (
-        <div className="">
-            <div className="row align-items-start">
-                <div className="col-9">
-                    <form onSubmit={(e) => submit(e)}>
-                        <div className="row align-items-start">
-                            <div className="col-6">
-                                {' '}
-                                <div className="form-group">
-                                    <label htmlFor="Restaurant">
-                                        Restaurant
-                                    </label>
-                                    <select
-                                        onChange={(e) =>
-                                            setRestName(e.target.value)
-                                        }
-                                        className="form-control"
-                                        value={restName}
-                                        required
-                                    >
-                                        <option value="empty">
-                                            Seleccione una opcion
-                                        </option>
-                                        {rest.map((restaurant) => (
-                                            <option
-                                                value={restaurant.id}
-                                                key={restaurant.id}
-                                            >
-                                                {restaurant.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="date">Date</label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestDate(e.target.value)
-                                        }
-                                        type="date"
-                                        className="form-control"
-                                        value={restDate}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="WeatherTemp">
-                                        Temperature
-                                    </label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestTemp(e.target.value)
-                                        }
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Temperature"
-                                        value={restTemp}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Weather">Weather</label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestWeat(e.target.value)
-                                        }
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Weather"
-                                        value={restWeat}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Cash">Cash +/-</label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestCash(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Cash +/-"
-                                        value={restCash}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Candidates Interviewed">
-                                        Candidates Interview
-                                    </label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestInter(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Candidates Interviewed"
-                                        value={restInter}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Candidates Onboard">
-                                        Candidates Onboard
-                                    </label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestOnb(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Candidates Onboard"
-                                        value={restOnb}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Candidates Terminated">
-                                        Employees Terminated
-                                    </label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestTerm(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Employees Terminated"
-                                        value={restTerm}
-                                        required
-                                    />
-                                </div>{' '}
-                            </div>
-                            <div className="col-6">
-                                <div className="form-group">
-                                    <label htmlFor="Truck">Truck</label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestTruck(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Truck"
-                                        value={restTruck}
-                                        required
-                                    />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <label htmlFor="Store Credit Card Purchase">
-                                        Transfer
-                                    </label>
-                                    <div className="px-5">
-                                        <select
-                                            onChange={(e) =>
-                                                setTransfer(e.target.value)
-                                            }
-                                            name=""
-                                            id=""
-                                            className="form-control"
-                                            value={transfer}
+        <>
+            <ul className="nav nav-tabs" id="myTab" role="tablist">
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link btn-danger font-weight-bold text-uppercase active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Form</button>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link btn-danger font-weight-bold text-uppercase" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Document Csv</button>
+                </li>
+
+            </ul>
+            <div className="tab-content" id="myTabContent">
+                <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <form onSubmit={(e) => submit(e)} className='wraper'>
+                        
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Restaurant">
+                                          Restaurant
+                                </label>
+                                <select
+                                    onChange={(e) =>
+                                        setRestName(e.target.value)
+                                    }
+                                    className="form-control"
+                                    value={restName}
+                                    required
+                                >
+                                    <option value="empty">
+                              
+                                              Select a option
+                                    </option>
+                                    {rest.map((restaurant) => (
+                                        <option
+                                            value={restaurant.id}
+                                            key={restaurant.id}
                                         >
-                                            <option value="+">In</option>
-                                            <option value="-">Out</option>
-                                        </select>
-                                    </div>
-                                    <span className="input-group-text">
-                                        Ammount
-                                    </span>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestTrans(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Transfer"
-                                        value={restTrans}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Store Credit Card Purchase">
-                                        Store Credit Card Purchase
-                                    </label>
-                                    <input
-                                        onChange={(e) =>
-                                            setRestCCP(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Store Credit Card Purchase"
-                                        value={restCCP}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="qPromo">
-                                        Quarterly Promo
-                                    </label>
-                                    <input
-                                        onChange={(e) =>
-                                            setQPromo(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Quaterly Promo"
-                                        value={qPromo}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="Tips">Tips</label>
-                                    <input
-                                        onChange={(e) =>
-                                            setTips(e.target.value)
-                                        }
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Tips"
-                                        value={tips}
-                                        required
-                                    />
-                                </div>
+                                            {restaurant.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="date">Date</label>
                                 <input
-                                    type="submit"
-                                    className="btn btn-danger"
-                                    value="Submit Form"
+                                    onChange={(e) =>
+                                        setRestDate(e.target.value)
+                                    }
+                                    type="date"
+                                    className="form-control"
+                                    value={restDate}
+                                    required
                                 />
                             </div>
                         </div>
-                        {/* <!-- /.card-body --> */}
+                    
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="WeatherTemp">
+                                          Temperature
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestTemp(e.target.value)
+                                    }
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Temperature"
+                                    value={restTemp}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+
+                            <div className="form-group">
+                                <label htmlFor="Weather">Weather</label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestWeat(e.target.value)
+                                    }
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Weather"
+                                    value={restWeat}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Cash">Cash +/-</label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestCash(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Cash +/-"
+                                    value={restCash}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Candidates Interviewed">
+                                          Candidates Interview
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestInter(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Candidates Interviewed"
+                                    value={restInter}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Candidates Onboard">
+                                          Candidates Onboard
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestOnb(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Candidates Onboard"
+                                    value={restOnb}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Candidates Terminated">
+                                          Employees Terminated
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestTerm(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Employees Terminated"
+                                    value={restTerm}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Truck">Truck</label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestTruck(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Truck"
+                                    value={restTruck}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="input-group mb-3">
+                                <label htmlFor="Store Credit Card Purchase">
+                                          Transfer
+                                </label>
+                                <div className="px-5">
+                                    <select
+                                        onChange={(e) =>
+                                            setTransfer(e.target.value)
+                                        }
+                                        name=""
+                                        id=""
+                                        className="form-control"
+                                        value={transfer}
+                                    >
+                                        <option value="+">In</option>
+                                        <option value="-">Out</option>
+                                    </select>
+                                </div>
+                                <span className="input-group-text">
+                                          Ammount
+                                </span>
+                                <input
+                                    onChange={(e) =>
+                                        setRestTrans(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Transfer"
+                                    value={restTrans}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Store Credit Card Purchase">
+                                          Store Credit Card Purchase
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestCCP(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Store Credit Card Purchase"
+                                    value={restCCP}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="qPromo">
+                                          Quarterly Promo
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setQPromo(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Quaterly Promo"
+                                    value={qPromo}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Tips">Tips</label>
+                                <input
+                                    onChange={(e) =>
+                                        setTips(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Tips"
+                                    value={tips}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <input
+                                type="submit"
+                                className="btn btn-danger mt-3"
+                                value="Submit Form"
+                            />
+                        </div>
+                     
                     </form>
                 </div>
-                <div className="col-3 mt-3">
-                    <ReactLoading
-                        style={{
-                            display: cargando ? 'block' : 'none',
-                            position: 'absolute',
-                            zIndex: '9999',
-                            top: '30%',
-                            left: '50%',
-                            height: '150px',
-                            width: '150px',
-                            color: '#D11F1F'
-                        }}
-                        color="#D11F1F"
-                        width="300px"
-                        type="spinningBubbles"
-                        height="100px"
-                    />
-                    <FileUploader
-                        handleChange={handleChange}
-                        name="archivo"
-                        types={fileTypes}
-                    />
-                    {validacion ? <span>{file.name}</span> : <span> </span>}
+                <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div className='wraper mt-5'>
+                        <div className='ownformcsv'>
 
-                    <input
-                        type="submit"
-                        className="btn btn-danger"
-                        value="Submit File"
-                        onClick={(e) => altaCsv(e.target.file)}
-                    />
-                    <a href="../archivo.csv" className="btn btn-danger m-3">
+                            <FileUploader
+                                handleChange={handleChange}
+                                name="archivo"
+                                types={fileTypes}
+                                className="fullwidth"
+                            />
+                            {validacion ? <span>{file.name}</span> : <span> </span>}
+                        </div>
+                        <div className='ownformcsv'>
+                            <input
+                                type="submit"
+                                className="btn btn-danger fullwidth"
+                                value="Submit File"
+                                onClick={(e) => altaCsv(e.target.file)}
+                            />
+                        </div>
+                        <div className='ownformcsv '>
+                            <a href="../archivo.csv" className="btn btn-danger mt-3 fullwidth">
                         Download Form File
-                    </a>
+                            </a>
+                        </div>
+                    </div>
                 </div>
+ 
             </div>
 
+            <ReactLoading
+                style={{
+                    display: cargando ? 'block' : 'none',
+                    position: 'absolute',
+                    zIndex: '9999',
+                    top: '30%',
+                    left: '50%',
+                    height: '150px',
+                    width: '150px',
+                    color: '#D11F1F'
+                }}
+                color="#D11F1F"
+                width="300px"
+                type="spinningBubbles"
+                height="100px"
+            />
             <ToastContainer />
-        </div>
+        </>
+ 
     );
 }
 

@@ -99,7 +99,14 @@ function Checks() {
         try {
             const respuesta = await axios.post(
                 `${urlconf}datepopulate`,
-                recibeDates
+                recibeDates,
+                {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                }
             );
             console.log(respuesta);
             notify();
@@ -165,79 +172,146 @@ function Checks() {
             />
             <section className="content-header">
                 <div className="container-fluid">
-                    <div className="row mb-2">
-                        <div className="col-sm-12">
-                            <h1>DataTables</h1>
-                            <div className="input-group mb-3">
-                                <span className="input-group-text">
-                                    Start Week
-                                </span>
-                                <input
-                                    title="Start Week"
-                                    type="number"
-                                    className="form-control input-sm mr-3"
-                                    min="1"
-                                    max="52"
-                                    value={startWeek}
-                                    onChange={(e) =>
-                                        setStartWeek(e.target.value)
-                                    }
-                                />
-                                <span className="input-group-text">
-                                    End Week
-                                </span>
-                                <input
-                                    title="End Week"
-                                    type="number"
-                                    className="form-control mr-3"
-                                    min="1"
-                                    max="52"
-                                    value={endWeek}
-                                    onChange={(e) => setEndWeek(e.target.value)}
-                                />
-                                <span className="input-group-text">
-                                    Start Year
-                                </span>
-                                <input
-                                    title="Start Year"
-                                    type="number"
-                                    className="form-control mr-3"
-                                    min="2015"
-                                    max="2999"
-                                    value={startYear}
-                                    onChange={(e) =>
-                                        setStartYear(e.target.value)
-                                    }
-                                />
-                                <span className="input-group-text">
-                                    End Year
-                                </span>
-                                <input
-                                    title="End Year"
-                                    type="number"
-                                    className="form-control mr-3"
-                                    min="2015"
-                                    max="2999"
-                                    value={endYear}
-                                    onChange={(e) => setEndYear(e.target.value)}
-                                />
-                                <select
-                                    className="form-control mr-3"
-                                    value={byWeek}
-                                    onChange={(e) => setByWeek(e.target.value)}
-                                >
-                                    <option selected value="byDay">
-                                        By Day
-                                    </option>
-                                    <option value="byWeek">By Week</option>
-                                </select>
-                                <input
-                                    type="submit"
-                                    value="Search"
-                                    onClick={(e) => weekSelector(e)}
-                                    className="form-control btn btn-danger btn-sm mr-3 text-lg"
-                                />
-                            </div>
+                    <h1>DataTables</h1>
+                    <div
+                        className="input-group mb-3"
+                        style={{display: 'flex', flexFlow: 'row wrap'}}
+                    >
+                        <div
+                            className=""
+                            style={{
+                                display: 'flex',
+                                flexFlow: 'row nowrap',
+                                flex: '1 16.6667%'
+                            }}
+                        >
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                Start Week
+                            </span>
+                            <input
+                                title="Start Week"
+                                type="number"
+                                className="form-control input-sm mr-3"
+                                min="1"
+                                max="52"
+                                style={{minWidth: '50px'}}
+                                value={startWeek}
+                                onChange={(e) => setStartWeek(e.target.value)}
+                            />
+                        </div>
+                        <div
+                            className=""
+                            style={{
+                                display: 'flex',
+                                flexFlow: 'row nowrap',
+                                flex: '1 16.6667%'
+                            }}
+                        >
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                End Week
+                            </span>
+                            <input
+                                title="End Week"
+                                type="number"
+                                className="form-control mr-3"
+                                min="1"
+                                max="52"
+                                style={{minWidth: '50px'}}
+                                value={endWeek}
+                                onChange={(e) => setEndWeek(e.target.value)}
+                            />
+                        </div>
+                        <div
+                            className=""
+                            style={{
+                                display: 'flex',
+                                flexFlow: 'row nowrap',
+                                flex: '1 16.6667%'
+                            }}
+                        >
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                Start Year
+                            </span>
+                            <input
+                                title="Start Year"
+                                type="number"
+                                className="form-control mr-3"
+                                min="2015"
+                                style={{minWidth: '50px'}}
+                                max="2999"
+                                value={startYear}
+                                onChange={(e) => setStartYear(e.target.value)}
+                            />
+                        </div>
+                        <div
+                            className=""
+                            style={{
+                                display: 'flex',
+                                flexFlow: 'row nowrap',
+                                flex: '1 16.6667%'
+                            }}
+                        >
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                End Year
+                            </span>
+                            <input
+                                title="End Year"
+                                type="number"
+                                className="form-control mr-3"
+                                min="2015"
+                                max="2999"
+                                style={{minWidth: '50px'}}
+                                value={endYear}
+                                onChange={(e) => setEndYear(e.target.value)}
+                            />
+                        </div>
+                        <div
+                            className=""
+                            style={{
+                                display: 'flex',
+                                flexFlow: 'row nowrap',
+                                flex: '1 16.6667%'
+                            }}
+                        >
+                            <select
+                                className="form-control mr-3"
+                                value={byWeek}
+                                onChange={(e) => setByWeek(e.target.value)}
+                                style={{minWidth: '100px'}}
+                            >
+                                <option selected value="byDay">
+                                    By Day
+                                </option>
+                                <option value="byWeek">By Week</option>
+                            </select>
+                        </div>
+                        <div
+                            className=""
+                            style={{
+                                display: 'flex',
+                                flexFlow: 'row nowrap',
+                                flex: '1 16.6667%'
+                            }}
+                        >
+                            <input
+                                type="submit"
+                                value="Search"
+                                onClick={(e) => weekSelector(e)}
+                                className="form-control btn btn-danger btn-sm mr-3 text-lg"
+                                style={{minWidth: '100px'}}
+                            />
                         </div>
                     </div>
                 </div>

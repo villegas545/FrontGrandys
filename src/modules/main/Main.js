@@ -1,14 +1,12 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {Gatekeeper} from 'gatekeeper-client-sdk';
 import {loadUser, logoutUser} from '@store/reducers/auth';
 import {toggleSidebarMenu} from '@app/store/reducers/ui';
 
 // import Dashboard from '@pages/Dashboard';
-import Blank from '@pages/Blank';
-import SubMenu from '@pages/SubMenu';
-import Profile from '@pages/profile/Profile';
+
 import Checks from '@app/pages/Checks';
 import Users from '@app/pages/Users';
 import Rests from '@app/pages/Rests';
@@ -20,6 +18,10 @@ import MenuSidebar from './menu-sidebar/MenuSidebar';
 import PageLoading from '../../components/page-loading/PageLoading';
 
 const Main = () => {
+    const [role, setRole] = React.useState('');
+    useEffect(() => {
+        setRole(localStorage.getItem('role'));
+    }, []);
     const dispatch = useDispatch();
     const isSidebarMenuCollapsed = useSelector(
         (state) => state.ui.isSidebarMenuCollapsed
@@ -72,6 +74,9 @@ const Main = () => {
     }, [screenSize, isSidebarMenuCollapsed]);
     const logoutFunction = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('role');
+
         window.location.href = '/';
     };
     const getAppTemplate = useCallback(() => {
@@ -88,31 +93,53 @@ const Main = () => {
                 <div className="content-wrapper">
                     <div className="pt-3" />
                     <section className="content">
-                        <Switch>
-                            <Route exact path="/sub-menu-2" component={Blank} />
-                            <Route
-                                exact
-                                path="/sub-menu-1"
-                                component={SubMenu}
-                            />
-                            <Route exact path="/blank" component={Blank} />
-                            <Route exact path="/profile" component={Profile} />
-                            <Route exact path="/users" component={Users} />
-                            <Route
-                                exact
-                                path="/Restaurants"
-                                component={Rests}
-                            />
-                            <Route exact path="/" component={Checks} />
-                            <Route exact path="/Checks" component={Checks} />
-                            <Route exact path="/Csv" component={Csv} />
-                            <Route
-                                exact
-                                path="/logout"
-                                component={logoutFunction}
-                                onEnter={() => logoutFunction()}
-                            />
-                        </Switch>
+                        {role === 'Admin' ? (
+                            <>
+                                <Switch>
+                                    <Route
+                                        exact
+                                        path="/users"
+                                        component={Users}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/Restaurants"
+                                        component={Rests}
+                                    />
+                                    <Route exact path="/" component={Checks} />
+                                    <Route
+                                        exact
+                                        path="/Checks"
+                                        component={Checks}
+                                    />
+                                    <Route exact path="/Csv" component={Csv} />
+                                    <Route
+                                        exact
+                                        path="/logout"
+                                        component={logoutFunction}
+                                        onEnter={() => logoutFunction()}
+                                    />
+                                </Switch>
+                            </>
+                        ) : (
+                            <>
+                                {' '}
+                                <Switch>
+                                    <Route exact path="/Csv" component={Csv} />
+                                    <Route
+                                        exact
+                                        path="/logout"
+                                        component={logoutFunction}
+                                        onEnter={() => logoutFunction()}
+                                    />
+                                    <Redirect
+                                        to={{
+                                            pathname: '/Csv'
+                                        }}
+                                    />
+                                </Switch>
+                            </>
+                        )}
                     </section>
                 </div>
                 <Footer />
