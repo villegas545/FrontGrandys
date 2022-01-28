@@ -140,7 +140,7 @@ function Csv() {
                 transferType: transfer
             }
         ];
-
+        console.log(data);
         const respuesta = await axios.post(
             `${urlFile}/form`,
             {data},
