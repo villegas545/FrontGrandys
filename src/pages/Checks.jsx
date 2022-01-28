@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import TableChecks from '@app/components/table/TableChecks';
+import TableReports from '@app/components/table/TableReports';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector, useDispatch} from 'react-redux';
@@ -356,38 +357,13 @@ function Checks() {
                               }`}
                           >
                               {' '}
-                              <TableChecks
+                              <TableReports
                                   columns={columns}
                                   data={item.Checks}
                                   id={item.id}
                               />
-                              {/*  <buttton
-                            value="Transpose"
-                            className="btn btn-dark botontransponer"
-                        >
-                            Transpose
-                        </buttton> */}
-                              {/*  <input
-                            value="Transpose"
-                            className="btn btn-danger botontransponer"
-                            onChange={() => console.log(item.id)}
-                        /> */}
                           </div>
                       ))}
-                {/*    <div
-                    className="tab-pane fade"
-                    id="nav-profile"
-                    role="tabpanel"
-                    aria-labelledby="nav-home-tab"
-                />
-                <div
-                    className="tab-pane fade  show active"
-                    id="nav-home"
-                    role="tabpanel"
-                    aria-labelledby="nav-home-tab"
-                >
-                    <TableChecks columns={columns} data={checks} />{' '}
-                </div> */}
             </div>
             <ToastContainer />
         </>

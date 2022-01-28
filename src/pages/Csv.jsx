@@ -35,9 +35,6 @@ function Csv() {
     const [restTemp, setRestTemp] = useState(null);
     const [restWeat, setRestWeat] = useState(null);
     const [restCash, setRestCash] = useState(null);
-    const [restInter, setRestInter] = useState(null);
-    const [restOnb, setRestOnb] = useState(null);
-    const [restTerm, setRestTerm] = useState(null);
     const [restTruck, setRestTruck] = useState(null);
     const [restTrans, setRestTrans] = useState(null);
     const [restCCP, setRestCCP] = useState(null);
@@ -61,9 +58,12 @@ function Csv() {
         try {
             const respuesta = await axios.post(
                 `${urlconf}datepopulate`,
-                recibeDates, {
+                recibeDates,
+                {
                     headers: {
-                        authorization: `bearerHeader: ${localStorage.getItem('token')}`
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
                     }
                 }
             );
@@ -115,9 +115,6 @@ function Csv() {
             restTemp == null ||
             restWeat == null ||
             restCash == null ||
-            restInter == null ||
-            restOnb == null ||
-            restTerm == null ||
             restTruck == null ||
             restTrans == null ||
             restCCP == null ||
@@ -135,9 +132,6 @@ function Csv() {
                 weatherTemp: restTemp,
                 weatherW: restWeat,
                 cash: restCash,
-                candidatesInt: restInter,
-                candidatesOnb: restOnb,
-                candidatesTerm: restTerm,
                 truck: restTruck,
                 transfer: restTrans,
                 storeCreditCardPursh: restCCP,
@@ -147,11 +141,17 @@ function Csv() {
             }
         ];
 
-        const respuesta = await axios.post(`${urlFile}/form`, {data}, {
-            headers: {
-                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+        const respuesta = await axios.post(
+            `${urlFile}/form`,
+            {data},
+            {
+                headers: {
+                    authorization: `bearerHeader: ${localStorage.getItem(
+                        'token'
+                    )}`
+                }
             }
-        });
+        );
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
             alert('Archivo cargado correctamente');
@@ -180,22 +180,45 @@ function Csv() {
         <>
             <ul className="nav nav-tabs" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
-                    <button className="nav-link btn-danger font-weight-bold text-uppercase active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Form</button>
+                    <button
+                        className="nav-link btn-danger font-weight-bold text-uppercase active"
+                        id="home-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#home"
+                        type="button"
+                        role="tab"
+                        aria-controls="home"
+                        aria-selected="true"
+                    >
+                        Form
+                    </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                    <button className="nav-link btn-danger font-weight-bold text-uppercase" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Document Csv</button>
+                    <button
+                        className="nav-link btn-danger font-weight-bold text-uppercase"
+                        id="profile-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#profile"
+                        type="button"
+                        role="tab"
+                        aria-controls="profile"
+                        aria-selected="false"
+                    >
+                        Document Csv
+                    </button>
                 </li>
-
             </ul>
             <div className="tab-content" id="myTabContent">
-                <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <form onSubmit={(e) => submit(e)} className='wraper'>
-                        
+                <div
+                    className="tab-pane fade show active"
+                    id="home"
+                    role="tabpanel"
+                    aria-labelledby="home-tab"
+                >
+                    <form onSubmit={(e) => submit(e)} className="wraper">
                         <div className="ownform">
                             <div className="form-group">
-                                <label htmlFor="Restaurant">
-                                          Restaurant
-                                </label>
+                                <label htmlFor="Restaurant">Restaurant</label>
                                 <select
                                     onChange={(e) =>
                                         setRestName(e.target.value)
@@ -205,8 +228,7 @@ function Csv() {
                                     required
                                 >
                                     <option value="empty">
-                              
-                                              Select a option
+                                        Select a option
                                     </option>
                                     {rest.map((restaurant) => (
                                         <option
@@ -233,12 +255,10 @@ function Csv() {
                                 />
                             </div>
                         </div>
-                    
+
                         <div className="ownform">
                             <div className="form-group">
-                                <label htmlFor="WeatherTemp">
-                                          Temperature
-                                </label>
+                                <label htmlFor="WeatherTemp">Temperature</label>
                                 <input
                                     onChange={(e) =>
                                         setRestTemp(e.target.value)
@@ -252,7 +272,6 @@ function Csv() {
                             </div>
                         </div>
                         <div className="ownform">
-
                             <div className="form-group">
                                 <label htmlFor="Weather">Weather</label>
                                 <input
@@ -284,57 +303,6 @@ function Csv() {
                         </div>
                         <div className="ownform">
                             <div className="form-group">
-                                <label htmlFor="Candidates Interviewed">
-                                          Candidates Interview
-                                </label>
-                                <input
-                                    onChange={(e) =>
-                                        setRestInter(e.target.value)
-                                    }
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Candidates Interviewed"
-                                    value={restInter}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="ownform">
-                            <div className="form-group">
-                                <label htmlFor="Candidates Onboard">
-                                          Candidates Onboard
-                                </label>
-                                <input
-                                    onChange={(e) =>
-                                        setRestOnb(e.target.value)
-                                    }
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Candidates Onboard"
-                                    value={restOnb}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="ownform">
-                            <div className="form-group">
-                                <label htmlFor="Candidates Terminated">
-                                          Employees Terminated
-                                </label>
-                                <input
-                                    onChange={(e) =>
-                                        setRestTerm(e.target.value)
-                                    }
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Employees Terminated"
-                                    value={restTerm}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="ownform">
-                            <div className="form-group">
                                 <label htmlFor="Truck">Truck</label>
                                 <input
                                     onChange={(e) =>
@@ -351,7 +319,7 @@ function Csv() {
                         <div className="ownform">
                             <div className="input-group mb-3">
                                 <label htmlFor="Store Credit Card Purchase">
-                                          Transfer
+                                    Transfer
                                 </label>
                                 <div className="px-5">
                                     <select
@@ -368,7 +336,7 @@ function Csv() {
                                     </select>
                                 </div>
                                 <span className="input-group-text">
-                                          Ammount
+                                    Ammount
                                 </span>
                                 <input
                                     onChange={(e) =>
@@ -385,12 +353,10 @@ function Csv() {
                         <div className="ownform">
                             <div className="form-group">
                                 <label htmlFor="Store Credit Card Purchase">
-                                          Store Credit Card Purchase
+                                    Store Credit Card Purchase
                                 </label>
                                 <input
-                                    onChange={(e) =>
-                                        setRestCCP(e.target.value)
-                                    }
+                                    onChange={(e) => setRestCCP(e.target.value)}
                                     type="number"
                                     className="form-control"
                                     placeholder="Store Credit Card Purchase"
@@ -401,13 +367,9 @@ function Csv() {
                         </div>
                         <div className="ownform">
                             <div className="form-group">
-                                <label htmlFor="qPromo">
-                                          Quarterly Promo
-                                </label>
+                                <label htmlFor="qPromo">Quarterly Promo</label>
                                 <input
-                                    onChange={(e) =>
-                                        setQPromo(e.target.value)
-                                    }
+                                    onChange={(e) => setQPromo(e.target.value)}
                                     type="number"
                                     className="form-control"
                                     placeholder="Quaterly Promo"
@@ -420,9 +382,7 @@ function Csv() {
                             <div className="form-group">
                                 <label htmlFor="Tips">Tips</label>
                                 <input
-                                    onChange={(e) =>
-                                        setTips(e.target.value)
-                                    }
+                                    onChange={(e) => setTips(e.target.value)}
                                     type="number"
                                     className="form-control"
                                     placeholder="Tips"
@@ -438,22 +398,29 @@ function Csv() {
                                 value="Submit Form"
                             />
                         </div>
-                     
                     </form>
                 </div>
-                <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <div className='wraper mt-5'>
-                        <div className='ownformcsv'>
-
+                <div
+                    className="tab-pane fade"
+                    id="profile"
+                    role="tabpanel"
+                    aria-labelledby="profile-tab"
+                >
+                    <div className="wraper mt-5">
+                        <div className="ownformcsv">
                             <FileUploader
                                 handleChange={handleChange}
                                 name="archivo"
                                 types={fileTypes}
                                 className="fullwidth"
                             />
-                            {validacion ? <span>{file.name}</span> : <span> </span>}
+                            {validacion ? (
+                                <span>{file.name}</span>
+                            ) : (
+                                <span> </span>
+                            )}
                         </div>
-                        <div className='ownformcsv'>
+                        <div className="ownformcsv">
                             <input
                                 type="submit"
                                 className="btn btn-danger fullwidth"
@@ -461,14 +428,16 @@ function Csv() {
                                 onClick={(e) => altaCsv(e.target.file)}
                             />
                         </div>
-                        <div className='ownformcsv '>
-                            <a href="../archivo.csv" className="btn btn-danger mt-3 fullwidth">
-                        Download Form File
+                        <div className="ownformcsv ">
+                            <a
+                                href="../archivo.csv"
+                                className="btn btn-danger mt-3 fullwidth"
+                            >
+                                Download Form File
                             </a>
                         </div>
                     </div>
                 </div>
- 
             </div>
 
             <ReactLoading
@@ -489,7 +458,6 @@ function Csv() {
             />
             <ToastContainer />
         </>
- 
     );
 }
 
