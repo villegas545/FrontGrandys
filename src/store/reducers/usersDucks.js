@@ -65,7 +65,11 @@ export const recordsUpdate = (id) => async (dispatch) => {
 };
 export const addUsersAction = (records) => async (dispatch, getState) => {
     try {
-        await axios.post(`${url}`, records);
+        await axios.post(`${url}`, records, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
         const res = await axios.get(`${url}`, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
