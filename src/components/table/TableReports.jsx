@@ -1,5 +1,5 @@
 import React from 'react';
-
+/* import round from 'lodash/round'; */
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 // import JSPDF from 'jspdf';
 // import 'jspdf-autotable';
@@ -26,6 +26,20 @@ function TableReports({data, id}) {
         } catch {
             return a.date - b.date;
         }
+    });
+    data.map((item) => {
+        item.quarterlyProm1 = Math.trunc(Number(item.quarterlyProm1));
+        item.transCount = Math.trunc(Number(item.transCount));
+        item.coupons = Math.trunc(Number(item.coupons));
+        item.coupQuant = Math.trunc(Number(item.coupQuant));
+        item.outOrderQuant = Math.trunc(Number(item.outOrderQuant));
+        item.singleSteaks = Math.trunc(Number(item.singleSteaks));
+        item.doubleSteaks = Math.trunc(Number(item.doubleSteaks));
+        item.nuggetMeal = Math.trunc(Number(item.nuggetMeal));
+        item.quarterlyProm1 = Math.trunc(Number(item.quarterlyProm1));
+        item.actualLabor = Math.trunc(Number(item.actualLabor));
+
+        return item;
     });
 
     React.useEffect(() => {
