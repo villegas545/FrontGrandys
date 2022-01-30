@@ -16,7 +16,18 @@ const fileTypes = ['only csv files', 'vnd.ms-excel'];
 function Csv() {
     const dispatch = useDispatch();
     const notify = () =>
-        toast('Downloaded!!!!, Please press "Search Button" again', {
+        toast('Uploaded success!!!!', {
+            theme: 'colored',
+            type: 'success',
+            position: 'top-center',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+        });
+    const notify2 = () =>
+        toast('Uploaded success!!!!', {
             theme: 'colored',
             type: 'success',
             position: 'top-center',
@@ -84,7 +95,8 @@ function Csv() {
         });
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
-            alert('Archivo cargado correctamente');
+            // alert('Archivo cargado correctamente');
+            notify2();
         } else {
             const numberDates = respuesta.data.dateList.length;
             confirmAlert({
@@ -154,7 +166,7 @@ function Csv() {
         );
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
-            alert('Archivo cargado correctamente');
+            notify();
         } else {
             const numberDates = respuesta.data.dateList.length;
             confirmAlert({
@@ -232,7 +244,7 @@ function Csv() {
                                     </option>
                                     {rest.map((restaurant) => (
                                         <option
-                                            value={restaurant.id}
+                                            value={restaurant.api}
                                             key={restaurant.id}
                                         >
                                             {restaurant.name}

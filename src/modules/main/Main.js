@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Gatekeeper} from 'gatekeeper-client-sdk';
 import {loadUser, logoutUser} from '@store/reducers/auth';
 import {toggleSidebarMenu} from '@app/store/reducers/ui';
+import axios from 'axios';
 
 // import Dashboard from '@pages/Dashboard';
 
@@ -11,6 +12,7 @@ import Checks from '@app/pages/Checks';
 import Users from '@app/pages/Users';
 import Rests from '@app/pages/Rests';
 import Csv from '@app/pages/Csv';
+import {url as urlconf} from '../../config/index';
 
 import Header from './header/Header';
 import Footer from './footer/Footer';
@@ -34,6 +36,22 @@ const Main = () => {
     };
 
     const fetchProfile = async () => {
+        try {
+            await axios.get(`${urlconf}validate`, {
+                headers: {
+                    authorization: `bearerHeader: ${localStorage.getItem(
+                        'token'
+                    )}`
+                }
+            });
+            console.log('validate');
+            setIsAppLoaded(true);
+        } catch (error) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
+            setIsAppLoaded(true);
+        }
         try {
             const response = await Gatekeeper.getProfile();
             dispatch(loadUser(response));
@@ -76,7 +94,7 @@ const Main = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('role');
-
+        setIsAppLoaded(true);
         window.location.href = '/';
     };
     const getAppTemplate = useCallback(() => {

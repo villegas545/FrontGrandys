@@ -76,7 +76,7 @@ const MenuSidebar = () => {
                         />
                     </div>
                     <div className="info">
-                        <span className="d-block text-light">
+                        <span className="d-block text-light ">
                             {userGrandys}
                         </span>
                     </div>

@@ -156,7 +156,7 @@ function TableReports({data, id}) {
                     })}
                 </tbody> */}
                 {data.map((row) => (
-                    <tr>
+                    <tr key={row.id}>
                         <td>{row.date}</td>
                         <td>{row.weatherTemp}</td>
                         <td>{row.weatherW}</td>
