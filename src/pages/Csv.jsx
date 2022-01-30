@@ -7,7 +7,7 @@ import ReactLoading from 'react-loading';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useDispatch, useSelector} from 'react-redux';
-import {getRestAction} from '@app/store/reducers/restsDucks';
+import {getRestActionByApi} from '@app/store/reducers/restsDucks';
 import {url as urlconf} from '../config';
 import '../styles/csv.scss';
 
@@ -57,7 +57,8 @@ function Csv() {
     const urlFile = `${urlconf}csvToJson`;
     // __________llamar restaurantes
     React.useEffect(async () => {
-        await dispatch(getRestAction());
+        await dispatch(getRestActionByApi(localStorage.getItem('restaurantApi')));
+        setRestName(rest.api);
     }, []);
 
     const handleChange = (_file) => {
@@ -121,8 +122,7 @@ function Csv() {
     const submit = async (e) => {
         e.preventDefault();
         if (
-            restName == null ||
-            restName === 'empty' ||
+
             restDate == null ||
             restTemp == null ||
             restWeat == null ||
@@ -231,26 +231,14 @@ function Csv() {
                         <div className="ownform">
                             <div className="form-group">
                                 <label htmlFor="Restaurant">Restaurant</label>
-                                <select
-                                    onChange={(e) =>
-                                        setRestName(e.target.value)
-                                    }
+                                <input
+                                 
+                                    type="text"
                                     className="form-control"
-                                    value={restName}
-                                    required
-                                >
-                                    <option value="empty">
-                                        Select a option
-                                    </option>
-                                    {rest.map((restaurant) => (
-                                        <option
-                                            value={restaurant.api}
-                                            key={restaurant.id}
-                                        >
-                                            {restaurant.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    value=   {rest.name}
+                                    readOnly
+                                />
+                               
                             </div>
                         </div>
                         <div className="ownform">

@@ -50,6 +50,7 @@ const Main = () => {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('role');
+            localStorage.removeItem('restaurantApi');
             setIsAppLoaded(true);
         }
         try {
@@ -94,6 +95,7 @@ const Main = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('role');
+        localStorage.removeItem('restaurantApi');
         setIsAppLoaded(true);
         window.location.href = '/';
     };

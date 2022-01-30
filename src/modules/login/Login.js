@@ -128,7 +128,8 @@ const Login = () => {
                 loginUser({
                     token: token2.data.token,
                     name: token2.data.user,
-                    role: token2.data.role
+                    role: token2.data.role,
+                    restaurantApi: token2.data.restaurantApi
                 })
             );
             history.push('/');

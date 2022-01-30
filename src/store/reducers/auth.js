@@ -20,6 +20,7 @@ export const authSlice = createSlice({
             localStorage.setItem('token', payload.token);
             localStorage.setItem('user', payload.name);
             localStorage.setItem('role', payload.role);
+            localStorage.setItem('restaurantApi', payload.restaurantApi);
             state.isLoggedIn = true;
             state.token = payload;
         },
