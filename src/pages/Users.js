@@ -57,7 +57,7 @@ function Users() {
         },
         {
             Header: 'Restaurant',
-            accessor: 'restaurantApi'
+            accessor: 'Restaurant.name'
         }
     ];
 

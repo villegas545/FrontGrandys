@@ -94,7 +94,8 @@ function Checks() {
     const [endYear, setEndYear] = React.useState(1);
     const [byWeek, setByWeek] = React.useState('byDay');
     const [cargando, setCargando] = React.useState(false);
-
+    const [role, setRole] = React.useState('');
+    const [api, setApi] = React.useState('');
     const datePopulate = async (recibeDates) => {
         console.log(recibeDates);
         try {
@@ -117,7 +118,10 @@ function Checks() {
         }
         setCargando(false);
     };
-
+    React.useEffect(() => {
+        setRole(localStorage.getItem('role'));
+        setApi(localStorage.getItem('api'));
+    }, []);
     React.useEffect(async () => {
         const yearSelect = new Date().getFullYear();
         setStartYear(yearSelect);

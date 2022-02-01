@@ -93,6 +93,12 @@ export const getUsersAction = () => async (dispatch, getState) => {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
         });
+        res.data = res.data.map((user) => {
+            user.restaurantName = user.Restaurant.restaurantName;
+            return user;
+        });
+        console.log(res.data);
+
         dispatch({
             type: GET_USERS_SUCCESS,
             payload: res.data

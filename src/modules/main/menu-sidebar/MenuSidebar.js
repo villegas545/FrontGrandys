@@ -6,6 +6,11 @@ import {MenuItem} from '@components';
 
 export const MENU = [
     {
+        name: 'Reports',
+        path: '/checks',
+        icon: 'fa-chart-bar'
+    },
+    {
         name: 'Daily load',
         path: '/Csv',
         icon: 'fa-file-excel'

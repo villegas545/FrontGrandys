@@ -152,6 +152,11 @@ const Main = () => {
                                         component={logoutFunction}
                                         onEnter={() => logoutFunction()}
                                     />
+                                    <Route
+                                        exact
+                                        path="/Checks"
+                                        component={Checks}
+                                    />
                                     <Redirect
                                         to={{
                                             pathname: '/Csv'

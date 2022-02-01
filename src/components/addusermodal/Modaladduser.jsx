@@ -15,7 +15,9 @@ function Modaladduser({action}) {
         registros.password
     );
     const [roles, setRole] = React.useState(registros.roles);
-    const [restaurant, setRestaurant] = React.useState(registros.restaurantApi);
+    const [restaurant, setRestaurant] = React.useState(
+        registros.restaurantApi.replace(/\s+/g, '')
+    );
     const [restaurants, setRestaurants] = React.useState([]);
     const dispatch = useDispatch();
 
@@ -31,7 +33,14 @@ function Modaladduser({action}) {
         getRestaurants();
         console.log(registros);
     }, []);
-    const validate = () => {
+    useEffect(() => {
+        if (roles === 'Admin') {
+            setRestaurant('Admin');
+        } else {
+            setRestaurant('Empty');
+        }
+    }, [roles]);
+    const validate = async () => {
         if (
             name === '' ||
             email === '' ||
@@ -165,24 +174,29 @@ function Modaladduser({action}) {
                         <option value="Admin">Admin</option>
                     </select>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Restaurant</label>
-                    <select
-                        onChange={(e) => setRestaurant(e.target.value)}
-                        className="form-control"
-                        value={restaurant}
-                    >
-                        <option value="Empty">Select</option>
-                        {restaurants.map((mapRestaurant) => (
-                            <option
-                                key={mapRestaurant.id}
-                                value={mapRestaurant.api}
-                            >
-                                {mapRestaurant.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                {roles === 'Employee' ? (
+                    <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">
+                            Restaurant
+                        </label>
+                        <select
+                            onChange={(e) => setRestaurant(e.target.value)}
+                            className="form-control"
+                            value={restaurant}
+                        >
+                            <option value="Empty">Select</option>
+                            {restaurants.map((mapRestaurant) => (
+                                <option
+                                    key={mapRestaurant.id}
+                                    value={mapRestaurant.api}
+                                >
+                                    {mapRestaurant.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                ) : null}
+
                 <div className="form-group">
                     {registros.name === '' ? (
                         <input

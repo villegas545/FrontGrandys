@@ -89,7 +89,9 @@ function Csv() {
     const altaCsv = async () => {
         const f = new FormData();
         f.append('archivo', file);
-        const respuesta = await axios.post(`${urlFile}/file`, f, {
+        const api = localStorage.getItem('restaurantApi');
+        
+        const respuesta = await axios.post(`${urlFile}/file/${api}`, f, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
@@ -152,9 +154,9 @@ function Csv() {
                 transferType: transfer
             }
         ];
-
+        const api = localStorage.getItem('restaurantApi');
         const respuesta = await axios.post(
-            `${urlFile}/form`,
+            `${urlFile}/form/${api}`,
             {data},
             {
                 headers: {
