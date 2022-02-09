@@ -35,7 +35,7 @@ function Modaladduser({action}) {
     }, []);
     useEffect(() => {
         if (roles === 'Admin') {
-            setRestaurant('Admin');
+            setRestaurant('803e93eae8c5f709ba4d91bb7f09A796');
         } else {
             setRestaurant('Empty');
         }

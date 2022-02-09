@@ -38,11 +38,6 @@ export const MENUADMIN = [
         icon: 'fa-chart-bar'
     },
     {
-        name: 'Daily load',
-        path: '/Csv',
-        icon: 'fa-file-excel'
-    },
-    {
         name: 'Logout',
         path: '/logout',
         icon: 'fa-sign-out-alt'

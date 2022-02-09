@@ -81,7 +81,8 @@ function Checks() {
             {Header: 'House Charges', accessor: 'houseCharges'},
             {Header: 'Paid Outs', accessor: 'paidOuts'},
             {Header: 'Transfer', accessor: 'transfer'},
-            {Header: 'Store CC Pursh', accessor: 'storeCreditCardPursh'}
+            {Header: 'Store CC Pursh', accessor: 'storeCreditCardPursh'},
+            {Header: 'Door Dash %', accessor: 'dorDashPerc'}
         ],
         []
     );

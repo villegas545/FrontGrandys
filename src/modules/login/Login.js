@@ -106,6 +106,7 @@ const Login = () => {
             );
         }
     };
+
     return (
         <div className="login-box">
             <div className="card card-outline card-dark">
@@ -130,7 +131,7 @@ const Login = () => {
                                 type="email"
                                 formik={formik}
                                 formikFieldProps={formik.getFieldProps('email')}
-                                value="maocan@gmail.com"
+                                value=""
                             />
                         </div>
                         <div className="mb-3">
@@ -142,7 +143,7 @@ const Login = () => {
                                 formikFieldProps={formik.getFieldProps(
                                     'password'
                                 )}
-                                value="12345"
+                                value=""
                             />
                         </div>
 
@@ -162,7 +163,7 @@ const Login = () => {
 
                     <p className="mb-1 color-dark">
                         <Link to="/forgot-password" className="text-dark">
-                            {t('login.label.forgotPass')}
+                            Restore password
                         </Link>
                     </p>
                 </div>

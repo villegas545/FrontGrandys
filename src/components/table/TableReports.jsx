@@ -122,6 +122,7 @@ function TableReports({data, id}) {
                         <td className="font-weight-bold">Discounts</td>
                         <td className="font-weight-bold">Door Dash …</td>
                         <td className="font-weight-bold">($) Door Dash …</td>
+                        <td className="font-weight-bold">(%) Door Dash</td>
                         <td className="font-weight-bold">Single Steaks</td>
                         <td className="font-weight-bold">Double Steaks</td>
                         <td className="font-weight-bold">Nugget Meal</td>
@@ -181,6 +182,7 @@ function TableReports({data, id}) {
                         <td>{row.discQuant}</td>
                         <td>{row.outOrderQuant}</td>
                         <td>${row.outOrderAmm}</td>
+                        <td>{row.dorDashPerc}%</td>
                         <td>{row.singleSteaks}</td>
                         <td>{row.doubleSteaks}</td>
                         <td>{row.nuggetMeal}</td>

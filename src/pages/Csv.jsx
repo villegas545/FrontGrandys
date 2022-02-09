@@ -299,6 +299,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Cash +/-"
                                     value={restCash}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -314,6 +315,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Truck"
                                     value={restTruck}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -348,6 +350,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Transfer"
                                     value={restTrans}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -363,6 +366,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Store Credit Card Purchase"
                                     value={restCCP}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -389,6 +393,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Tips"
                                     value={tips}
+                                    step="0.01"
                                     required
                                 />
                             </div>
