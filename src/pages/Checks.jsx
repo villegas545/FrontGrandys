@@ -139,7 +139,10 @@ function Checks() {
                         label: 'Yes',
                         onClick: () => {
                             setCargando(true);
-                            datePopulate(dates);
+                            /* datePopulate(dates); */
+                            alert(
+                                'date not available, please wait for the next update'
+                            );
                         }
                     },
                     {

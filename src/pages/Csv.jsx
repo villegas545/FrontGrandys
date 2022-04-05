@@ -110,7 +110,8 @@ function Csv() {
                         label: 'Yes',
                         onClick: () => {
                             setCargando(true);
-                            datePopulate(respuesta.data.dateList);
+                            /*  datePopulate(respuesta.data.dateList); */
+                            alert("date not available, please wait for the next update");
                         }
                     },
                     {
@@ -340,7 +341,7 @@ function Csv() {
                                     </select>
                                 </div>
                                 <span className="input-group-text">
-                                    Ammount
+                                    Amount
                                 </span>
                                 <input
                                     onChange={(e) =>
