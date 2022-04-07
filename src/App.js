@@ -5,6 +5,7 @@ import Login from '@modules/login/Login';
 import Register from '@modules/register/Register';
 import ForgetPassword from '@modules/forgot-password/ForgotPassword';
 import RecoverPassword from '@modules/recover-password/RecoverPassword';
+import ResetPassword from '@modules/forgot-password/ResetPassword';
 import PrivacyPolicy from '@modules/privacy-policy/PrivacyPolicy';
 import {useWindowSize} from '@app/hooks/useWindowSize';
 import {calculateWindowSize} from '@app/utils/helpers';
@@ -42,6 +43,9 @@ const App = () => {
                 </PublicRoute>
                 <PublicRoute exact path="/recover-password">
                     <RecoverPassword />
+                </PublicRoute>
+                <PublicRoute exact path="/resetpassword/:token">
+                    <ResetPassword />
                 </PublicRoute>
                 <PublicRoute exact path="/privacy-policy">
                     <PrivacyPolicy />

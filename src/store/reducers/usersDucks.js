@@ -42,7 +42,8 @@ export const recordsUpdate = (id) => async (dispatch) => {
                 name: '',
                 email: '',
                 password: '',
-                roles: 'Empty'
+                roles: 'Empty',
+                restaurantApi: ''
             };
         } else {
             res = await axios.get(`${url}/${id}`, {
@@ -85,15 +86,19 @@ export const addUsersAction = (records) => async (dispatch, getState) => {
 };
 
 export const getUsersAction = () => async (dispatch, getState) => {
-    /* console.log('getState', getState().users.offset); */
     const {offset} = getState().users;
-
     try {
         const res = await axios.get(`${url}`, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
         });
+        res.data = res.data.map((user) => {
+            user.restaurantName = user.Restaurant.restaurantName;
+            return user;
+        });
+        console.log(res.data);
+
         dispatch({
             type: GET_USERS_SUCCESS,
             payload: res.data

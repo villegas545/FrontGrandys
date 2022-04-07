@@ -1,5 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
+import axios from 'axios';
+import {url as urlconf} from '../../config/index';
 
+const url = `${urlconf}check`;
 const initialState = {
     isLoggedIn: !!localStorage.getItem('token'),
     token: localStorage.getItem('token'),
@@ -17,6 +20,7 @@ export const authSlice = createSlice({
             localStorage.setItem('token', payload.token);
             localStorage.setItem('user', payload.name);
             localStorage.setItem('role', payload.role);
+            localStorage.setItem('restaurantApi', payload.restaurantApi);
             state.isLoggedIn = true;
             state.token = payload;
         },
@@ -27,8 +31,22 @@ export const authSlice = createSlice({
             state.isLoggedIn = false;
             state.token = null; */
         },
-        loadUser: (state, {payload}) => {
+        loadUser: async (state, {payload}) => {
             state.currentUser = payload;
+            try {
+                await axios.get(`${url}/validate`, {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                });
+                console.log('validate');
+            } catch (error) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('role');
+            }
         }
     }
 });

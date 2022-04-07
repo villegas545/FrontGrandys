@@ -7,7 +7,7 @@ import ReactLoading from 'react-loading';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useDispatch, useSelector} from 'react-redux';
-import {getRestAction} from '@app/store/reducers/restsDucks';
+import {getRestActionByApi} from '@app/store/reducers/restsDucks';
 import {url as urlconf} from '../config';
 import '../styles/csv.scss';
 
@@ -16,7 +16,18 @@ const fileTypes = ['only csv files', 'vnd.ms-excel'];
 function Csv() {
     const dispatch = useDispatch();
     const notify = () =>
-        toast('Downloaded!!!!, Please press "Search Button" again', {
+        toast('Uploaded success!!!!', {
+            theme: 'colored',
+            type: 'success',
+            position: 'top-center',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+        });
+    const notify2 = () =>
+        toast('Uploaded success!!!!', {
             theme: 'colored',
             type: 'success',
             position: 'top-center',
@@ -46,7 +57,8 @@ function Csv() {
     const urlFile = `${urlconf}csvToJson`;
     // __________llamar restaurantes
     React.useEffect(async () => {
-        await dispatch(getRestAction());
+        await dispatch(getRestActionByApi(localStorage.getItem('restaurantApi')));
+        setRestName(rest.api);
     }, []);
 
     const handleChange = (_file) => {
@@ -77,14 +89,17 @@ function Csv() {
     const altaCsv = async () => {
         const f = new FormData();
         f.append('archivo', file);
-        const respuesta = await axios.post(`${urlFile}/file`, f, {
+        const api = localStorage.getItem('restaurantApi');
+        
+        const respuesta = await axios.post(`${urlFile}/file/${api}`, f, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
         });
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
-            alert('Archivo cargado correctamente');
+            // alert('Archivo cargado correctamente');
+            notify2();
         } else {
             const numberDates = respuesta.data.dateList.length;
             confirmAlert({
@@ -95,7 +110,8 @@ function Csv() {
                         label: 'Yes',
                         onClick: () => {
                             setCargando(true);
-                            datePopulate(respuesta.data.dateList);
+                            /*  datePopulate(respuesta.data.dateList); */
+                            alert("date not available, please wait for the next update");
                         }
                     },
                     {
@@ -109,8 +125,7 @@ function Csv() {
     const submit = async (e) => {
         e.preventDefault();
         if (
-            restName == null ||
-            restName === 'empty' ||
+
             restDate == null ||
             restTemp == null ||
             restWeat == null ||
@@ -140,9 +155,9 @@ function Csv() {
                 transferType: transfer
             }
         ];
-        console.log(data);
+        const api = localStorage.getItem('restaurantApi');
         const respuesta = await axios.post(
-            `${urlFile}/form`,
+            `${urlFile}/form/${api}`,
             {data},
             {
                 headers: {
@@ -154,7 +169,7 @@ function Csv() {
         );
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
-            alert('Archivo cargado correctamente');
+            notify();
         } else {
             const numberDates = respuesta.data.dateList.length;
             confirmAlert({
@@ -219,26 +234,14 @@ function Csv() {
                         <div className="ownform">
                             <div className="form-group">
                                 <label htmlFor="Restaurant">Restaurant</label>
-                                <select
-                                    onChange={(e) =>
-                                        setRestName(e.target.value)
-                                    }
+                                <input
+                                 
+                                    type="text"
                                     className="form-control"
-                                    value={restName}
-                                    required
-                                >
-                                    <option value="empty">
-                                        Select a option
-                                    </option>
-                                    {rest.map((restaurant) => (
-                                        <option
-                                            value={restaurant.id}
-                                            key={restaurant.id}
-                                        >
-                                            {restaurant.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    value=   {rest.name}
+                                    readOnly
+                                />
+                               
                             </div>
                         </div>
                         <div className="ownform">
@@ -297,6 +300,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Cash +/-"
                                     value={restCash}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -312,6 +316,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Truck"
                                     value={restTruck}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -336,7 +341,7 @@ function Csv() {
                                     </select>
                                 </div>
                                 <span className="input-group-text">
-                                    Ammount
+                                    Amount
                                 </span>
                                 <input
                                     onChange={(e) =>
@@ -346,6 +351,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Transfer"
                                     value={restTrans}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -361,6 +367,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Store Credit Card Purchase"
                                     value={restCCP}
+                                    step="0.01"
                                     required
                                 />
                             </div>
@@ -387,6 +394,7 @@ function Csv() {
                                     className="form-control"
                                     placeholder="Tips"
                                     value={tips}
+                                    step="0.01"
                                     required
                                 />
                             </div>

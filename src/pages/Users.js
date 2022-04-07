@@ -54,6 +54,10 @@ function Users() {
         {
             Header: 'Role',
             accessor: 'roles'
+        },
+        {
+            Header: 'Restaurant',
+            accessor: 'Restaurant.name'
         }
     ];
 

@@ -6,6 +6,11 @@ import {MenuItem} from '@components';
 
 export const MENU = [
     {
+        name: 'Reports',
+        path: '/checks',
+        icon: 'fa-chart-bar'
+    },
+    {
         name: 'Daily load',
         path: '/Csv',
         icon: 'fa-file-excel'
@@ -31,11 +36,6 @@ export const MENUADMIN = [
         name: 'Reports',
         path: '/checks',
         icon: 'fa-chart-bar'
-    },
-    {
-        name: 'Daily load',
-        path: '/Csv',
-        icon: 'fa-file-excel'
     },
     {
         name: 'Logout',
@@ -76,7 +76,7 @@ const MenuSidebar = () => {
                         />
                     </div>
                     <div className="info">
-                        <span className="d-block text-light">
+                        <span className="d-block text-light ">
                             {userGrandys}
                         </span>
                     </div>

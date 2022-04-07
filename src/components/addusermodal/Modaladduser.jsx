@@ -1,26 +1,55 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector, useDispatch} from 'react-redux';
 import {modalClose} from '@app/store/reducers/usersDucks';
+import axios from 'axios';
+import {url as urlconf} from '../../config/index';
 
 function Modaladduser({action}) {
     const registros = useSelector((store) => store.users.records);
     const [name, setName] = React.useState(registros.name);
     const [email, setEmail] = React.useState(registros.email);
     const [password, setPassword] = React.useState(registros.password);
-    const [repeatPassword, setRepeatPassword] = React.useState('');
+    const [repeatPassword, setRepeatPassword] = React.useState(
+        registros.password
+    );
     const [roles, setRole] = React.useState(registros.roles);
+    const [restaurant, setRestaurant] = React.useState(
+        registros.restaurantApi.replace(/\s+/g, '')
+    );
+    const [restaurants, setRestaurants] = React.useState([]);
     const dispatch = useDispatch();
 
-    const validate = () => {
+    const getRestaurants = async () => {
+        const response = await axios.get(`${urlconf}restaurant`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        setRestaurants(response.data);
+    };
+    useEffect(() => {
+        getRestaurants();
+        console.log(registros);
+    }, []);
+    useEffect(() => {
+        if (roles === 'Admin') {
+            setRestaurant('803e93eae8c5f709ba4d91bb7f09A796');
+        } else {
+            setRestaurant('Empty');
+        }
+    }, [roles]);
+    const validate = async () => {
         if (
             name === '' ||
             email === '' ||
             password === '' ||
             repeatPassword === '' ||
             roles === '' ||
-            roles === 'Empty'
+            roles === 'Empty' ||
+            restaurant === '' ||
+            restaurant === 'Empty'
         ) {
             return false;
         }
@@ -63,10 +92,10 @@ function Modaladduser({action}) {
                 name,
                 email,
                 password,
-                roles
+                roles,
+                restaurantApi: restaurant
             };
             action(records);
-            /* await axios.post('http://localhost:5000/api/user', records); */
             notify();
             await dispatch(modalClose(true));
         } else {
@@ -145,6 +174,29 @@ function Modaladduser({action}) {
                         <option value="Admin">Admin</option>
                     </select>
                 </div>
+                {roles === 'Employee' ? (
+                    <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">
+                            Restaurant
+                        </label>
+                        <select
+                            onChange={(e) => setRestaurant(e.target.value)}
+                            className="form-control"
+                            value={restaurant}
+                        >
+                            <option value="Empty">Select</option>
+                            {restaurants.map((mapRestaurant) => (
+                                <option
+                                    key={mapRestaurant.id}
+                                    value={mapRestaurant.api}
+                                >
+                                    {mapRestaurant.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                ) : null}
+
                 <div className="form-group">
                     {registros.name === '' ? (
                         <input

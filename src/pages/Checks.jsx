@@ -81,7 +81,8 @@ function Checks() {
             {Header: 'House Charges', accessor: 'houseCharges'},
             {Header: 'Paid Outs', accessor: 'paidOuts'},
             {Header: 'Transfer', accessor: 'transfer'},
-            {Header: 'Store CC Pursh', accessor: 'storeCreditCardPursh'}
+            {Header: 'Store CC Pursh', accessor: 'storeCreditCardPursh'},
+            {Header: 'Door Dash %', accessor: 'dorDashPerc'}
         ],
         []
     );
@@ -94,7 +95,8 @@ function Checks() {
     const [endYear, setEndYear] = React.useState(1);
     const [byWeek, setByWeek] = React.useState('byDay');
     const [cargando, setCargando] = React.useState(false);
-
+    const [role, setRole] = React.useState('');
+    const [api, setApi] = React.useState('');
     const datePopulate = async (recibeDates) => {
         console.log(recibeDates);
         try {
@@ -117,7 +119,10 @@ function Checks() {
         }
         setCargando(false);
     };
-
+    React.useEffect(() => {
+        setRole(localStorage.getItem('role'));
+        setApi(localStorage.getItem('api'));
+    }, []);
     React.useEffect(async () => {
         const yearSelect = new Date().getFullYear();
         setStartYear(yearSelect);
@@ -134,7 +139,10 @@ function Checks() {
                         label: 'Yes',
                         onClick: () => {
                             setCargando(true);
-                            datePopulate(dates);
+                            /* datePopulate(dates); */
+                            alert(
+                                'date not available, please wait for the next update'
+                            );
                         }
                     },
                     {

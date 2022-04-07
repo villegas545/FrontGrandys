@@ -36,6 +36,16 @@ export const getChecksAction =
                 }
             );
             if (res.data.message === 'datos') {
+                const role = localStorage.getItem('role');
+                const api = localStorage.getItem('restaurantApi');
+                console.log('role', role);
+                if (role !== 'Admin') {
+                    res.data.response = res.data.response.filter(
+                        (restaurant) =>
+                            restaurant.api.replace(/ /g, '') ===
+                            api.replace(/ /g, '')
+                    );
+                }
                 dispatch({
                     type: GET_CHECKS_SUCCESS,
                     payload: res.data.response

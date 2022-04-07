@@ -1,5 +1,5 @@
 import React from 'react';
-
+/* import round from 'lodash/round'; */
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 // import JSPDF from 'jspdf';
 // import 'jspdf-autotable';
@@ -26,6 +26,20 @@ function TableReports({data, id}) {
         } catch {
             return a.date - b.date;
         }
+    });
+    data.map((item) => {
+        item.quarterlyProm1 = Math.trunc(Number(item.quarterlyProm1));
+        item.transCount = Math.trunc(Number(item.transCount));
+        item.coupons = Math.trunc(Number(item.coupons));
+        item.coupQuant = Math.trunc(Number(item.coupQuant));
+        item.outOrderQuant = Math.trunc(Number(item.outOrderQuant));
+        item.singleSteaks = Math.trunc(Number(item.singleSteaks));
+        item.doubleSteaks = Math.trunc(Number(item.doubleSteaks));
+        item.nuggetMeal = Math.trunc(Number(item.nuggetMeal));
+        item.quarterlyProm1 = Math.trunc(Number(item.quarterlyProm1));
+        item.actualLabor = Math.trunc(Number(item.actualLabor));
+
+        return item;
     });
 
     React.useEffect(() => {
@@ -108,6 +122,7 @@ function TableReports({data, id}) {
                         <td className="font-weight-bold">Discounts</td>
                         <td className="font-weight-bold">Door Dash …</td>
                         <td className="font-weight-bold">($) Door Dash …</td>
+                        <td className="font-weight-bold">(%) Door Dash</td>
                         <td className="font-weight-bold">Single Steaks</td>
                         <td className="font-weight-bold">Double Steaks</td>
                         <td className="font-weight-bold">Nugget Meal</td>
@@ -142,7 +157,7 @@ function TableReports({data, id}) {
                     })}
                 </tbody> */}
                 {data.map((row) => (
-                    <tr>
+                    <tr key={row.id}>
                         <td>{row.date}</td>
                         <td>{row.weatherTemp}</td>
                         <td>{row.weatherW}</td>
@@ -167,6 +182,7 @@ function TableReports({data, id}) {
                         <td>{row.discQuant}</td>
                         <td>{row.outOrderQuant}</td>
                         <td>${row.outOrderAmm}</td>
+                        <td>{row.dorDashPerc}%</td>
                         <td>{row.singleSteaks}</td>
                         <td>{row.doubleSteaks}</td>
                         <td>{row.nuggetMeal}</td>

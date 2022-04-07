@@ -22,6 +22,7 @@ const dataInicial = {
 // types
 const ADD_REST_SUCCESS = 'ADD_REST_SUCCESS';
 const GET_REST_SUCCESS = 'GET_REST_SUCCESS';
+const GET_REST_BY_API_SUCCESS = 'GET_REST_BY_API_SUCCESS';
 const DELETE_REST_SUCCESS = 'DELETE_REST_SUCCESS';
 const UPDATE_REST_SUCCESS = 'UPDATE_REST_SUCCESS';
 const RECORDS_UPDATE = 'RECORDS_UPDATE';
@@ -87,11 +88,29 @@ export const addRestAction = (records) => async (dispatch, getState) => {
 };
 
 export const getRestAction = () => async (dispatch, getState) => {
-    /* console.log('getState', getState().rest.offset); */
     const {offset} = getState().rest;
 
     try {
         const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        console.log(res);
+        dispatch({
+            type: GET_REST_SUCCESS,
+            payload: res.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getRestActionByApi = (api) => async (dispatch, getState) => {
+    const {offset} = getState().rest;
+
+    try {
+        const res = await axios.get(`${urlconf}restaurants/${api}`, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
@@ -163,6 +182,8 @@ export default function restReducer(state = dataInicial, action) {
             return {...state, array: action.payload};
         case RECORDS_UPDATE:
             return {...state, records: action.payload};
+        case GET_REST_BY_API_SUCCESS:
+            return {...state, array: action.payload};
         default:
             return state;
     }
