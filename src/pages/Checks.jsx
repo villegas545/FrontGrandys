@@ -143,10 +143,12 @@ function Checks() {
                             setCargando(true);
                             if (force) {
                                 datePopulate(dates);
+                                setForce(false);
                             } else {
                                 alert(
                                     'date not available, please wait for the next update'
                                 );
+                                setCargando(false);
                             }
                         }
                     },
@@ -162,6 +164,7 @@ function Checks() {
         e.preventDefault();
         await dispatch(getChecksActionClean());
         if (accion === 'force') {
+            setForce(true);
             await dispatch(
                 updateChecksAction(
                     startWeek,
@@ -171,7 +174,6 @@ function Checks() {
                     byWeek
                 )
             );
-            setForce(true);
         } else {
             await dispatch(
                 getChecksAction(startWeek, endWeek, startYear, endYear, byWeek)
