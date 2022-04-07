@@ -12,7 +12,8 @@ import axios from 'axios';
 import {
     getChecksAction,
     getChecksActionClean,
-    getChecksCleanDatesSuccess
+    getChecksCleanDatesSuccess,
+    updateChecksAction
 } from '@app/store/reducers/checksDucks';
 import {confirmAlert} from 'react-confirm-alert';
 import {nodeName} from 'jquery';
@@ -87,6 +88,7 @@ function Checks() {
         []
     );
 
+    const [force, setForce] = React.useState(false);
     const checks = useSelector((store) => store.checks.array);
     const dates = useSelector((store) => store.checks.dates);
     const [startWeek, setStartWeek] = React.useState(1);
@@ -139,10 +141,13 @@ function Checks() {
                         label: 'Yes',
                         onClick: () => {
                             setCargando(true);
-                            /* datePopulate(dates); */
-                            alert(
-                                'date not available, please wait for the next update'
-                            );
+                            if (force) {
+                                datePopulate(dates);
+                            } else {
+                                alert(
+                                    'date not available, please wait for the next update'
+                                );
+                            }
                         }
                     },
                     {
@@ -153,12 +158,25 @@ function Checks() {
         }
     }, [dates]);
 
-    const weekSelector = async (e) => {
+    const weekSelector = async (e, accion) => {
         e.preventDefault();
         await dispatch(getChecksActionClean());
-        await dispatch(
-            getChecksAction(startWeek, endWeek, startYear, endYear, byWeek)
-        );
+        if (accion === 'force') {
+            await dispatch(
+                updateChecksAction(
+                    startWeek,
+                    endWeek,
+                    startYear,
+                    endYear,
+                    byWeek
+                )
+            );
+            setForce(true);
+        } else {
+            await dispatch(
+                getChecksAction(startWeek, endWeek, startYear, endYear, byWeek)
+            );
+        }
     };
     return (
         <>
@@ -317,10 +335,20 @@ function Checks() {
                             <input
                                 type="submit"
                                 value="Search"
-                                onClick={(e) => weekSelector(e)}
-                                className="form-control btn btn-danger btn-sm mr-3 text-lg"
-                                style={{minWidth: '100px'}}
+                                onClick={(e) => weekSelector(e, '')}
+                                className="form-control btn btn-danger btn-xs mr-3 text-lg"
+                                style={{minWidth: '80px'}}
                             />
+
+                            {role === 'Admin' ? (
+                                <input
+                                    type="submit"
+                                    value="Update"
+                                    onClick={(e) => weekSelector(e, 'force')}
+                                    className="form-control btn btn-dark btn-xs mr-3 text-lg"
+                                    style={{minWidth: '80px'}}
+                                />
+                            ) : null}
                         </div>
                     </div>
                 </div>
