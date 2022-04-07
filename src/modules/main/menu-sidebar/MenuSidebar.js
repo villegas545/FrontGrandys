@@ -63,7 +63,7 @@ const MenuSidebar = () => {
                     style={{opacity: '.8'}}
                 />
                 <span className="brand-text font-weight-light">
-                    randy´s Chicken
+                    Grandy´s Chicken
                 </span>
             </Link>
             <div className="sidebar">

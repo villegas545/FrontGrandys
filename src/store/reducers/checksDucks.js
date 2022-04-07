@@ -95,6 +95,49 @@ export const getChecksActionClean = () => async (dispatch) => {
     }
 };
 
+/* Accion de forzar update */
+export const updateChecksAction =
+    (startWeek, endWeek, startYear, endYear, byWeek) => async (dispatch) => {
+        /* console.log('getState', getState().rest.offset); */
+        console.log('estas recargando el duckChecks');
+        try {
+            const res = await axios.get(
+                `${url}/${startWeek}/${endWeek}/${startYear}/${endYear}/force`,
+                {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                }
+            );
+            if (res.data.message === 'datos') {
+                const role = localStorage.getItem('role');
+                const api = localStorage.getItem('restaurantApi');
+                console.log('role', role);
+                if (role !== 'Admin') {
+                    res.data.response = res.data.response.filter(
+                        (restaurant) =>
+                            restaurant.api.replace(/ /g, '') ===
+                            api.replace(/ /g, '')
+                    );
+                }
+                dispatch({
+                    type: GET_CHECKS_SUCCESS,
+                    payload: res.data.response
+                });
+            } else {
+                dispatch({
+                    type: GET_CHECKS_DATES_SUCCESS,
+                    payload: res.data.respuesta
+                });
+            }
+            console.log(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 // reducer
 export default function usersReducer(state = dataInicial, action) {
     switch (action.type) {
