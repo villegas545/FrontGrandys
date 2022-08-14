@@ -39,6 +39,7 @@ module.exports = {
             }
         ],
         'react-hooks/rules-of-hooks': 'error',
-        'import/prefer-default-export': 'off'
+        'import/prefer-default-export': 'off',
+        'jsx-a11y/anchor-is-valid': 0
     }
 };

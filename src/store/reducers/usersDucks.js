@@ -25,7 +25,7 @@ const DELETE_USERS_SUCCESS = 'DELETE_USERS_SUCCESS';
 const UPDATE_USERS_SUCCESS = 'UPDATE_USERS_SUCCESS';
 const RECORDS_UPDATE = 'RECORDS_UPDATE';
 const MODAL_CLOSE = 'MODAL_CLOSE';
-
+const SYNC_USERS_SUCCESS = 'SYNC_USERS_SUCCESS';
 // acciones
 export const modalClose = (boleano) => async (dispatch) => {
     dispatch({
@@ -128,6 +128,26 @@ export const deleteUsersAction = (id) => async (dispatch, getState) => {
         console.log(error);
     }
 };
+export const syncUsers = () => async (dispatch) => {
+    try {
+        await axios.get(`${urlconf}syncUsers`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        dispatch({
+            type: SYNC_USERS_SUCCESS,
+            payload: res.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export const updateUsersAction =
     (records, id) => async (dispatch, getState) => {
@@ -170,6 +190,8 @@ export default function usersReducer(state = dataInicial, action) {
             return {...state, array: action.payload};
         case RECORDS_UPDATE:
             return {...state, records: action.payload};
+        case SYNC_USERS_SUCCESS:
+            return {...state, array: action.payload};
         default:
             return state;
     }

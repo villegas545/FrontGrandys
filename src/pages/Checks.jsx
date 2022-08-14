@@ -66,7 +66,7 @@ function Checks() {
             {Header: 'Single Steaks', accessor: 'singleSteaks'},
             {Header: 'Double Steaks', accessor: 'doubleSteaks'},
             {Header: 'Nugget Meal', accessor: 'nuggetMeal'},
-            {Header: 'Quarterly Promo 1', accessor: 'quarterlyProm1'},
+            {Header: 'Waste', accessor: 'quarterlyProm1'},
             {Header: 'Cash Received', accessor: 'cashReceived'},
             {Header: 'Tips', accessor: 'Dep1'},
             {Header: 'Total Deposit', accessor: 'totalDep'}, //= cash received + tips + cash+/- -paidouts
@@ -141,15 +141,15 @@ function Checks() {
                         label: 'Yes',
                         onClick: () => {
                             setCargando(true);
-                            if (force) {
-                                datePopulate(dates);
-                                setForce(false);
-                            } else {
-                                alert(
-                                    'date not available, please wait for the next update'
-                                );
-                                setCargando(false);
-                            }
+                            //  if (force) {
+                            datePopulate(dates);
+                            setForce(false);
+                            // } else {
+                            // alert(
+                            //       'date not available, please wait for the next update'
+                            //  );
+                            //  setCargando(false);
+                            // }
                         }
                     },
                     {
@@ -162,22 +162,35 @@ function Checks() {
 
     const weekSelector = async (e, accion) => {
         e.preventDefault();
-        await dispatch(getChecksActionClean());
-        if (accion === 'force') {
-            setForce(true);
-            await dispatch(
-                updateChecksAction(
-                    startWeek,
-                    endWeek,
-                    startYear,
-                    endYear,
-                    byWeek
-                )
-            );
-        } else {
-            await dispatch(
-                getChecksAction(startWeek, endWeek, startYear, endYear, byWeek)
-            );
+        setCargando(true);
+        try {
+            await dispatch(getChecksActionClean());
+            if (accion === 'force') {
+                setForce(true);
+                await dispatch(
+                    updateChecksAction(
+                        startWeek,
+                        endWeek,
+                        startYear,
+                        endYear,
+                        byWeek
+                    )
+                );
+            } else {
+                await dispatch(
+                    getChecksAction(
+                        startWeek,
+                        endWeek,
+                        startYear,
+                        endYear,
+                        byWeek
+                    )
+                );
+            }
+            setCargando(false);
+        } catch (error) {
+            console.log(error);
+            setCargando(false);
         }
     };
     return (
@@ -399,6 +412,7 @@ function Checks() {
                                   columns={columns}
                                   data={item.Checks}
                                   id={item.id}
+                                  checks={checks}
                               />
                           </div>
                       ))}

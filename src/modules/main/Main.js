@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Gatekeeper} from 'gatekeeper-client-sdk';
 import {loadUser, logoutUser} from '@store/reducers/auth';
 import {toggleSidebarMenu} from '@app/store/reducers/ui';
+
 import axios from 'axios';
 
 // import Dashboard from '@pages/Dashboard';
@@ -12,6 +13,7 @@ import Checks from '@app/pages/Checks';
 import Users from '@app/pages/Users';
 import Rests from '@app/pages/Rests';
 import Csv from '@app/pages/Csv';
+import Employee from '@app/pages/Employee';
 import {url as urlconf} from '../../config/index';
 
 import Header from './header/Header';
@@ -138,6 +140,11 @@ const Main = () => {
                                         path="/logout"
                                         component={logoutFunction}
                                         onEnter={() => logoutFunction()}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/employee"
+                                        component={Employee}
                                     />
                                 </Switch>
                             </>

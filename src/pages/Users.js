@@ -2,7 +2,6 @@
 import React, {Fragment} from 'react';
 import {Modal} from 'react-bootstrap';
 import Modaladduser from '@app/components/addusermodal/Modaladduser';
-
 import {useDispatch, useSelector} from 'react-redux';
 import {
     addUsersAction,
@@ -10,8 +9,13 @@ import {
     updateUsersAction,
     deleteUsersAction,
     recordsUpdate,
-    modalClose
+    modalClose,
+    syncUsers
 } from '@app/store/reducers/usersDucks';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ReactLoading from 'react-loading';
+
 import Table from '../components/table/Table';
 
 function MyVerticallyCenteredModal(props) {
@@ -58,11 +62,17 @@ function Users() {
         {
             Header: 'Restaurant',
             accessor: 'Restaurant.name'
+        },
+        {
+            Header: 'Pin Code',
+            accessor: 'pinCode'
         }
     ];
 
     const closeModal = useSelector((store) => store.users.modalClose);
     const users = useSelector((store) => store.users.array);
+    const [cargando, setCargando] = React.useState(false);
+
     const [action, setAction] = React.useState(true);
     /*    const emptyRecords = {
         name: '',
@@ -97,6 +107,19 @@ function Users() {
     /*  const prueba = () => {
         console.log('chido');
     };  */
+    const notify = () =>
+        toast('Success', {
+            theme: 'colored',
+            type: 'success',
+            position: 'top-center',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined
+        });
+
     return (
         <>
             <section className="content-header">
@@ -109,13 +132,24 @@ function Users() {
                                     <input
                                         type="submit"
                                         value="Add User"
-                                        className="form-control btn btn-danger btn-sm mr-3 text-lg"
+                                        className=" btn btn-danger btn-sm mr-3 text-lg"
                                         onClick={async () => {
                                             await dispatch(
                                                 recordsUpdate('empty')
                                             );
                                             setModalShow(true);
                                             setAction(true);
+                                        }}
+                                    />{' '}
+                                    <input
+                                        type="submit"
+                                        value="Sync Users"
+                                        className=" btn btn-danger btn-sm mr-3 text-lg"
+                                        onClick={async () => {
+                                            setCargando(true);
+                                            await dispatch(syncUsers());
+                                            setCargando(false);
+                                            notify();
                                         }}
                                     />
                                     {action ? (
@@ -143,6 +177,23 @@ function Users() {
                 data={users}
                 deleteItem={deleteItem}
                 updateItem={updateItem}
+            />
+            <ToastContainer />
+            <ReactLoading
+                style={{
+                    display: cargando ? 'block' : 'none',
+                    position: 'absolute',
+                    zIndex: '9999',
+                    top: '30%',
+                    left: '50%',
+                    height: '150px',
+                    width: '150px',
+                    color: '#D11F1F'
+                }}
+                color="#D11F1F"
+                width="300px"
+                type="spinningBubbles"
+                height="100px"
             />
             {/* <Table headers={headers} prueba={prueba} /> */}
             {/* <input type="submit" value="test" onClick={() => prueba()} /> */}

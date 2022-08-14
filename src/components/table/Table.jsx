@@ -1,12 +1,13 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/button-has-type */
 import React from 'react';
-import {useTable} from 'react-table';
+import {useTable, usePagination} from 'react-table';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import styled from 'styled-components';
 
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-
-/* import makeData from './makeData'; */
 
 function Table({columns, data, deleteItem, updateItem}) {
     // notificacion tostify
@@ -24,11 +25,32 @@ function Table({columns, data, deleteItem, updateItem}) {
         });
 
     // Use the state and functions returned from useTable to build your UI
-    const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} =
-        useTable({
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        prepareRow,
+        page, // Instead of using 'rows', we'll use page,
+        // which has only the rows for the active page
+
+        // The rest of these things are super handy, too ;)
+        canPreviousPage,
+        canNextPage,
+        pageOptions,
+        pageCount,
+        gotoPage,
+        nextPage,
+        previousPage,
+        setPageSize,
+        state: {pageIndex, pageSize}
+    } = useTable(
+        {
             columns,
-            data
-        });
+            data,
+            initialState: {pageIndex: 0}
+        },
+        usePagination
+    );
     // Confirmacion de accion
     const confirm = (id) => {
         confirmAlert({
@@ -71,7 +93,7 @@ function Table({columns, data, deleteItem, updateItem}) {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {rows.map((row, index) => {
+                    {page.map((row, index) => {
                         prepareRow(row);
                         return (
                             <tr {...row.getRowProps()}>
@@ -106,6 +128,56 @@ function Table({columns, data, deleteItem, updateItem}) {
                     })}
                 </tbody>
             </table>
+            <div className="pagination ">
+                <button
+                    onClick={() => gotoPage(0)}
+                    disabled={!canPreviousPage}
+                    className="btn btn-secondary ml-2"
+                >
+                    {'<<'}
+                </button>{' '}
+                <button
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                    className="btn btn-secondary ml-2"
+                >
+                    {'<'}
+                </button>{' '}
+                <span style={{'margin-top': '5px'}} className="ml-2">
+                    Page{' '}
+                    <strong>
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>{' '}
+                </span>
+                <select
+                    value={pageSize}
+                    onChange={(e) => {
+                        setPageSize(Number(e.target.value));
+                    }}
+                    className="form-select"
+                    style={{'margin-left': '15px'}}
+                >
+                    {[10, 20, 30, 40, 50].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                            Show {pageSize}
+                        </option>
+                    ))}
+                </select>
+                <button
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                    className="btn btn-secondary ml-2"
+                >
+                    {'>'}
+                </button>{' '}
+                <button
+                    onClick={() => gotoPage(pageCount - 1)}
+                    disabled={!canNextPage}
+                    className="btn btn-secondary ml-2"
+                >
+                    {'>>'}
+                </button>{' '}
+            </div>
             <ToastContainer />
         </>
     );

@@ -16,6 +16,11 @@ export const MENU = [
         icon: 'fa-file-excel'
     },
     {
+        name: 'Employee',
+        path: '/employee',
+        icon: 'fa-user-lock'
+    },
+    {
         name: 'Logout',
         path: '/logout',
         icon: 'fa-sign-out-alt'
@@ -36,6 +41,11 @@ export const MENUADMIN = [
         name: 'Reports',
         path: '/checks',
         icon: 'fa-chart-bar'
+    },
+    {
+        name: 'Employee',
+        path: '/employee',
+        icon: 'fa-user-lock'
     },
     {
         name: 'Logout',

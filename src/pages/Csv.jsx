@@ -263,6 +263,7 @@ function Csv() {
                             <div className="form-group">
                                 <label htmlFor="WeatherTemp">Temperature</label>
                                 <input
+                                    onBlur={(e) => alert(e.target.value)}
                                     onChange={(e) =>
                                         setRestTemp(e.target.value)
                                     }
@@ -374,12 +375,12 @@ function Csv() {
                         </div>
                         <div className="ownform">
                             <div className="form-group">
-                                <label htmlFor="qPromo">Quarterly Promo</label>
+                                <label htmlFor="qPromo">Waste</label>
                                 <input
                                     onChange={(e) => setQPromo(e.target.value)}
                                     type="number"
                                     className="form-control"
-                                    placeholder="Quaterly Promo"
+                                    placeholder="Waste"
                                     value={qPromo}
                                     required
                                 />
