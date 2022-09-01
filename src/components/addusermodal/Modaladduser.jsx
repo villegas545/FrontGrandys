@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, {useEffect} from 'react';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +8,7 @@ import axios from 'axios';
 import {url as urlconf} from '../../config/index';
 
 function Modaladduser({action}) {
+    const [role, setRolx] = React.useState('');
     const registros = useSelector((store) => store.users.records);
     const [name, setName] = React.useState(registros.name);
     const [email, setEmail] = React.useState(registros.email);
@@ -31,16 +33,22 @@ function Modaladduser({action}) {
     };
     useEffect(() => {
         getRestaurants();
+        if (localStorage.getItem('role') !== 'Employee') {
+            setRestaurant(localStorage.getItem('restaurantApi'));
+        } else {
+            setRestaurant('Empty');
+        }
         console.log(registros);
     }, []);
-    useEffect(() => {
+    /* useEffect(() => {
         if (roles === 'Admin') {
             setRestaurant('803e93eae8c5f709ba4d91bb7f09A796');
         } else {
             setRestaurant('Empty');
         }
-    }, [roles]);
-    const validate = async () => {
+    }, [roles]); */
+    //! Validacion de manejadores
+    const validateMgmt = () => {
         if (
             name === '' ||
             email === '' ||
@@ -58,6 +66,33 @@ function Modaladduser({action}) {
         }
         return true;
     };
+
+    //! Validacion de empleado
+    const validateEmployee = () => {
+        if (
+            name === '' ||
+            email === '' ||
+            roles === '' ||
+            roles === 'Empty' ||
+            restaurant === '' ||
+            restaurant === 'Empty'
+        ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const validate = async () => {
+        if (roles !== 'Employee') {
+            return validateMgmt();
+        }
+        return validateEmployee();
+    };
+
+    React.useEffect(() => {
+        setRolx(localStorage.getItem('role'));
+    }, []);
 
     const notifyError = () =>
         toast('No empty fields allowed or passwords doesn´t match', {
@@ -87,14 +122,15 @@ function Modaladduser({action}) {
 
     const submit = async (e) => {
         e.preventDefault();
+        const records = {
+            name,
+            email,
+            password,
+            roles,
+            restaurantApi: restaurant
+        };
+        console.log(records);
         if (await validate()) {
-            const records = {
-                name,
-                email,
-                password,
-                roles,
-                restaurantApi: restaurant
-            };
             action(records);
             notify();
             await dispatch(modalClose(true));
@@ -127,54 +163,86 @@ function Modaladduser({action}) {
                     />
                 </div>
                 {registros.name === '' ? (
-                    <div>
-                        <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                                Password{' '}
-                            </label>
-                            <input
-                                onChange={(e) => setPassword(e.target.value)}
-                                type="password"
-                                className="form-control"
-                                placeholder="Password"
-                                value={password}
-                            />
+                    <>
+                        <div>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputPassword1">
+                                    Password{' '}
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    type="password"
+                                    className="form-control"
+                                    placeholder="Password"
+                                    value={password}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputPassword1">
+                                    Repeat Password
+                                </label>
+                                <input
+                                    onChange={(e) =>
+                                        setRepeatPassword(e.target.value)
+                                    }
+                                    type="password"
+                                    className="form-control"
+                                    placeholder="Password"
+                                    value={repeatPassword}
+                                />
+                                {password !== repeatPassword ? (
+                                    <div className="text-form text-danger">
+                                        Password fields doesn´t match
+                                    </div>
+                                ) : null}
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="exampleInputPassword1">
-                                Repeat Password
-                            </label>
-                            <input
-                                onChange={(e) =>
-                                    setRepeatPassword(e.target.value)
-                                }
-                                type="password"
-                                className="form-control"
-                                placeholder="Password"
-                                value={repeatPassword}
-                            />
-                            {password !== repeatPassword ? (
-                                <div className="text-form text-danger">
-                                    Password fields doesn´t match
-                                </div>
-                            ) : null}
-                        </div>
-                    </div>
+                    </>
                 ) : null}
+                {role === 'Admin' ? (
+                    <>
+                        <div className="form-group">
+                            <label htmlFor="exampleInputPassword1">Role</label>
 
-                <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Role</label>
-                    <select
-                        onChange={(e) => setRole(e.target.value)}
-                        className="form-control"
-                        value={roles}
-                    >
-                        <option value="Empty">Select</option>
-                        <option value="Employee">Employee</option>
-                        <option value="Admin">Admin</option>
-                    </select>
-                </div>
-                {roles === 'Employee' ? (
+                            <select
+                                onChange={(e) => setRole(e.target.value)}
+                                className="form-control"
+                                value={roles}
+                            >
+                                <option value="Empty">Select</option>
+                                <option value="Employee">Employee</option>
+                                <option value="Manager_Assistant">
+                                    Manager Assistant
+                                </option>
+                                <option value="Manager">Manager</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                    </>
+                ) : null}
+                {role === 'Manager' ? (
+                    <>
+                        <div className="form-group">
+                            <label htmlFor="exampleInputPassword1">Role</label>
+
+                            <select
+                                onChange={(e) => setRole(e.target.value)}
+                                className="form-control"
+                                value={roles}
+                            >
+                                <option value="Empty">Select</option>
+                                <option value="Employee">Employee</option>
+                                <option value="Manager Assistant">
+                                    Manager Assistant
+                                </option>
+                            </select>
+                        </div>
+                    </>
+                ) : null}
+                {roles !== 'Admin' &&
+                localStorage.getItem('role') === 'Admin' ? (
                     <div className="form-group">
                         <label htmlFor="exampleInputPassword1">
                             Restaurant
@@ -184,6 +252,7 @@ function Modaladduser({action}) {
                             className="form-control"
                             value={restaurant}
                         >
+                            {localStorage.getItem('restaurantApi')}
                             <option value="Empty">Select</option>
                             {restaurants.map((mapRestaurant) => (
                                 <option
@@ -196,7 +265,6 @@ function Modaladduser({action}) {
                         </select>
                     </div>
                 ) : null}
-
                 <div className="form-group">
                     {registros.name === '' ? (
                         <input

@@ -42,9 +42,14 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function Users() {
-    const [modalShow, setModalShow] = React.useState(false);
+    const [role, setRole] = React.useState('');
     const [idState, setIdState] = React.useState(0);
+    const [action, setAction] = React.useState(true);
+    const [modalShow, setModalShow] = React.useState(false);
+    const [cargando, setCargando] = React.useState(false);
     const dispatch = useDispatch();
+    const users = useSelector((store) => store.users.array);
+    const closeModal = useSelector((store) => store.users.modalClose);
 
     const columns = [
         {
@@ -69,17 +74,9 @@ function Users() {
         }
     ];
 
-    const closeModal = useSelector((store) => store.users.modalClose);
-    const users = useSelector((store) => store.users.array);
-    const [cargando, setCargando] = React.useState(false);
-
-    const [action, setAction] = React.useState(true);
-    /*    const emptyRecords = {
-        name: '',
-        email: '',
-        password: '',
-        role: ''
-    }; */
+    React.useEffect(() => {
+        setRole(localStorage.getItem('role'));
+    }, []);
 
     const addUser = async (records) => {
         await dispatch(addUsersAction(records));
@@ -129,18 +126,20 @@ function Users() {
                             <h1>DataTables</h1>
                             <div className="input-group mb-1 mt-3">
                                 <span>
-                                    <input
-                                        type="submit"
-                                        value="Add User"
-                                        className=" btn btn-danger btn-sm mr-3 text-lg"
-                                        onClick={async () => {
-                                            await dispatch(
-                                                recordsUpdate('empty')
-                                            );
-                                            setModalShow(true);
-                                            setAction(true);
-                                        }}
-                                    />{' '}
+                                    {role === 'Admin' ? (
+                                        <input
+                                            type="submit"
+                                            value="Add User"
+                                            className=" btn btn-danger btn-sm mr-3 text-lg"
+                                            onClick={async () => {
+                                                await dispatch(
+                                                    recordsUpdate('empty')
+                                                );
+                                                setModalShow(true);
+                                                setAction(true);
+                                            }}
+                                        />
+                                    ) : null}
                                     <input
                                         type="submit"
                                         value="Sync Users"

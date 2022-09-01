@@ -152,6 +152,11 @@ const Main = () => {
                             <>
                                 {' '}
                                 <Switch>
+                                    <Route
+                                        exact
+                                        path="/users"
+                                        component={Users}
+                                    />
                                     <Route exact path="/Csv" component={Csv} />
                                     <Route
                                         exact
