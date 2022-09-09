@@ -13,7 +13,7 @@ import Checks from '@app/pages/Checks';
 import Users from '@app/pages/Users';
 import Rests from '@app/pages/Rests';
 import Csv from '@app/pages/Csv';
-import Employee from '@app/pages/Employee';
+import Employee from '@app/pages/Employee/Employee';
 import {url as urlconf} from '../../config/index';
 
 import Header from './header/Header';
@@ -163,6 +163,11 @@ const Main = () => {
                                         exact
                                         path="/Checks"
                                         component={Checks}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/employee"
+                                        component={Employee}
                                     />
                                     <Redirect
                                         to={{

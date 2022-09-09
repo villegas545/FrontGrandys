@@ -3,7 +3,9 @@ import React, {useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
-import {url as urlconf} from '../config';
+import {ToastContainer, toast} from 'react-toastify';
+import {url as urlconf} from '../../config';
+import EmployeeTab from './EmployeeTab';
 
 function ModalPinCode({show, onHide, action}) {
     const [pinCode, setPinCode] = useState('');
@@ -60,6 +62,20 @@ function Employee() {
     useEffect(() => {
         setModalShow(true);
     }, []);
+    const notify = React.useCallback(
+        () =>
+            toast('Incorrect pincode', {
+                theme: 'colored',
+                type: 'error',
+                position: 'top-center',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            }),
+        []
+    );
     const login = async (pinCode) => {
         setCargando(true);
         try {
@@ -74,8 +90,13 @@ function Employee() {
                     }
                 }
             );
-            setUser(respuesta.data);
-            setModalShow(false);
+            if (respuesta.data) {
+                setUser(respuesta.data);
+                setModalShow(false);
+            } else {
+                notify();
+            }
+
             console.log(respuesta);
         } catch (err) {
             console.log(err);
@@ -83,8 +104,13 @@ function Employee() {
         setCargando(false);
     };
     return (
-        <div>
-            Employee: {JSON.stringify(user)}
+        <>
+            {user ? (
+                <>
+                    <EmployeeTab user={user} />
+                </>
+            ) : null}
+
             <ModalPinCode
                 show={modalShow}
                 onHide={() => setModalShow(false)}
@@ -106,7 +132,8 @@ function Employee() {
                 type="spinningBubbles"
                 height="100px"
             />
-        </div>
+            <ToastContainer />
+        </>
     );
 }
 
