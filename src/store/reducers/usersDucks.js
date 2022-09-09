@@ -26,7 +26,9 @@ const UPDATE_USERS_SUCCESS = 'UPDATE_USERS_SUCCESS';
 const RECORDS_UPDATE = 'RECORDS_UPDATE';
 const MODAL_CLOSE = 'MODAL_CLOSE';
 const SYNC_USERS_SUCCESS = 'SYNC_USERS_SUCCESS';
-// acciones
+
+// ACCIONES
+//! CERRAR MODAL
 export const modalClose = (boleano) => async (dispatch) => {
     dispatch({
         type: MODAL_CLOSE,
@@ -34,6 +36,7 @@ export const modalClose = (boleano) => async (dispatch) => {
     });
 };
 
+//! RECORDS UPDATE
 export const recordsUpdate = (id) => async (dispatch) => {
     try {
         let res = [];
@@ -64,6 +67,8 @@ export const recordsUpdate = (id) => async (dispatch) => {
         console.log(error);
     }
 };
+
+//! ADD USERS ACTION
 export const addUsersAction = (records) => async (dispatch, getState) => {
     try {
         await axios.post(`${url}`, records, {
@@ -85,6 +90,7 @@ export const addUsersAction = (records) => async (dispatch, getState) => {
     }
 };
 
+//! GET USERS ACTION
 export const getUsersAction = () => async (dispatch, getState) => {
     const {offset} = getState().users;
     try {
@@ -108,8 +114,10 @@ export const getUsersAction = () => async (dispatch, getState) => {
     }
 };
 
+//! DELETE USERS ACTION
 export const deleteUsersAction = (id) => async (dispatch, getState) => {
     try {
+        console.log(localStorage);
         await axios.delete(`${url}/${id}`, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
@@ -120,28 +128,9 @@ export const deleteUsersAction = (id) => async (dispatch, getState) => {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
         });
+        console.log(res.data);
         dispatch({
-            type: DELETE_USERS_SUCCESS,
-            payload: res.data
-        });
-    } catch (error) {
-        console.log(error);
-    }
-};
-export const syncUsers = () => async (dispatch) => {
-    try {
-        await axios.get(`${urlconf}syncUsers`, {
-            headers: {
-                authorization: `bearerHeader: ${localStorage.getItem('token')}`
-            }
-        });
-        const res = await axios.get(`${url}`, {
-            headers: {
-                authorization: `bearerHeader: ${localStorage.getItem('token')}`
-            }
-        });
-        dispatch({
-            type: SYNC_USERS_SUCCESS,
+            type: UPDATE_USERS_SUCCESS,
             payload: res.data
         });
     } catch (error) {
@@ -149,6 +138,7 @@ export const syncUsers = () => async (dispatch) => {
     }
 };
 
+//! UPDATE USERS ACTION
 export const updateUsersAction =
     (records, id) => async (dispatch, getState) => {
         try {
@@ -175,7 +165,29 @@ export const updateUsersAction =
         }
     };
 
-// reducer
+//! SYNC USERS ACTION
+export const syncUsers = () => async (dispatch) => {
+    try {
+        await axios.get(`${urlconf}syncUsers`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        dispatch({
+            type: SYNC_USERS_SUCCESS,
+            payload: res.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+//! reducer
 export default function usersReducer(state = dataInicial, action) {
     switch (action.type) {
         case MODAL_CLOSE:
