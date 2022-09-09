@@ -6,6 +6,11 @@ import {MenuItem} from '@components';
 
 export const MENU = [
     {
+        name: 'Users',
+        path: '/Users',
+        icon: 'fa-users'
+    },
+    {
         name: 'Reports',
         path: '/checks',
         icon: 'fa-chart-bar'

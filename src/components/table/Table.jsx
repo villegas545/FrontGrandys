@@ -72,6 +72,11 @@ function Table({columns, data, deleteItem, updateItem}) {
     };
 
     // Render the UI for your table
+    const [role, setRole] = React.useState('');
+    React.useEffect(() => {
+        setRole(localStorage.getItem('role'));
+    }, []);
+
     return (
         <>
             <table
@@ -87,8 +92,12 @@ function Table({columns, data, deleteItem, updateItem}) {
                                     {column.render('Header')}
                                 </th>
                             ))}
-                            <th>Update</th>
-                            <th>Delete</th>
+                            {role === 'Admin' || role === 'Manager' ? (
+                                <>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                </>
+                            ) : null}
                         </tr>
                     ))}
                 </thead>
@@ -105,24 +114,30 @@ function Table({columns, data, deleteItem, updateItem}) {
                                         </td>
                                     );
                                 })}
-                                <td>
-                                    <input
-                                        type="submit"
-                                        value="Update"
-                                        className="btn btn-warning"
-                                        onClick={() => {
-                                            updateItem(row.original.id);
-                                        }}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="submit"
-                                        value="Delete"
-                                        className="btn btn-danger"
-                                        onClick={() => confirm(row.original.id)}
-                                    />
-                                </td>
+                                {role === 'Admin' || role === 'Manager' ? (
+                                    <>
+                                        <td>
+                                            <input
+                                                type="submit"
+                                                value="Update"
+                                                className="btn btn-warning"
+                                                onClick={() => {
+                                                    updateItem(row.original.id);
+                                                }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="submit"
+                                                value="Delete"
+                                                className="btn btn-danger"
+                                                onClick={() =>
+                                                    confirm(row.original.id)
+                                                }
+                                            />
+                                        </td>
+                                    </>
+                                ) : null}
                             </tr>
                         );
                     })}
