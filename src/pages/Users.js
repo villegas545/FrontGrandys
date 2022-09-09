@@ -77,11 +77,13 @@ function Users() {
     React.useEffect(() => {
         setRole(localStorage.getItem('role'));
     }, []);
-
+    //! ADD USER
     const addUser = async (records) => {
         await dispatch(addUsersAction(records));
     };
+    //! UPDATE USER
     const updateUser = async (records) => {
+        console.log(users);
         await dispatch(updateUsersAction(records, idState));
     };
     const updateItem = async (id) => {
@@ -91,6 +93,7 @@ function Users() {
         setModalShow(true);
         console.log(id);
     };
+    //! DELETE USER
     const deleteItem = async (id) => {
         await dispatch(deleteUsersAction(id));
     };

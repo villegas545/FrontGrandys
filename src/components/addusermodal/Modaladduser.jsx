@@ -129,7 +129,7 @@ function Modaladduser({action}) {
             roles,
             restaurantApi: restaurant
         };
-        console.log(records);
+
         if (await validate()) {
             action(records);
             notify();

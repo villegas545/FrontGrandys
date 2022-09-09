@@ -117,6 +117,7 @@ export const getUsersAction = () => async (dispatch, getState) => {
 //! DELETE USERS ACTION
 export const deleteUsersAction = (id) => async (dispatch, getState) => {
     try {
+        console.log(localStorage);
         await axios.delete(`${url}/${id}`, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
@@ -127,30 +128,9 @@ export const deleteUsersAction = (id) => async (dispatch, getState) => {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
             }
         });
+        console.log(res.data);
         dispatch({
-            type: DELETE_USERS_SUCCESS,
-            payload: res.data
-        });
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-//! SYNC USERS ACTION
-export const syncUsers = () => async (dispatch) => {
-    try {
-        await axios.get(`${urlconf}syncUsers`, {
-            headers: {
-                authorization: `bearerHeader: ${localStorage.getItem('token')}`
-            }
-        });
-        const res = await axios.get(`${url}`, {
-            headers: {
-                authorization: `bearerHeader: ${localStorage.getItem('token')}`
-            }
-        });
-        dispatch({
-            type: SYNC_USERS_SUCCESS,
+            type: UPDATE_USERS_SUCCESS,
             payload: res.data
         });
     } catch (error) {
@@ -184,6 +164,28 @@ export const updateUsersAction =
             console.log(error);
         }
     };
+
+//! SYNC USERS ACTION
+export const syncUsers = () => async (dispatch) => {
+    try {
+        await axios.get(`${urlconf}syncUsers`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        const res = await axios.get(`${url}`, {
+            headers: {
+                authorization: `bearerHeader: ${localStorage.getItem('token')}`
+            }
+        });
+        dispatch({
+            type: SYNC_USERS_SUCCESS,
+            payload: res.data
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 //! reducer
 export default function usersReducer(state = dataInicial, action) {
