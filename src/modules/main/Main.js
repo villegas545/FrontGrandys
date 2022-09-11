@@ -1,10 +1,11 @@
+/* eslint-disable indent */
 import React, {useState, useEffect, useCallback} from 'react';
-import {Route, Switch, Redirect} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {Gatekeeper} from 'gatekeeper-client-sdk';
 import {loadUser, logoutUser} from '@store/reducers/auth';
 import {toggleSidebarMenu} from '@app/store/reducers/ui';
-
+import {updateAuth} from '@app/store/reducers/localVariables';
 import axios from 'axios';
 
 // import Dashboard from '@pages/Dashboard';
@@ -14,6 +15,7 @@ import Users from '@app/pages/Users';
 import Rests from '@app/pages/Rests';
 import Csv from '@app/pages/Csv';
 import Employee from '@app/pages/Employee/Employee';
+import UserForm from '@app/pages/UserForm';
 import {url as urlconf} from '../../config/index';
 
 import Header from './header/Header';
@@ -22,10 +24,10 @@ import MenuSidebar from './menu-sidebar/MenuSidebar';
 import PageLoading from '../../components/page-loading/PageLoading';
 
 const Main = () => {
-    const [role, setRole] = React.useState('');
-    useEffect(() => {
+    //  const [role, setRole] = React.useState('');
+    /*   useEffect(() => {
         setRole(localStorage.getItem('role'));
-    }, []);
+    }, []); */
     const dispatch = useDispatch();
     const isSidebarMenuCollapsed = useSelector(
         (state) => state.ui.isSidebarMenuCollapsed
@@ -36,7 +38,7 @@ const Main = () => {
     const handleToggleMenuSidebar = () => {
         dispatch(toggleSidebarMenu());
     };
-
+    const authVariable = useSelector((state) => state.localVariables);
     const fetchProfile = async () => {
         try {
             await axios.get(`${urlconf}validate`, {
@@ -46,6 +48,14 @@ const Main = () => {
                     )}`
                 }
             });
+            dispatch(
+                updateAuth({
+                    token: localStorage.token,
+                    user: localStorage.user,
+                    role: localStorage.role,
+                    restaurantApi: localStorage.restaurantApi
+                })
+            );
             console.log('validate');
             setIsAppLoaded(true);
         } catch (error) {
@@ -94,10 +104,12 @@ const Main = () => {
         }
     }, [screenSize, isSidebarMenuCollapsed]);
     const logoutFunction = () => {
+        console.log('click');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('role');
         localStorage.removeItem('restaurantApi');
+        dispatch(updateAuth({}));
         setIsAppLoaded(true);
         window.location.href = '/';
     };
@@ -105,83 +117,67 @@ const Main = () => {
         if (!isAppLoaded) {
             return <PageLoading />;
         }
-
         return (
             <>
                 <Header toggleMenuSidebar={handleToggleMenuSidebar} />
-
                 <MenuSidebar />
-
                 <div className="content-wrapper">
                     <div className="pt-3" />
                     <section className="content">
-                        {role === 'Admin' ? (
-                            <>
-                                <Switch>
+                        <Switch>
+                            <Route
+                                exact
+                                path="/employee"
+                                component={Employee}
+                            />
+                            <Route
+                                exact
+                                path="/userForm"
+                                component={UserForm}
+                            />
+                            <Route
+                                exact
+                                path="/logout"
+                                component={logoutFunction}
+                                onEnter={() => logoutFunction()}
+                            />
+                            {authVariable.role !== 'Employee' ? (
+                                <>
                                     <Route
                                         exact
                                         path="/users"
                                         component={Users}
                                     />
-                                    <Route
-                                        exact
-                                        path="/Restaurants"
-                                        component={Rests}
-                                    />
+                                    {authVariable.role === 'Admin' ? (
+                                        <Route
+                                            exact
+                                            path="/Restaurants"
+                                            component={Rests}
+                                        />
+                                    ) : null}
                                     <Route exact path="/" component={Checks} />
                                     <Route
                                         exact
                                         path="/Checks"
                                         component={Checks}
                                     />
-                                    <Route exact path="/Csv" component={Csv} />
-                                    <Route
-                                        exact
-                                        path="/logout"
-                                        component={logoutFunction}
-                                        onEnter={() => logoutFunction()}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/employee"
-                                        component={Employee}
-                                    />
-                                </Switch>
-                            </>
-                        ) : (
-                            <>
-                                {' '}
-                                <Switch>
-                                    <Route
-                                        exact
-                                        path="/users"
-                                        component={Users}
-                                    />
-                                    <Route exact path="/Csv" component={Csv} />
-                                    <Route
-                                        exact
-                                        path="/logout"
-                                        component={logoutFunction}
-                                        onEnter={() => logoutFunction()}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/Checks"
-                                        component={Checks}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/employee"
-                                        component={Employee}
-                                    />
-                                    <Redirect
+                                    {authVariable.role === 'Manager' ||
+                                    authVariable.role === 'Manager Asistent' ? (
+                                        <Route
+                                            exact
+                                            path="/Csv"
+                                            component={Csv}
+                                        />
+                                    ) : null}
+                                </>
+                            ) : null}
+
+                            {/* <Redirect
                                         to={{
                                             pathname: '/Csv'
                                         }}
-                                    />
-                                </Switch>
-                            </>
-                        )}
+                                    /> */}
+                        </Switch>
                     </section>
                 </div>
                 <Footer />

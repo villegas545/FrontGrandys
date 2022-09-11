@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-shadow */
 /* eslint-disable react/button-has-type */
 import React, {useState} from 'react';
@@ -9,15 +10,23 @@ import 'react-toastify/dist/ReactToastify.css';
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
+import {
+    approveRejectCashRegisterStartup,
+    cancelCashRegisterStartup
+} from '@app/services';
+import { useDispatch} from 'react-redux';
+import {getCashInAction} from '@app/store/reducers/cashInDucks';
 
-function TableCashIn({columns, data, deleteItem}) {
+
+function TableCashIn({columns, data}) {
     // notificacion tostify
     const [modalShow, setModalShow] = React.useState(false);
+    const dispatch = useDispatch();
 
     const notify = () =>
-        toast('Successfuly deleted!!!!', {
+        toast('Successfully changed!', {
             theme: 'colored',
-            type: 'error',
+            type: 'success',
             position: 'top-center',
             autoClose: 2000,
             hideProgressBar: false,
@@ -56,17 +65,39 @@ function TableCashIn({columns, data, deleteItem}) {
     );
     const [idRow, setIdRow] = useState();
     const [userSelected, setUserSelected] = useState('');
-
+    const actionButton = async (id, action) => {
+        switch (action) {
+        case 'approve':
+            await approveRejectCashRegisterStartup({
+                idRequestCashRegisterStartup:id,
+                approved:"Approved"
+            })
+            break;
+        case 'reject':
+            await approveRejectCashRegisterStartup({
+                idRequestCashRegisterStartup:id,
+                rejected:"Rejected"
+            })
+            break;
+        case 'cancel':
+            await cancelCashRegisterStartup({idRequestCashRegisterStartup:id})
+            break;
+        default:
+            console.log('never');
+            break;
+        }
+        dispatch(getCashInAction("reload"))
+    };
     // Confirmacion de accion
-    const confirm = (id) => {
+    const confirm = (id, action) => {
         confirmAlert({
-            title: 'Confirm to delete',
+            title: `Confirm to ${action}`,
             message: 'Are you sure to do this?',
             buttons: [
                 {
                     label: 'Yes',
                     onClick: () => {
-                        deleteItem(id);
+                        actionButton(id, action);
                         notify();
                     }
                 },
@@ -125,24 +156,36 @@ function TableCashIn({columns, data, deleteItem}) {
                                     />
                                 </td>
                                 <td>
-                                    <input
-                                        type="submit"
-                                        value="Approve"
-                                        className="btn btn-success"
-                                        onClick={() => confirm(row.original.id)}
-                                    />
-                                    <input
-                                        type="submit"
-                                        value="Reject"
-                                        className="btn btn-warning"
-                                        onClick={() => confirm(row.original.id)}
-                                    />
-                                    <input
-                                        type="submit"
-                                        value="Cancel"
-                                        className="btn btn-danger"
-                                        onClick={() => confirm(row.original.id)}
-                                    />
+                                    { localStorage.getItem("role")==="Employee" && row.original.status==="Pending" ?
+                                        <><input
+                                            type="submit"
+                                            value="Approve"
+                                            className="btn btn-success"
+                                            onClick={() =>
+                                                confirm(row.original.id, 'approve')
+                                            }
+                                        />
+                                        <input
+                                            type="submit"
+                                            value="Reject"
+                                            className="btn btn-warning ml-2"
+                                            onClick={() =>
+                                                confirm(row.original.id, 'reject')
+                                            }
+                                        />
+                                        </>
+                                        :null}
+                                    { localStorage.getItem("role")==="Manager" && row.original.status==="Approved" ?
+                                        <>
+                                            <input
+                                                type="submit"
+                                                value="Cancel"
+                                                className="btn btn-danger ml-2"
+                                                onClick={() =>
+                                                    confirm(row.original.id, 'cancel')
+                                                }
+                                            />
+                                        </>:null}
                                 </td>
                             </tr>
                         );

@@ -1,21 +1,32 @@
 /* eslint-disable indent */
 import axios from 'axios';
+import {currencyFormat} from '@app/services/utils';
 import {url as urlconf} from '../../config/index';
-
-const url = `${urlconf}getCashRegisterStartup?startDate=12/12/2012&endDate=12/12/2012`;
+// const url = `${urlconf}getCashRegisterStartup?startDate=12/12/2012&endDate=12/12/2012`;
+const url = `${urlconf}getCashRegisterStartup`;
 
 const dataInitial = {
     details: [],
-    tableInfo: []
+    tableInfo: [],
+    lastFilter: '',
+    cashTotal: 0
 };
 
 const GET_CASH_IN_SUCCESS = 'GET_CASH_IN_SUCCESS';
 
 // actions
-export const getCashInAction = () => async (dispatch) => {
+export const getCashInAction = (formData) => async (dispatch, getState) => {
     try {
+        console.log(getState());
+        let urlFilter;
+        if (formData === 'reload') {
+            urlFilter = getState().cashIn.lastFilter;
+        } else {
+            urlFilter = `${url}?startDate=${formData.startDate}&endDate=${formData.endDate}&restaurant=${formData.restaurant}&employee=${formData.employee}&status=${formData.status}`;
+        }
+
         const res = (
-            await axios.get(`${url}`, {
+            await axios.get(urlFilter, {
                 headers: {
                     authorization: `bearerHeader: ${localStorage.getItem(
                         'token'
@@ -25,6 +36,7 @@ export const getCashInAction = () => async (dispatch) => {
         ).data.response;
         const tableInfo = [];
         console.log(res);
+        let totalTotal = 0;
         res.forEach((element) => {
             const coinsTotal =
                 (element.pennies +
@@ -38,21 +50,26 @@ export const getCashInAction = () => async (dispatch) => {
                 element.twenties * 20 +
                 element.fifties * 50 +
                 element.hundreads * 100;
+            totalTotal =
+                Number(totalTotal) + Number(coinsTotal) + Number(billsTotal);
             tableInfo.push({
                 id: element.id,
                 user: element.User.name,
                 restaurant: element.Restaurant.name,
                 date: element.date,
-                coinsTotal,
-                billsTotal,
-                grandTotal: coinsTotal + billsTotal,
+                coinsTotal: currencyFormat(coinsTotal),
+                billsTotal: currencyFormat(billsTotal),
+                grandTotal: currencyFormat(coinsTotal + billsTotal),
                 status: element.status
             });
         });
+        console.log('total', totalTotal);
         dispatch({
             type: GET_CASH_IN_SUCCESS,
             details: res,
-            tableInfo
+            tableInfo,
+            urlFilter,
+            cashTotal: totalTotal
         });
     } catch (error) {
         console.log(error.data.response);
@@ -65,7 +82,9 @@ export default function cashInReducer(state = dataInitial, action) {
             return {
                 ...state,
                 details: action.details,
-                tableInfo: action.tableInfo
+                tableInfo: action.tableInfo,
+                lastFilter: action.urlFilter,
+                cashTotal: action.cashTotal
             };
         default:
             return state;

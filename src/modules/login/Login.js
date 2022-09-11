@@ -5,6 +5,7 @@ import {toast} from 'react-toastify';
 import {useFormik} from 'formik';
 import {useTranslation} from 'react-i18next';
 import {loginUser} from '@store/reducers/auth';
+import {updateAuth} from '@app/store/reducers/localVariables';
 import {Button, Input} from '@components';
 import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -79,16 +80,24 @@ const Login = () => {
             });
             // eslint-disable-next-line no-constant-condition
             // eslint-disable-next-line no-cond-assign
-            console.log(token2.data.token);
+            // console.log(token2.data.token);
             toast.success('Login is succeed!');
             document.getElementById('root').classList.remove('login-page');
             document.getElementById('root').classList.remove('hold-transition');
             setAuthLoading(false);
-            console.log(token2.data);
+            //  console.log(token2.data);
             dispatch(
                 loginUser({
                     token: token2.data.token,
                     name: token2.data.user,
+                    role: token2.data.role,
+                    restaurantApi: token2.data.restaurantApi
+                })
+            );
+            dispatch(
+                updateAuth({
+                    token: token2.data.token,
+                    user: token2.data.user,
                     role: token2.data.role,
                     restaurantApi: token2.data.restaurantApi
                 })

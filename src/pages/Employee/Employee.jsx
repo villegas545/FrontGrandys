@@ -4,6 +4,8 @@ import {Modal} from 'react-bootstrap';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import {ToastContainer, toast} from 'react-toastify';
+import {updateAuth} from '@app/store/reducers/localVariables';
+import {useDispatch} from 'react-redux';
 import {url as urlconf} from '../../config';
 import EmployeeTab from './EmployeeTab';
 
@@ -30,7 +32,7 @@ function ModalPinCode({show, onHide, action}) {
                         <input
                             className="form-control "
                             type="text"
-                            placeholder="Enter A Pin Code"
+                            placeholder="Enter A Pin Code Or Your Password"
                             onChange={(e) => setPinCode(e.target.value)}
                         />
                     </div>
@@ -58,7 +60,10 @@ function ModalPinCode({show, onHide, action}) {
 function Employee() {
     const [modalShow, setModalShow] = useState(false);
     const [cargando, setCargando] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [user, setUser] = useState('');
+    const dispatch = useDispatch();
+
     useEffect(() => {
         setModalShow(true);
     }, []);
@@ -91,14 +96,30 @@ function Employee() {
                 }
             );
             if (respuesta.data) {
-                setUser(respuesta.data);
+                //  setUser(respuesta.data);
+                localStorage.setItem('role', respuesta.data.role);
+                localStorage.setItem('token', respuesta.data.token);
+                localStorage.setItem('user', respuesta.data.user);
+                localStorage.setItem(
+                    'restaurantApi',
+                    respuesta.data.restaurantApi
+                );
+                dispatch(
+                    updateAuth({
+                        role: respuesta.data.role,
+                        token: respuesta.data.token,
+                        user: respuesta.data.user,
+                        restaurantApi: respuesta.data.restaurantApi
+                    })
+                );
+                setUser('algo');
                 setModalShow(false);
             } else {
                 notify();
             }
-
             console.log(respuesta);
         } catch (err) {
+            notify();
             console.log(err);
         }
         setCargando(false);
@@ -107,7 +128,7 @@ function Employee() {
         <>
             {user ? (
                 <>
-                    <EmployeeTab user={user} />
+                    <EmployeeTab />
                 </>
             ) : null}
 

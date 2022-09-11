@@ -6,6 +6,7 @@ import usersReducer from '@app/store/reducers/usersDucks';
 import restReducer from '@app/store/reducers/restsDucks';
 import checksReducer from '@app/store/reducers/checksDucks';
 import cashInReducer from '@app/store/reducers/cashInDucks';
+import localVariablesReducer from '@app/store/reducers/localVariables';
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
         rest: restReducer,
         users: usersReducer,
         cashIn: cashInReducer,
+        localVariables: localVariablesReducer,
         auth: authSlice.reducer,
         ui: uiSlice.reducer
     }

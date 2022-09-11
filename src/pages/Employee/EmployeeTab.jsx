@@ -2,8 +2,7 @@ import CashIn from '@app/pages/Employee/CashIn';
 import CashOut from '@app/pages/Employee/CashOut';
 import React from 'react';
 
-const EmployeeTab = ({user}) => {
-    console.log(user);
+const EmployeeTab = () => {
     return (
         <>
             {/*    Employee: {JSON.stringify(user)} */}
@@ -43,7 +42,7 @@ const EmployeeTab = ({user}) => {
                     aria-labelledby="nav-home-tab"
                     tabIndex="0"
                 >
-                    <CashIn user={user} />
+                    <CashIn />
                 </div>
                 <div
                     className="tab-pane fade"
