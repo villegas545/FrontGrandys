@@ -6,12 +6,6 @@ import {Link} from 'react-router-dom';
 import {MenuItem} from '@components';
 
 const MenuSidebar = () => {
-    // const [userGrandys, setUser] = React.useState('');
-    // const [role, setRole] = React.useState('');
-    /*    useEffect(() => {
-        setRole(localStorage.getItem('role'));
-        setUser(localStorage.getItem('user'));
-    }, []); */
     const authVariable = useSelector((state) => state.localVariables);
     const menu = [];
     if (authVariable.role === 'Admin') {

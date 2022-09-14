@@ -7,7 +7,7 @@ import CurrencyFormat from 'react-currency-format';
 import {useSelector} from 'react-redux';
 import {addCashInService} from '@app/services/';
 
-const ModalDetailsCashIn = ({onHide, show, idRow, action, user}) => {
+const ModalDetailsCashIn = ({onHide, show, idRow, action, user, employees}) => {
     console.log(user);
     return (
         <Modal
@@ -24,13 +24,18 @@ const ModalDetailsCashIn = ({onHide, show, idRow, action, user}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <BodyInfo idRow={idRow} action={action} user={user} />
+                <BodyInfo
+                    idRow={idRow}
+                    action={action}
+                    user={user}
+                    employees={employees}
+                />
             </Modal.Body>
         </Modal>
     );
 };
 
-const BodyInfo = ({idRow, action, user}) => {
+const BodyInfo = ({idRow, action, user, employees}) => {
     console.log(user);
     const [form, setForm] = useState({
         pennies: 0,
@@ -103,6 +108,25 @@ const BodyInfo = ({idRow, action, user}) => {
             <div className="card-body">
                 <div className="d-flex justify-content-end">
                     <div>
+                        <span>Select the Employee</span>
+                        <select
+                            className="form-control mr-3"
+                            style={{minWidth: '100px'}}
+                            onChange={async (e) =>
+                                setForm({
+                                    ...form,
+                                    employee: e.target.value
+                                })
+                            }
+                            value={form.employee}
+                        >
+                            <option selected>Select a value</option>
+                            {employees.map((employee) => (
+                                <option value={employee.idEmployee}>
+                                    {employee.name}
+                                </option>
+                            ))}
+                        </select>
                         Date:{' '}
                         <input
                             type="date"

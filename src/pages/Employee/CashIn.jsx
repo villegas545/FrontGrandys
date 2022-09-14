@@ -291,6 +291,7 @@ const CashIn = () => {
                         onHide={() => setModalShow(false)}
                         action="add"
                         user={user}
+                        employees={employees}
                     />
                 </div>
             </section>
