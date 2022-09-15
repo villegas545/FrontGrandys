@@ -69,6 +69,7 @@ const CashIn = () => {
                 let resEmployees = await getUsersByRestaurant(
                     resRestaurant[0].idRestaurant
                 );
+                console.log(resEmployees);
                 resEmployees = resEmployees.map((employee) => {
                     return {...employee, Discontinued: false};
                 });
