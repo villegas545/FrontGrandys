@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
 import {currencyFormat} from '@app/services/utils';
+import {processListBoxDragAndDrop} from '@progress/kendo-react-listbox';
 
 const columns = [
     {
@@ -53,11 +54,40 @@ const CashIn = () => {
         startDate: '',
         endDate: ''
     });
-
+    const [state, setState] = React.useState({
+        notDiscontinued: [],
+        discontinued: [],
+        draggedItem: {}
+    });
     useEffect(() => {
         (async () => {
             // dispatch(getCashInAction());
-            setRestaurants(await getRestaurantByLevel());
+            // setRestaurants(await getRestaurantByLevel());
+            const resRestaurant = await getRestaurantByLevel();
+            setRestaurants(resRestaurant);
+            if (resRestaurant.length === 1) {
+                let resEmployees = await getUsersByRestaurant(
+                    resRestaurant[0].idRestaurant
+                );
+                resEmployees = resEmployees.map((employee) => {
+                    return {...employee, Discontinued: false};
+                });
+                resEmployees.push({
+                    idEmployee: 111111111111111,
+                    name: 'Drop here the employee',
+                    Discontinued: true
+                });
+                setEmployees(resEmployees);
+                setState({
+                    notDiscontinued: resEmployees.filter(
+                        (product) => !product.Discontinued
+                    ),
+                    discontinued: resEmployees.filter(
+                        (product) => product.Discontinued
+                    ),
+                    draggedItem: {}
+                });
+            }
         })();
     }, []);
 
@@ -66,6 +96,38 @@ const CashIn = () => {
     }, [cashIn]);
     const search = async () => {
         dispatch(getCashInAction(formSearch));
+    };
+    // LIST DROPANDDRAG
+
+    const handleDragStart = (e) => {
+        setState({...state, draggedItem: e.dataItem});
+    };
+
+    const handleDrop = (e) => {
+        const result = processListBoxDragAndDrop(
+            state.notDiscontinued,
+            state.discontinued,
+            state.draggedItem,
+            e.dataItem,
+            'idEmployee'
+        );
+        /*     console.log(result.listBoxOneData);
+        if (
+            !result.listBoxTwoData.some(
+                (element) => element.idEmployee === '111111111111111'
+            )
+        ) {
+            result.listBoxTwoData.push({
+                idEmployee: 111111111111111,
+                name: 'Drop Here the employee',
+                Discontinued: true
+            });
+        } */
+        setState({
+            ...state,
+            notDiscontinued: result.listBoxOneData,
+            discontinued: result.listBoxTwoData
+        });
     };
     return (
         <>
@@ -104,7 +166,9 @@ const CashIn = () => {
                                     });
                                 }}
                             >
-                                <option selected>Select a value</option>
+                                {restaurants.length > 1 ? (
+                                    <option selected>Select a value</option>
+                                ) : null}
                                 {restaurants.map((restaurant) => (
                                     <option value={restaurant.idRestaurant}>
                                         {restaurant.restaurantName}
@@ -292,6 +356,9 @@ const CashIn = () => {
                         action="add"
                         user={user}
                         employees={employees}
+                        state={state}
+                        handleDragStart={handleDragStart}
+                        handleDrop={handleDrop}
                     />
                 </div>
             </section>
@@ -299,4 +366,4 @@ const CashIn = () => {
     );
 };
 
-export default CashIn;
+export default React.memo(CashIn);

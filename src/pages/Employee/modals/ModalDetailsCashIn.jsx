@@ -6,8 +6,19 @@ import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector} from 'react-redux';
 import {addCashInService} from '@app/services/';
+import {ListBox} from '@progress/kendo-react-listbox';
 
-const ModalDetailsCashIn = ({onHide, show, idRow, action, user, employees}) => {
+const ModalDetailsCashIn = ({
+    onHide,
+    show,
+    idRow,
+    action,
+    user,
+    employees,
+    state,
+    handleDragStart,
+    handleDrop
+}) => {
     console.log(user);
     return (
         <Modal
@@ -29,14 +40,24 @@ const ModalDetailsCashIn = ({onHide, show, idRow, action, user, employees}) => {
                     action={action}
                     user={user}
                     employees={employees}
+                    state={state}
+                    handleDragStart={handleDragStart}
+                    handleDrop={handleDrop}
                 />
             </Modal.Body>
         </Modal>
     );
 };
 
-const BodyInfo = ({idRow, action, user, employees}) => {
-    console.log(user);
+const BodyInfo = ({
+    idRow,
+    action,
+    user,
+    state,
+    handleDragStart,
+    handleDrop
+}) => {
+    console.log(state);
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -103,30 +124,65 @@ const BodyInfo = ({idRow, action, user, employees}) => {
                 break;
         }
     };
+
+    // LISTBOX DRAGANDDROP
+    /*   const [state, setState] = React.useState({
+        notDiscontinued: employees.filter((product) => !product.Discontinued),
+        discontinued: employees.filter((product) => product.Discontinued),
+        draggedItem: {}
+    }); */
+    /*     useEffect(() => {
+        employees = employees.map((employee) => {
+            return {...employee, Discontinued: false};
+        });
+        setState({
+            notDiscontinued: employees.filter(
+                (product) => !product.Discontinued
+            ),
+            discontinued: employees.filter((product) => product.Discontinued),
+            draggedItem: {}
+        });
+    }, []); */
+    /*     const handleDragStart = (e) => {
+        setState({...state, draggedItem: e.dataItem});
+    };
+
+    const handleDrop = (e) => {
+        const result = processListBoxDragAndDrop(
+            state.notDiscontinued,
+            state.discontinued,
+            state.draggedItem,
+            e.dataItem,
+            'id'
+        );
+        setState({
+            ...state,
+            notDiscontinued: result.listBoxOneData,
+            discontinued: result.listBoxTwoData
+        });
+    }; */
     return (
         <>
             <div className="card-body">
                 <div className="d-flex justify-content-end">
-                    <div>
-                        <span>Select the Employee</span>
-                        <select
-                            className="form-control mr-3"
-                            style={{minWidth: '100px'}}
-                            onChange={async (e) =>
-                                setForm({
-                                    ...form,
-                                    employee: e.target.value
-                                })
-                            }
-                            value={form.employee}
-                        >
-                            <option selected>Select a value</option>
-                            {employees.map((employee) => (
-                                <option value={employee.idEmployee}>
-                                    {employee.name}
-                                </option>
-                            ))}
-                        </select>
+                    <div className="d-flex ">
+                        <div className="d-inline-flex">
+                            <ListBox
+                                data={state.notDiscontinued}
+                                textField="name"
+                                onDragStart={handleDragStart}
+                                onDrop={handleDrop}
+                            />
+                            <ListBox
+                                data={state.discontinued}
+                                textField="name"
+                                style={{
+                                    marginLeft: '12px'
+                                }}
+                                onDragStart={handleDragStart}
+                                onDrop={handleDrop}
+                            />
+                        </div>
                         Date:{' '}
                         <input
                             type="date"
@@ -585,23 +641,24 @@ const BodyInfo = ({idRow, action, user, employees}) => {
                             }
                         />
                     </div>
-                    {!idRow ? (
-                        <>
-                            {' '}
-                            <div>
-                                <input
-                                    type="submit"
-                                    className="btn btn-dark btn-lg"
-                                    value={actionButton}
-                                    onClick={() => submit()}
-                                />
-                            </div>
-                        </>
-                    ) : null}
                 </div>
+                {!idRow ? (
+                    <>
+                        {' '}
+                        <div>
+                            <input
+                                type="submit"
+                                className="btn btn-dark btn-lg"
+                                value={actionButton}
+                                onClick={() => submit()}
+                            />
+                        </div>
+                    </>
+                ) : null}
             </div>
         </>
     );
 };
 
-export default ModalDetailsCashIn;
+export default React.memo(ModalDetailsCashIn);
+React.memo(BodyInfo);
