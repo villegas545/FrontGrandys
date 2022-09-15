@@ -65,28 +65,33 @@ const CashIn = () => {
             // setRestaurants(await getRestaurantByLevel());
             const resRestaurant = await getRestaurantByLevel();
             setRestaurants(resRestaurant);
-            if (resRestaurant.length === 1) {
-                let resEmployees = await getUsersByRestaurant(
-                    resRestaurant[0].idRestaurant
-                );
-                resEmployees = resEmployees.map((employee) => {
-                    return {...employee, Discontinued: false};
-                });
-                resEmployees.push({
-                    idEmployee: 111111111111111,
-                    name: 'Drop here the employee',
-                    Discontinued: true
-                });
-                setEmployees(resEmployees);
-                setState({
-                    notDiscontinued: resEmployees.filter(
-                        (product) => !product.Discontinued
-                    ),
-                    discontinued: resEmployees.filter(
-                        (product) => product.Discontinued
-                    ),
-                    draggedItem: {}
-                });
+            if (
+                localStorage.getItem('role') === 'Manager' ||
+                localStorage.getItem('role') === 'Manager Asistent'
+            ) {
+                if (resRestaurant.length === 1) {
+                    let resEmployees = await getUsersByRestaurant(
+                        resRestaurant[0].idRestaurant
+                    );
+                    resEmployees = resEmployees.map((employee) => {
+                        return {...employee, Discontinued: false};
+                    });
+                    resEmployees.push({
+                        idEmployee: 111111111111111,
+                        name: 'Drop here the employee',
+                        Discontinued: true
+                    });
+                    setEmployees(resEmployees);
+                    setState({
+                        notDiscontinued: resEmployees.filter(
+                            (product) => !product.Discontinued
+                        ),
+                        discontinued: resEmployees.filter(
+                            (product) => product.Discontinued
+                        ),
+                        draggedItem: {}
+                    });
+                }
             }
         })();
     }, []);
