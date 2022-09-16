@@ -2,12 +2,12 @@ import axios from 'axios';
 import {url as urlconf} from '../config';
 
 const postFunction = async (route, data) => {
-    await axios.post(`${urlconf}${route}`, data, {
+    const response = await axios.post(`${urlconf}${route}`, data, {
         headers: {
             authorization: `bearerHeader: ${localStorage.getItem('token')}`
         }
     });
-    return {msg: 'success'};
+    return response.data;
 };
 
 const getFunction = async (route) => {
