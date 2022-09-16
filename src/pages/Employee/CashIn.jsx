@@ -73,6 +73,7 @@ const CashIn = () => {
                     let resEmployees = await getUsersByRestaurant(
                         resRestaurant[0].idRestaurant
                     );
+                    setEmployees(resEmployees);
                     resEmployees = resEmployees.map((employee) => {
                         return {...employee, Discontinued: false};
                     });
@@ -81,7 +82,6 @@ const CashIn = () => {
                         name: 'Drop here the employee',
                         Discontinued: true
                     });
-                    setEmployees(resEmployees);
                     setState({
                         notDiscontinued: resEmployees.filter(
                             (product) => !product.Discontinued

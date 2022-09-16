@@ -43,6 +43,7 @@ const ModalDetailsCashIn = ({
                     state={state}
                     handleDragStart={handleDragStart}
                     handleDrop={handleDrop}
+                    onHide={onHide}
                 />
             </Modal.Body>
         </Modal>
@@ -55,7 +56,8 @@ const BodyInfo = ({
     user,
     state,
     handleDragStart,
-    handleDrop
+    handleDrop,
+    onHide
 }) => {
     console.log(state);
     const [form, setForm] = useState({
@@ -76,10 +78,13 @@ const BodyInfo = ({
     });
     const cashIn = useSelector((store) => store.cashIn);
     const [actionButton, setActionButton] = useState();
+    // eslint-disable-next-line no-unused-vars
+    const [error, setError] = useState();
     useEffect(() => {
         const filtered = cashIn.details.find((element) => element.id === idRow);
         if (filtered) {
             setForm({
+                employees: [],
                 pennies: filtered.pennies,
                 nickels: filtered.nickels,
                 dimes: filtered.dimes,
@@ -94,6 +99,15 @@ const BodyInfo = ({
                 comentaries: filtered.comentaries,
                 date: filtered.date
             });
+        } else {
+            // const today = new Date();
+            let today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            const yyyy = today.getFullYear();
+            today = `${yyyy}-${mm}-${dd}`;
+            console.log(today);
+            setForm({...form, date: today});
         }
         if (action) {
             switch (action) {
@@ -108,9 +122,20 @@ const BodyInfo = ({
     }, []);
     const addCashIn = async () => {
         try {
-            await addCashInService(form);
-        } catch (error) {
-            console.log(error);
+            const request = form;
+            request.employees = state.discontinued;
+            const response = await addCashInService(request);
+            if (response.message === 'existentEmployees') {
+                setError(
+                    `The followewing employees are already captured: ${response.existentsEmployees.join(
+                        ', '
+                    )}`
+                );
+            } else {
+                onHide();
+            }
+        } catch (err) {
+            console.log(err);
         }
         console.log('click en add');
     };
@@ -166,23 +191,6 @@ const BodyInfo = ({
             <div className="card-body">
                 <div className="d-flex justify-content-end">
                     <div className="d-flex ">
-                        <div className="d-inline-flex">
-                            <ListBox
-                                data={state.notDiscontinued}
-                                textField="name"
-                                onDragStart={handleDragStart}
-                                onDrop={handleDrop}
-                            />
-                            <ListBox
-                                data={state.discontinued}
-                                textField="name"
-                                style={{
-                                    marginLeft: '12px'
-                                }}
-                                onDragStart={handleDragStart}
-                                onDrop={handleDrop}
-                            />
-                        </div>
                         Date:{' '}
                         <input
                             type="date"
@@ -541,107 +549,133 @@ const BodyInfo = ({
                         </div>
                     </div>
                 </div>
-                <div className="d-flex p-2 justify-content-around">
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Coins Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                100
-                            }
-                            disabled
-                        />
+                <div className="d-flex justify-content-around">
+                    <div className="flex-row p-2 justify-content-around">
+                        <div className="d-flex justify-content-around mb-3">
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Coins Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                        100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Bills Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100)
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Grand Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        <div style={{minWidth: '300px'}}>
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                Comments
+                            </span>
+                            <textarea
+                                title="Comments"
+                                type="text"
+                                className="form-control input-sm mr-3"
+                                style={{minWidth: '50px'}}
+                                defaultValue={form.comentaries}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        comentaries: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Bills Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreads * 100)
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Grand Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreads * 100) +
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                    100
-                            }
-                            disabled
-                        />
-                    </div>
+
+                    {!idRow ? (
+                        <div className="d-flex flex-wrap justify-content-around">
+                            <span style={{width: '100%', textAlign: 'center'}}>
+                                Employees
+                            </span>
+                            <ListBox
+                                data={state.notDiscontinued}
+                                textField="name"
+                                onDragStart={handleDragStart}
+                                onDrop={handleDrop}
+                            />
+                            <ListBox
+                                data={state.discontinued}
+                                textField="name"
+                                style={{
+                                    marginLeft: '12px'
+                                }}
+                                onDragStart={handleDragStart}
+                                onDrop={handleDrop}
+                            />
+                        </div>
+                    ) : null}
                 </div>
-                <div className="d-flex p-2 justify-content-around align-items-center">
-                    <div style={{width: '60%'}}>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Comments
-                        </span>
-                        <textarea
-                            title="Comments"
-                            type="text"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            defaultValue={form.comentaries}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    comentaries: e.target.value
-                                })
-                            }
-                        />
-                    </div>
-                </div>
+
                 {!idRow ? (
                     <>
                         {' '}
@@ -655,6 +689,7 @@ const BodyInfo = ({
                         </div>
                     </>
                 ) : null}
+                {error || null}
             </div>
         </>
     );
