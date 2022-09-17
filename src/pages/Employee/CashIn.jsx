@@ -6,8 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
-import {currencyFormat} from '@app/services/utils';
-import {processListBoxDragAndDrop} from '@progress/kendo-react-listbox';
+import {currencyFormat, getToday} from '@app/services/utils';
 
 const columns = [
     {
@@ -51,18 +50,12 @@ const CashIn = () => {
         restaurant: '',
         employee: '',
         status: '',
-        startDate: '',
-        endDate: ''
+        startDate: getToday(),
+        endDate: getToday()
     });
-    const [state, setState] = React.useState({
-        notDiscontinued: [],
-        discontinued: [],
-        draggedItem: {}
-    });
+
     useEffect(() => {
         (async () => {
-            // dispatch(getCashInAction());
-            // setRestaurants(await getRestaurantByLevel());
             const resRestaurant = await getRestaurantByLevel();
             setRestaurants(resRestaurant);
             if (
@@ -70,28 +63,15 @@ const CashIn = () => {
                 localStorage.getItem('role') === 'Manager Asistent'
             ) {
                 if (resRestaurant.length === 1) {
-                    let resEmployees = await getUsersByRestaurant(
-                        resRestaurant[0].idRestaurant
+                    setEmployees(
+                        await getUsersByRestaurant(
+                            resRestaurant[0].idRestaurant
+                        )
                     );
-                    setEmployees(resEmployees);
-                    resEmployees = resEmployees.map((employee) => {
-                        return {...employee, Discontinued: false};
-                    });
-                    resEmployees.push({
-                        idEmployee: 111111111111111,
-                        name: 'Drop here the employee',
-                        Discontinued: true
-                    });
-                    setState({
-                        notDiscontinued: resEmployees.filter(
-                            (product) => !product.Discontinued
-                        ),
-                        discontinued: resEmployees.filter(
-                            (product) => product.Discontinued
-                        ),
-                        draggedItem: {}
-                    });
                 }
+            }
+            if (localStorage.getItem('role') === 'Employee') {
+                console.log('hi');
             }
         })();
     }, []);
@@ -102,38 +82,7 @@ const CashIn = () => {
     const search = async () => {
         dispatch(getCashInAction(formSearch));
     };
-    // LIST DROPANDDRAG
 
-    const handleDragStart = (e) => {
-        setState({...state, draggedItem: e.dataItem});
-    };
-
-    const handleDrop = (e) => {
-        const result = processListBoxDragAndDrop(
-            state.notDiscontinued,
-            state.discontinued,
-            state.draggedItem,
-            e.dataItem,
-            'idEmployee'
-        );
-        /*     console.log(result.listBoxOneData);
-        if (
-            !result.listBoxTwoData.some(
-                (element) => element.idEmployee === '111111111111111'
-            )
-        ) {
-            result.listBoxTwoData.push({
-                idEmployee: 111111111111111,
-                name: 'Drop Here the employee',
-                Discontinued: true
-            });
-        } */
-        setState({
-            ...state,
-            notDiscontinued: result.listBoxOneData,
-            discontinued: result.listBoxTwoData
-        });
-    };
     return (
         <>
             <section className="content-header mt-3">
@@ -208,7 +157,13 @@ const CashIn = () => {
                                     })
                                 }
                             >
-                                <option selected>Select a value</option>
+                                {localStorage.getItem('role') !== 'Employee' ? (
+                                    <option selected>Select a value</option>
+                                ) : (
+                                    <option>
+                                        {localStorage.getItem('user')}
+                                    </option>
+                                )}
                                 {employees.map((employee) => (
                                     <option value={employee.idEmployee}>
                                         {employee.name}
@@ -275,6 +230,7 @@ const CashIn = () => {
                                         startDate: e.target.value
                                     })
                                 }
+                                defaultValue={getToday()}
                             />
                         </div>
                         <div
@@ -301,6 +257,7 @@ const CashIn = () => {
                                         endDate: e.target.value
                                     })
                                 }
+                                defaultValue={getToday()}
                             />
                         </div>
                         <div
@@ -322,14 +279,7 @@ const CashIn = () => {
                         </div>
                     </div>
 
-                    <div
-                        className="d-flex justify-content-end align-items-md-center"
-                        /*      style={{
-                            display: 'flex',
-                            flexFlow: 'row nowrap',
-                            flex: '1 10%'
-                        }} */
-                    >
+                    <div className="d-flex justify-content-end align-items-md-center">
                         <span>
                             <b>
                                 {' '}
@@ -361,9 +311,6 @@ const CashIn = () => {
                         action="add"
                         user={user}
                         employees={employees}
-                        state={state}
-                        handleDragStart={handleDragStart}
-                        handleDrop={handleDrop}
                     />
                 </div>
             </section>
