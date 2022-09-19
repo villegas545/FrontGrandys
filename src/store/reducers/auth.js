@@ -43,9 +43,12 @@ export const authSlice = createSlice({
                 });
                 console.log('validate');
             } catch (error) {
+                console.log('click');
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 localStorage.removeItem('role');
+                localStorage.removeItem('restaurantApi');
+                window.location.href = '/';
             }
         }
     }
