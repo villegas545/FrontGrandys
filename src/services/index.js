@@ -38,6 +38,9 @@ export const getUsersByRestaurant = async (data) =>
 export const addCashInService = async (data) =>
     postFunction('saveCashRegisterStartup', data);
 
+export const addCashOutService = async (data) =>
+    postFunction('saveCashRegisterStartup', data);
+
 export const approveRejectCashRegisterStartup = async (data) =>
     patchFunction('approveRejectCashRegisterStartup', data);
 
