@@ -32,6 +32,18 @@ const EmployeeTab = () => {
                     >
                         Cash Out
                     </button>
+                    <button
+                        className="nav-link btn-danger font-weight-bold text-uppercase"
+                        id="nav-safe-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#nav-safe"
+                        type="button"
+                        role="tab"
+                        aria-controls="nav-safe"
+                        aria-selected="false"
+                    >
+                        Safe cash
+                    </button>
                 </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
@@ -52,6 +64,15 @@ const EmployeeTab = () => {
                     tabIndex="0"
                 >
                     <CashOut />
+                </div>
+                <div
+                    className="tab-pane fade"
+                    id="nav-safe"
+                    role="tabpanel"
+                    aria-labelledby="nav-safe-tab"
+                    tabIndex="0"
+                >
+                    <div>safe</div>
                 </div>
             </div>
         </>

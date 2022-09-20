@@ -4,21 +4,16 @@ import React, {useState, useEffect} from 'react';
 import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {addCashInService} from '@app/services/';
-import {ListBox} from '@progress/kendo-react-listbox';
+import {
+    ListBox,
+    processListBoxDragAndDrop
+} from '@progress/kendo-react-listbox';
+import {getCashInAction} from '@app/store/reducers/cashInDucks';
+import {getToday} from '@app/services/utils';
 
-const ModalDetailsCashIn = ({
-    onHide,
-    show,
-    idRow,
-    action,
-    user,
-    employees,
-    state,
-    handleDragStart,
-    handleDrop
-}) => {
+const ModalDetailsCashIn = ({onHide, show, idRow, action, user, employees}) => {
     console.log(user);
     return (
         <Modal
@@ -40,9 +35,6 @@ const ModalDetailsCashIn = ({
                     action={action}
                     user={user}
                     employees={employees}
-                    state={state}
-                    handleDragStart={handleDragStart}
-                    handleDrop={handleDrop}
                     onHide={onHide}
                 />
             </Modal.Body>
@@ -50,16 +42,7 @@ const ModalDetailsCashIn = ({
     );
 };
 
-const BodyInfo = ({
-    idRow,
-    action,
-    user,
-    state,
-    handleDragStart,
-    handleDrop,
-    onHide
-}) => {
-    console.log(state);
+const BodyInfo = ({idRow, action, user, employees, onHide}) => {
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -76,6 +59,7 @@ const BodyInfo = ({
         date: '',
         idEmployee: user.id
     });
+    const dispatch = useDispatch();
     const cashIn = useSelector((store) => store.cashIn);
     const [actionButton, setActionButton] = useState();
     // eslint-disable-next-line no-unused-vars
@@ -101,13 +85,7 @@ const BodyInfo = ({
             });
         } else {
             // const today = new Date();
-            let today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-            const yyyy = today.getFullYear();
-            today = `${yyyy}-${mm}-${dd}`;
-            console.log(today);
-            setForm({...form, date: today});
+            setForm({...form, date: getToday()});
         }
         if (action) {
             switch (action) {
@@ -120,6 +98,48 @@ const BodyInfo = ({
             }
         }
     }, []);
+
+    // LISTBOX DRAGANDDROP
+    const [state, setState] = React.useState({
+        notDiscontinued: [],
+        discontinued: [],
+        draggedItem: {}
+    });
+    useEffect(() => {
+        employees = employees.map((employee) => {
+            return {...employee, Discontinued: false};
+        });
+        employees.push({
+            idEmployee: 111111111111111,
+            name: 'Drop here the employee',
+            Discontinued: true
+        });
+        setState({
+            notDiscontinued: employees.filter(
+                (product) => !product.Discontinued
+            ),
+            discontinued: employees.filter((product) => product.Discontinued),
+            draggedItem: {}
+        });
+    }, []);
+    const handleDragStart = (e) => {
+        setState({...state, draggedItem: e.dataItem});
+    };
+
+    const handleDrop = (e) => {
+        const result = processListBoxDragAndDrop(
+            state.notDiscontinued,
+            state.discontinued,
+            state.draggedItem,
+            e.dataItem,
+            'idEmployee'
+        );
+        setState({
+            ...state,
+            notDiscontinued: result.listBoxOneData,
+            discontinued: result.listBoxTwoData
+        });
+    };
     const addCashIn = async () => {
         try {
             const request = form;
@@ -132,6 +152,7 @@ const BodyInfo = ({
                     )}`
                 );
             } else {
+                dispatch(getCashInAction('reload'));
                 onHide();
             }
         } catch (err) {
@@ -149,43 +170,6 @@ const BodyInfo = ({
                 break;
         }
     };
-
-    // LISTBOX DRAGANDDROP
-    /*   const [state, setState] = React.useState({
-        notDiscontinued: employees.filter((product) => !product.Discontinued),
-        discontinued: employees.filter((product) => product.Discontinued),
-        draggedItem: {}
-    }); */
-    /*     useEffect(() => {
-        employees = employees.map((employee) => {
-            return {...employee, Discontinued: false};
-        });
-        setState({
-            notDiscontinued: employees.filter(
-                (product) => !product.Discontinued
-            ),
-            discontinued: employees.filter((product) => product.Discontinued),
-            draggedItem: {}
-        });
-    }, []); */
-    /*     const handleDragStart = (e) => {
-        setState({...state, draggedItem: e.dataItem});
-    };
-
-    const handleDrop = (e) => {
-        const result = processListBoxDragAndDrop(
-            state.notDiscontinued,
-            state.discontinued,
-            state.draggedItem,
-            e.dataItem,
-            'id'
-        );
-        setState({
-            ...state,
-            notDiscontinued: result.listBoxOneData,
-            discontinued: result.listBoxTwoData
-        });
-    }; */
     return (
         <>
             <div className="card-body">
