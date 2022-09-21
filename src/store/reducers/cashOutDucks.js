@@ -3,7 +3,7 @@ import axios from 'axios';
 import {currencyFormat} from '@app/services/utils';
 import {url as urlconf} from '../../config/index';
 // const url = `${urlconf}getCashRegisterStartup?startDate=12/12/2012&endDate=12/12/2012`;
-const url = `${urlconf}getCashRegisterStartup`;
+const url = `${urlconf}getCashRegisterEndups`;
 
 const dataInitial = {
     details: [],
@@ -49,7 +49,7 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
                 element.fives * 5 +
                 element.twenties * 20 +
                 element.fifties * 50 +
-                element.hundreads * 100;
+                element.hundreds * 100;
             totalTotal =
                 Number(totalTotal) + Number(coinsTotal) + Number(billsTotal);
             tableInfo.push({

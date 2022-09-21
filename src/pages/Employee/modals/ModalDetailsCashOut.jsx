@@ -43,7 +43,7 @@ const BodyInfo = ({idRow, action, user}) => {
         tens: 0,
         twenties: 0,
         fifties: 0,
-        hundreads: 0,
+        hundreds: 0,
         comentaries: '',
         date: '',
         idEmployee: user.id
@@ -66,7 +66,7 @@ const BodyInfo = ({idRow, action, user}) => {
                 tens: filtered.tens,
                 twenties: filtered.twenties,
                 fifties: filtered.fifties,
-                hundreads: filtered.hundreads,
+                hundreds: filtered.hundreds,
                 comentaries: filtered.comentaries,
                 date: filtered.date
             });
@@ -443,10 +443,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 onChange={(e) =>
                                     setForm({
                                         ...form,
-                                        hundreads: e.target.value
+                                        hundreds: e.target.value
                                     })
                                 }
-                                value={form.hundreads}
+                                value={form.hundreds}
                             />{' '}
                         </div>
                         <div />
@@ -457,7 +457,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.hundreads * 100}
+                                value={form.hundreds * 100}
                                 disabled
                             />{' '}
                         </div>
@@ -506,7 +506,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                 Number(form.tens * 10) +
                                 Number(form.twenties * 20) +
                                 Number(form.fifties * 50) +
-                                Number(form.hundreads * 100)
+                                Number(form.hundreds * 100)
                             }
                             disabled
                         />
@@ -530,7 +530,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                 Number(form.tens * 10) +
                                 Number(form.twenties * 20) +
                                 Number(form.fifties * 50) +
-                                Number(form.hundreads * 100) +
+                                Number(form.hundreds * 100) +
                                 (Number(form.pennies) +
                                     Number(form.nickels * 5) +
                                     Number(form.dimes * 10) +
