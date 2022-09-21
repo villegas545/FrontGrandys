@@ -3,7 +3,7 @@ import axios from 'axios';
 import {currencyFormat} from '@app/services/utils';
 import {url as urlconf} from '../../config/index';
 // const url = `${urlconf}getCashRegisterStartup?startDate=12/12/2012&endDate=12/12/2012`;
-const url = `${urlconf}getCashRegisterStartup`;
+const url = `${urlconf}getCashRegisterEndups`;
 
 const dataInitial = {
     details: [],

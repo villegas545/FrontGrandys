@@ -1,8 +1,12 @@
 import CashIn from '@app/pages/Employee/CashIn';
 import CashOut from '@app/pages/Employee/CashOut';
+import SafeCash from '@app/pages/Employee/SafeCash';
 import React from 'react';
+import {useSelector} from 'react-redux';
 
 const EmployeeTab = () => {
+    const authVariable = useSelector((state) => state.localVariables);
+
     return (
         <>
             {/*    Employee: {JSON.stringify(user)} */}
@@ -32,18 +36,20 @@ const EmployeeTab = () => {
                     >
                         Cash Out
                     </button>
-                    <button
-                        className="nav-link btn-danger font-weight-bold text-uppercase"
-                        id="nav-safe-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#nav-safe"
-                        type="button"
-                        role="tab"
-                        aria-controls="nav-safe"
-                        aria-selected="false"
-                    >
-                        Safe cash
-                    </button>
+                    {authVariable.role !== 'Employee' ? (
+                        <button
+                            className="nav-link btn-danger font-weight-bold text-uppercase"
+                            id="nav-safe-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-safe"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-safe"
+                            aria-selected="false"
+                        >
+                            Safe cash
+                        </button>
+                    ) : null}
                 </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
@@ -65,15 +71,17 @@ const EmployeeTab = () => {
                 >
                     <CashOut />
                 </div>
-                <div
-                    className="tab-pane fade"
-                    id="nav-safe"
-                    role="tabpanel"
-                    aria-labelledby="nav-safe-tab"
-                    tabIndex="0"
-                >
-                    <div>safe</div>
-                </div>
+                {authVariable.role !== 'Employee' ? (
+                    <div
+                        className="tab-pane fade"
+                        id="nav-safe"
+                        role="tabpanel"
+                        aria-labelledby="nav-safe-tab"
+                        tabIndex="0"
+                    >
+                        <SafeCash />
+                    </div>
+                ) : null}
             </div>
         </>
     );
