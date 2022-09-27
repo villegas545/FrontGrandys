@@ -59,6 +59,13 @@ const columns = [
     }
 ];
 const CashOut = () => {
+    useEffect(() => {
+        (async () => {
+            const resp = await getUsersByRestaurant();
+            console.log(resp);
+        })();
+    }, []);
+
     const dispatch = useDispatch();
     const cashOut = useSelector((store) => store.cashOut);
     const [modalShow, setModalShow] = useState(false);
