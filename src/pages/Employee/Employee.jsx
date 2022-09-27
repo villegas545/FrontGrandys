@@ -32,7 +32,7 @@ function ModalPinCode({show, onHide, action}) {
                         <input
                             className="form-control "
                             type="password"
-                            placeholder="Enter A Pin Code Or Your Password"
+                            placeholder="Enter A Pin Code"
                             onChange={(e) => setPinCode(e.target.value)}
                         />
                     </div>

@@ -60,7 +60,7 @@ const SafeCash = () => {
             setRestaurants(resRestaurant);
             if (
                 localStorage.getItem('role') === 'Manager' ||
-                localStorage.getItem('role') === 'Manager Asistent'
+                localStorage.getItem('role') === 'Manager Assistant'
             ) {
                 if (resRestaurant.length === 1) {
                     setEmployees(

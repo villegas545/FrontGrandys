@@ -38,7 +38,18 @@ const Main = () => {
     const handleToggleMenuSidebar = () => {
         dispatch(toggleSidebarMenu());
     };
+
     const authVariable = useSelector((state) => state.localVariables);
+    const logoutFunction = () => {
+        console.log('click');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('role');
+        localStorage.removeItem('restaurantApi');
+        dispatch(updateAuth({}));
+        setIsAppLoaded(true);
+        window.location.href = '/';
+    };
     const fetchProfile = async () => {
         try {
             await axios.get(`${urlconf}validate`, {
@@ -59,11 +70,7 @@ const Main = () => {
             console.log('validate');
             setIsAppLoaded(true);
         } catch (error) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('role');
-            localStorage.removeItem('restaurantApi');
-            setIsAppLoaded(true);
+            logoutFunction();
         }
         try {
             const response = await Gatekeeper.getProfile();
@@ -103,16 +110,7 @@ const Main = () => {
             document.getElementById('root').classList.add('sidebar-collapse');
         }
     }, [screenSize, isSidebarMenuCollapsed]);
-    const logoutFunction = () => {
-        console.log('click');
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('role');
-        localStorage.removeItem('restaurantApi');
-        dispatch(updateAuth({}));
-        setIsAppLoaded(true);
-        window.location.href = '/';
-    };
+
     const getAppTemplate = useCallback(() => {
         if (!isAppLoaded) {
             return <PageLoading />;
@@ -141,7 +139,11 @@ const Main = () => {
                                 component={logoutFunction}
                                 onEnter={() => logoutFunction()}
                             />
-                            {authVariable.role !== 'Employee' ? (
+                            <Route exact path="/" component={() => <></>} />
+
+                            {authVariable.role === 'Manager' ||
+                            authVariable.role === 'Manager Assistant' ||
+                            authVariable.role === 'Admin' ? (
                                 <>
                                     <Route
                                         exact
@@ -155,14 +157,14 @@ const Main = () => {
                                             component={Rests}
                                         />
                                     ) : null}
-                                    <Route exact path="/" component={Checks} />
                                     <Route
                                         exact
                                         path="/Checks"
                                         component={Checks}
                                     />
                                     {authVariable.role === 'Manager' ||
-                                    authVariable.role === 'Manager Asistent' ? (
+                                    authVariable.role ===
+                                        'Manager Assistant' ? (
                                         <Route
                                             exact
                                             path="/Csv"
@@ -177,6 +179,7 @@ const Main = () => {
                                             pathname: '/Csv'
                                         }}
                                     /> */}
+                            <Route path="/" component={Employee} />
                         </Switch>
                     </section>
                 </div>

@@ -174,8 +174,13 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
         <>
             <div className="card-body">
                 <div className="d-flex justify-content-end">
-                    <div className="d-flex ">
-                        Date:{' '}
+                    <div className="d-flex align-items-center">
+                        <span
+                            className="input-group-text"
+                            style={{minWidth: '50px'}}
+                        >
+                            Date
+                        </span>
                         <input
                             type="date"
                             className="form-control mr-3"
@@ -660,6 +665,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                     ) : null}
                 </div>
 
+                <p className="text-danger"> {error || null}</p>
                 {!idRow ? (
                     <>
                         {' '}
@@ -673,7 +679,6 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                     </>
                 ) : null}
-                {error || null}
             </div>
         </>
     );
