@@ -59,8 +59,8 @@ const CashIn = () => {
             const resRestaurant = await getRestaurantByLevel();
             setRestaurants(resRestaurant);
             if (
-                localStorage.getItem('role') === 'Manager' ||
-                localStorage.getItem('role') === 'Manager Asistent'
+                localStorage.getItem('role') === 'Cash Manager' ||
+                localStorage.getItem('role') === 'Cash Manager Assistant'
             ) {
                 if (resRestaurant.length === 1) {
                     setEmployees(
@@ -70,7 +70,7 @@ const CashIn = () => {
                     );
                 }
             }
-            if (localStorage.getItem('role') === 'Employee') {
+            if (localStorage.getItem('role') === 'Cash Employee') {
                 console.log('hi');
             }
         })();
@@ -128,7 +128,8 @@ const CashIn = () => {
                                         {restaurant.restaurantName}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') === 'Admin' ? (
+                                {localStorage.getItem('role') ===
+                                ' Cash Admin' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -157,7 +158,8 @@ const CashIn = () => {
                                     })
                                 }
                             >
-                                {localStorage.getItem('role') !== 'Employee' ? (
+                                {localStorage.getItem('role') !==
+                                'Cash Employee' ? (
                                     <option selected>Select a value</option>
                                 ) : (
                                     <option>
@@ -169,7 +171,8 @@ const CashIn = () => {
                                         {employee.name}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') !== 'Employee' ? (
+                                {localStorage.getItem('role') !==
+                                'Cash Employee' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -286,8 +289,9 @@ const CashIn = () => {
                                 Cash Total: {currencyFormat(cashIn.cashTotal)}
                             </b>
                         </span>{' '}
-                        {localStorage.getItem('role') === 'Manager' ||
-                        localStorage.getItem('role') === 'Manager Assistant' ? (
+                        {localStorage.getItem('role') === 'Cash Manager' ||
+                        localStorage.getItem('role') ===
+                            'Cash Manager Assistant' ? (
                             <input
                                 type="submit"
                                 value="Open Cash In"

@@ -92,7 +92,7 @@ function Table({columns, data, deleteItem, updateItem}) {
                                     {column.render('Header')}
                                 </th>
                             ))}
-                            {role === 'Admin' || role === 'Manager' ? (
+                            {role === 'Admin' ? (
                                 <>
                                     <th>Update</th>
                                     <th>Delete</th>
@@ -114,7 +114,7 @@ function Table({columns, data, deleteItem, updateItem}) {
                                         </td>
                                     );
                                 })}
-                                {role === 'Admin' || role === 'Manager' ? (
+                                {role === 'Admin' ? (
                                     <>
                                         <td>
                                             <input
