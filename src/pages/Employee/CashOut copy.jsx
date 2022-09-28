@@ -6,7 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalDetailsCashOut';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
-import {currencyFormat, getToday} from '@app/services/utils';
+import {currencyFormat} from '@app/services/utils';
 
 const columns = [
     {
@@ -34,11 +34,45 @@ const columns = [
         accessor: 'grandTotal'
     },
     {
+        Header: 'PIPO',
+        accessor: 'pipo'
+    },
+    {
+        Header: 'Owed to House',
+        accessor: 'owedToHouse'
+    },
+    {
+        Header: 'Difference',
+        accessor: 'difference'
+    },
+    {
+        Header: 'Strike',
+        accessor: 'strike'
+    },
+    {
         Header: 'Status',
         accessor: 'status'
+    },
+    {
+        Header: 'View Details',
+        accessor: 'viewDetails'
     }
 ];
+
 const CashOut = () => {
+    //! como hacer una consulta de una llamada al back
+    // se saca la funcion getUsersByRestaurant del archivo index (services)
+    // este se comunica con el back por medio del routes y el tipo de consulta crud
+    // el useEffect cuando tiene corchetes vacios se ejecuta solo una vez al cargar el componente
+    /*  useEffect(() => {
+        (async () => {
+            const resp = await getUsersByRestaurant(
+                '1ba868d435a3e947d67d5e6b558412AC'
+            );
+            console.log(resp);
+        })();
+    }, []); */
+
     const dispatch = useDispatch();
     const cashOut = useSelector((store) => store.cashOut);
     const [modalShow, setModalShow] = useState(false);
@@ -50,29 +84,14 @@ const CashOut = () => {
         restaurant: '',
         employee: '',
         status: '',
-        startDate: getToday(),
-        endDate: getToday()
+        startDate: '',
+        endDate: ''
     });
 
     useEffect(() => {
         (async () => {
-            const resRestaurant = await getRestaurantByLevel();
-            setRestaurants(resRestaurant);
-            if (
-                localStorage.getItem('role') === 'Cash Manager' ||
-                localStorage.getItem('role') === 'Cash Manager Assistant'
-            ) {
-                if (resRestaurant.length === 1) {
-                    setEmployees(
-                        await getUsersByRestaurant(
-                            resRestaurant[0].idRestaurant
-                        )
-                    );
-                }
-            }
-            if (localStorage.getItem('role') === 'Cash Employee') {
-                console.log('hi');
-            }
+            // dispatch(getCashOutAction());
+            setRestaurants(await getRestaurantByLevel());
         })();
     }, []);
 
@@ -82,7 +101,6 @@ const CashOut = () => {
     const search = async () => {
         dispatch(getCashOutAction(formSearch));
     };
-
     return (
         <>
             <section className="content-header mt-3">
@@ -120,16 +138,13 @@ const CashOut = () => {
                                     });
                                 }}
                             >
-                                {restaurants.length > 1 ? (
-                                    <option selected>Select a value</option>
-                                ) : null}
+                                <option selected>Select a value</option>
                                 {restaurants.map((restaurant) => (
                                     <option value={restaurant.idRestaurant}>
                                         {restaurant.restaurantName}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') ===
-                                ' Cash Admin' ? (
+                                {localStorage.getItem('role') === 'Admin' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -158,21 +173,13 @@ const CashOut = () => {
                                     })
                                 }
                             >
-                                {localStorage.getItem('role') !==
-                                'Cash Employee' ? (
-                                    <option selected>Select a value</option>
-                                ) : (
-                                    <option>
-                                        {localStorage.getItem('user')}
-                                    </option>
-                                )}
+                                <option selected>Select a value</option>
                                 {employees.map((employee) => (
                                     <option value={employee.idEmployee}>
                                         {employee.name}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') !==
-                                'Cash Employee' ? (
+                                {localStorage.getItem('role') !== 'Employee' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -233,7 +240,6 @@ const CashOut = () => {
                                         startDate: e.target.value
                                     })
                                 }
-                                defaultValue={getToday()}
                             />
                         </div>
                         <div
@@ -260,7 +266,6 @@ const CashOut = () => {
                                         endDate: e.target.value
                                     })
                                 }
-                                defaultValue={getToday()}
                             />
                         </div>
                         <div
@@ -282,16 +287,22 @@ const CashOut = () => {
                         </div>
                     </div>
 
-                    <div className="d-flex justify-content-end align-items-md-center">
+                    <div
+                        className="d-flex justify-content-end align-items-md-center"
+                        /*      style={{
+                            display: 'flex',
+                            flexFlow: 'row nowrap',
+                            flex: '1 10%'
+                        }} */
+                    >
                         <span>
                             <b>
                                 {' '}
                                 Cash Total: {currencyFormat(cashOut.cashTotal)}
                             </b>
                         </span>{' '}
-                        {localStorage.getItem('role') === 'Cash Manager' ||
-                        localStorage.getItem('role') ===
-                            'Cash Manager Assistant' ? (
+                        {localStorage.getItem('role') === 'Manager' ||
+                        localStorage.getItem('role') === 'Manager Assistant' ? (
                             <input
                                 type="submit"
                                 value="Open Cash In"
@@ -322,4 +333,4 @@ const CashOut = () => {
     );
 };
 
-export default React.memo(CashOut);
+export default CashOut;
