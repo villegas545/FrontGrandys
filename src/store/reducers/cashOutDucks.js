@@ -72,7 +72,7 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
             cashTotal: totalTotal
         });
     } catch (error) {
-        console.log(error.data.response);
+        console.log(error);
     }
 };
 

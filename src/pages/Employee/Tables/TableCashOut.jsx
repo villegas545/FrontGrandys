@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-shadow */
 /* eslint-disable react/button-has-type */
@@ -14,9 +15,8 @@ import {
     approveRejectCashRegisterStartup,
     cancelCashRegisterStartup
 } from '@app/services';
-import { useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
-
 
 function TableCashOut({columns, data}) {
     // notificacion tostify
@@ -67,26 +67,28 @@ function TableCashOut({columns, data}) {
     const [userSelected, setUserSelected] = useState('');
     const actionButton = async (id, action) => {
         switch (action) {
-        case 'approve':
-            await approveRejectCashRegisterStartup({
-                idRequestCashRegisterStartup:id,
-                approved:"Approved"
-            })
-            break;
-        case 'reject':
-            await approveRejectCashRegisterStartup({
-                idRequestCashRegisterStartup:id,
-                rejected:"Rejected"
-            })
-            break;
-        case 'cancel':
-            await cancelCashRegisterStartup({idRequestCashRegisterStartup:id})
-            break;
-        default:
-            console.log('never');
-            break;
+            case 'approve':
+                await approveRejectCashRegisterStartup({
+                    idRequestCashRegisterStartup: id,
+                    approved: 'Approved'
+                });
+                break;
+            case 'reject':
+                await approveRejectCashRegisterStartup({
+                    idRequestCashRegisterStartup: id,
+                    rejected: 'Rejected'
+                });
+                break;
+            case 'cancel':
+                await cancelCashRegisterStartup({
+                    idRequestCashRegisterStartup: id
+                });
+                break;
+            default:
+                console.log('never');
+                break;
         }
-        dispatch(getCashOutAction("reload"))
+        dispatch(getCashOutAction('reload'));
     };
     // Confirmacion de accion
     const confirm = (id, action) => {
@@ -156,36 +158,51 @@ function TableCashOut({columns, data}) {
                                     />
                                 </td>
                                 <td>
-                                    { localStorage.getItem("role")==="Employee" && row.original.status==="Pending" ?
-                                        <><input
-                                            type="submit"
-                                            value="Approve"
-                                            className="btn btn-success"
-                                            onClick={() =>
-                                                confirm(row.original.id, 'approve')
-                                            }
-                                        />
-                                        <input
-                                            type="submit"
-                                            value="Reject"
-                                            className="btn btn-warning ml-2"
-                                            onClick={() =>
-                                                confirm(row.original.id, 'reject')
-                                            }
-                                        />
+                                    {localStorage.getItem('role') ===
+                                        'Cash Employee' &&
+                                    row.original.status === 'Pending' ? (
+                                        <>
+                                            <input
+                                                type="submit"
+                                                value="Approve"
+                                                className="btn btn-success"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'approve'
+                                                    )
+                                                }
+                                            />
+                                            <input
+                                                type="submit"
+                                                value="Reject"
+                                                className="btn btn-warning ml-2"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'reject'
+                                                    )
+                                                }
+                                            />
                                         </>
-                                        :null}
-                                    { localStorage.getItem("role")==="Manager" && row.original.status==="Approved" ?
+                                    ) : null}
+                                    {localStorage.getItem('role') ===
+                                        'Cash Manager' &&
+                                    row.original.status === 'Approved' ? (
                                         <>
                                             <input
                                                 type="submit"
                                                 value="Cancel"
                                                 className="btn btn-danger ml-2"
                                                 onClick={() =>
-                                                    confirm(row.original.id, 'cancel')
+                                                    confirm(
+                                                        row.original.id,
+                                                        'cancel'
+                                                    )
                                                 }
                                             />
-                                        </>:null}
+                                        </>
+                                    ) : null}
                                 </td>
                             </tr>
                         );
