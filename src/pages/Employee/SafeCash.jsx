@@ -1,11 +1,11 @@
 /* eslint-disable indent */
-import TableCashIn from '@app/pages/Employee/Tables/TableCashIn';
-import {getCashInAction} from '@app/store/reducers/cashInDucks';
+import TableSafeCash from '@app/pages/Employee/Tables/TableSafeCash';
+import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
 import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
-import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
-import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
+import ModalDetailsSafeCash from '@app/pages/Employee/modals/ModalDetailsSafeCash';
+import {getRestaurantByLevel, getManagersByRestaurant} from '@app/services/';
 import {currencyFormat, getToday} from '@app/services/utils';
 
 const columns = [
@@ -18,8 +18,28 @@ const columns = [
         accessor: 'restaurant'
     },
     {
-        Header: 'Name',
+        Header: 'Created By',
         accessor: 'user'
+    },
+    {
+        Header: 'Created Time',
+        accessor: 'createdHour'
+    },
+    {
+        Header: 'Received By',
+        accessor: 'received'
+    },
+    {
+        Header: 'Received Time',
+        accessor: 'receivedHour'
+    },
+    {
+        Header: 'Vouchers In',
+        accessor: 'vouchersIn'
+    },
+    {
+        Header: 'Vouchers Out',
+        accessor: 'vouchersOut'
     },
     {
         Header: 'Coins Total',
@@ -40,7 +60,7 @@ const columns = [
 ];
 const SafeCash = () => {
     const dispatch = useDispatch();
-    const cashIn = useSelector((store) => store.cashIn);
+    const safeCash = useSelector((store) => store.safeCash);
     const [modalShow, setModalShow] = useState(false);
     const [restaurants, setRestaurants] = useState([]);
     const [employees, setEmployees] = useState([]);
@@ -59,28 +79,26 @@ const SafeCash = () => {
             const resRestaurant = await getRestaurantByLevel();
             setRestaurants(resRestaurant);
             if (
-                localStorage.getItem('role') === 'Manager' ||
-                localStorage.getItem('role') === 'Manager Assistant'
+                localStorage.getItem('role') === 'Cash Manager' ||
+                localStorage.getItem('role') === 'Cash Manager Assistant'
             ) {
+                console.log('wipi');
                 if (resRestaurant.length === 1) {
                     setEmployees(
-                        await getUsersByRestaurant(
+                        await getManagersByRestaurant(
                             resRestaurant[0].idRestaurant
                         )
                     );
                 }
             }
-            if (localStorage.getItem('role') === 'Employee') {
-                console.log('hi');
-            }
         })();
     }, []);
 
     useEffect(() => {
-        console.log(cashIn);
-    }, [cashIn]);
+        console.log(safeCash);
+    }, [safeCash]);
     const search = async () => {
-        dispatch(getCashInAction(formSearch));
+        dispatch(getSafeCashAction(formSearch));
     };
 
     return (
@@ -110,7 +128,7 @@ const SafeCash = () => {
                                 style={{minWidth: '100px'}}
                                 onChange={async (e) => {
                                     setEmployees(
-                                        await getUsersByRestaurant(
+                                        await getManagersByRestaurant(
                                             e.target.value
                                         )
                                     );
@@ -128,7 +146,8 @@ const SafeCash = () => {
                                         {restaurant.restaurantName}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') === 'Admin' ? (
+                                {localStorage.getItem('role') ===
+                                'Cash Admin' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -157,7 +176,8 @@ const SafeCash = () => {
                                     })
                                 }
                             >
-                                {localStorage.getItem('role') !== 'Employee' ? (
+                                {localStorage.getItem('role') !==
+                                'Cash Employee' ? (
                                     <option selected>Select a value</option>
                                 ) : (
                                     <option>
@@ -169,7 +189,8 @@ const SafeCash = () => {
                                         {employee.name}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') !== 'Employee' ? (
+                                {localStorage.getItem('role') !==
+                                'Cash Employee' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -283,14 +304,16 @@ const SafeCash = () => {
                         <span>
                             <b>
                                 {' '}
-                                Cash Total: {currencyFormat(cashIn.cashTotal)}
+                                Cash Total:{' '}
+                                {currencyFormat(safeCash.totalTotal)}
                             </b>
                         </span>{' '}
-                        {localStorage.getItem('role') === 'Manager' ||
-                        localStorage.getItem('role') === 'Manager Assistant' ? (
+                        {localStorage.getItem('role') === 'Cash Manager' ||
+                        localStorage.getItem('role') ===
+                            'Cash Manager Assistant' ? (
                             <input
                                 type="submit"
-                                value="Open Cash In"
+                                value="Open Safe Cash"
                                 className="form-control btn btn-danger btn-xs mr-3 text-md ml-5"
                                 style={{
                                     minWidth: '40px',
@@ -301,11 +324,13 @@ const SafeCash = () => {
                             />
                         ) : null}
                     </div>
-                    <TableCashIn columns={columns} data={cashIn.tableInfo} />
+                    {safeCash.data ? (
+                        <TableSafeCash columns={columns} data={safeCash.data} />
+                    ) : null}
                     {
                         // Este modal es para abrirlo desde el opencash in, desde el boton rojo
                     }
-                    <ModalDetailsCashIn
+                    <ModalDetailsSafeCash
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                         action="add"

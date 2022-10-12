@@ -1,37 +1,13 @@
 /* eslint-disable indent */
-import React, {useState, useEffect} from 'react';
-
-import {Modal} from 'react-bootstrap';
-import './modalDetailsStyles.scss';
+import {currencyFormat} from '@app/services/utils';
+import React, {useState} from 'react';
 import CurrencyFormat from 'react-currency-format';
-import {useSelector} from 'react-redux';
-import {addCashOutService} from '@app/services/';
+import nextId from 'react-id-generator';
+import {useWizard} from 'react-use-wizard';
+import {useDispatch} from 'react-redux';
+import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 
-const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
-    console.log(user);
-    return (
-        <Modal
-            onHide={onHide}
-            show={show}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Details Balance - {user.user || null}{' '}
-                    {user ? user.name : null}
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <BodyInfo idRow={idRow} action={action} user={user} />
-            </Modal.Body>
-        </Modal>
-    );
-};
-
-const BodyInfo = ({idRow, action, user}) => {
-    console.log(user);
+const CaptureVoucher = () => {
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -43,80 +19,108 @@ const BodyInfo = ({idRow, action, user}) => {
         tens: 0,
         twenties: 0,
         fifties: 0,
-        hundreds: 0,
+        hundreads: 0,
+        total: 0,
         comentaries: '',
-        date: '',
-        idEmployee: user.id
+        type: 'In'
     });
-    const cashOut = useSelector((store) => store.cashOut);
-    const [actionButton, setActionButton] = useState();
-    useEffect(() => {
-        const filtered = cashOut.details.find(
-            (element) => element.id === idRow
+    const [vouchers, setVouchers] = useState([]);
+    const dispatch = useDispatch();
+
+    // eslint-disable-next-line no-unused-vars
+    const [error, setError] = useState();
+    const {nextStep, handleStep} = useWizard();
+    handleStep(() => {
+        console.log({
+            type: 'wizardCashIns',
+            cashIns: vouchers
+        });
+        dispatch(
+            wizardVoucher({
+                type: 'wizardVouchers',
+                vouchers
+            })
         );
-        if (filtered) {
-            setForm({
-                pennies: filtered.pennies,
-                nickels: filtered.nickels,
-                dimes: filtered.dimes,
-                quarters: filtered.quarters,
-                ones: filtered.ones,
-                twos: filtered.twos,
-                fives: filtered.fives,
-                tens: filtered.tens,
-                twenties: filtered.twenties,
-                fifties: filtered.fifties,
-                hundreds: filtered.hundreds,
-                comentaries: filtered.comentaries,
-                date: filtered.date
-            });
-        }
-        if (action) {
-            switch (action) {
-                case 'add':
-                    setActionButton('Register');
-                    break;
-                default:
-                    console.log('como chingas');
-                    break;
-            }
-        }
-    }, []);
-    const addCashOut = async () => {
+    });
+    const addVoucher = async () => {
         try {
-            await addCashOutService(form);
-        } catch (error) {
-            console.log(error);
+            console.log(form);
+            const formulario = form;
+            formulario.id = nextId();
+            formulario.total =
+                Number(form.ones) +
+                Number(form.fives * 5) +
+                Number(form.tens * 10) +
+                Number(form.twenties * 20) +
+                Number(form.fifties * 50) +
+                Number(form.hundreads * 100) +
+                (Number(form.pennies) +
+                    Number(form.nickels * 5) +
+                    Number(form.dimes * 10) +
+                    Number(form.quarters * 25)) /
+                    100;
+            setVouchers((old) => [...old, formulario]);
+            setForm({
+                pennies: 0,
+                nickels: 0,
+                dimes: 0,
+                quarters: 0,
+                ones: 0,
+                twos: 0,
+                fives: 0,
+                tens: 0,
+                twenties: 0,
+                fifties: 0,
+                hundreads: 0,
+                total: 0,
+                comentaries: '',
+                type: 'In'
+            });
+        } catch (err) {
+            console.log(err);
         }
-        console.log('click en add');
     };
-    const submit = () => {
-        switch (action) {
-            case 'add':
-                addCashOut();
-                break;
-            default:
-                console.log('default');
-                break;
-        }
+    const removeVoucher = (id) => {
+        console.log(id);
+        setVouchers(vouchers.filter((voucher) => voucher.id !== id));
+    };
+    const getTotalVouchers = (vouchersTotal) => {
+        console.log(vouchersTotal);
+        let total = 0;
+        vouchersTotal.forEach((voucher) => {
+            if (voucher.type === 'In') {
+                total += Number(voucher.total);
+            } else {
+                total -= Number(voucher.total);
+            }
+        });
+        return total;
+        //  const total = vouchers.forEach();
     };
     return (
         <>
             <div className="card-body">
                 <div className="d-flex justify-content-end">
-                    <div>
-                        Date:{' '}
-                        <input
-                            type="date"
-                            className="form-control mr-3"
+                    <div className="d-flex align-items-center">
+                        <span
+                            className="input-group-text"
+                            style={{minWidth: '50px'}}
+                        >
+                            Type
+                        </span>
+                        <select
+                            className="form-control"
                             onChange={(e) =>
                                 setForm({
                                     ...form,
-                                    date: e.target.value
+                                    type: e.target.value
                                 })
                             }
-                            value={form.date}
-                        />
+                            value={form.type}
+                        >
+                            <option>In</option>
+                            <option>Out</option>
+                        </select>
                     </div>
                 </div>
                 <div className="table_details">
@@ -144,7 +148,11 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.pennies / 50)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -176,7 +184,11 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.nickels / 40)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -208,7 +220,11 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.dimes / 50)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -240,7 +256,11 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.quarters / 40)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -443,10 +463,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 onChange={(e) =>
                                     setForm({
                                         ...form,
-                                        hundreds: e.target.value
+                                        hundreads: e.target.value
                                     })
                                 }
-                                value={form.hundreds}
+                                value={form.hundreads}
                             />{' '}
                         </div>
                         <div />
@@ -457,129 +477,180 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.hundreds * 100}
+                                value={form.hundreads * 100}
                                 disabled
                             />{' '}
                         </div>
                     </div>
                 </div>
-                <div className="d-flex p-2 justify-content-around">
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Coins Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                100
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Bills Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreds * 100)
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Grand Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreds * 100) +
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                    100
-                            }
-                            disabled
-                        />
-                    </div>
-                </div>
-                <div className="d-flex p-2 justify-content-around align-items-center">
-                    <div style={{width: '60%'}}>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Comments
-                        </span>
-                        <textarea
-                            title="Comments"
-                            type="text"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            defaultValue={form.comentaries}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    comentaries: e.target.value
-                                })
-                            }
-                        />
-                    </div>
-                    {!idRow ? (
-                        <>
-                            {' '}
+                <div className="d-flex justify-content-around">
+                    <div className="flex-row p-2 justify-content-around">
+                        <div className="d-flex justify-content-around mb-3">
                             <div>
-                                <input
-                                    type="submit"
-                                    className="btn btn-dark btn-lg"
-                                    value={actionButton}
-                                    onClick={() => submit()}
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Coins Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                        100
+                                    }
+                                    disabled
                                 />
                             </div>
-                        </>
-                    ) : null}
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Bills Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100)
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Grand Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        <div style={{minWidth: '300px'}}>
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                Comments
+                            </span>
+                            <textarea
+                                title="Comments"
+                                type="text"
+                                className="form-control input-sm mr-3"
+                                style={{minWidth: '50px'}}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        comentaries: e.target.value
+                                    })
+                                }
+                                value={form.comentaries}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="d-flex flex-wrap justify-content-around">
+                        <table className="table table-light text-center">
+                            <thead>
+                                <tr>
+                                    <th>Total</th>
+                                    <th>In/Out</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {vouchers.map((voucher) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <tr key={voucher.id}>
+                                        <td>{currencyFormat(voucher.total)}</td>
+                                        <td>{voucher.type}</td>
+                                        <td>
+                                            {' '}
+                                            <a
+                                                href="#"
+                                                onClick={() =>
+                                                    removeVoucher(voucher.id)
+                                                }
+                                            >
+                                                <i className="fas fa-trash-alt text-danger " />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>{}</th>
+                                    <th>Total:</th>
+                                    <th>
+                                        {currencyFormat(
+                                            getTotalVouchers(vouchers)
+                                        )}
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <p className="text-danger"> {error || null}</p>
+                <div>
+                    <input
+                        type="submit"
+                        className="btn btn-dark btn-lg"
+                        value="Add Voucher"
+                        onClick={() => addVoucher()}
+                    />
+                </div>
+                <div className="float-right">
+                    <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={() => nextStep()}
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
         </>
     );
 };
 
-export default ModalDetailsCashOut;
+export default CaptureVoucher;
+React.memo(CaptureVoucher);
