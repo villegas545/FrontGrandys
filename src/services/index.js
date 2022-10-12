@@ -35,6 +35,9 @@ export const getRestaurantByLevel = async () =>
 export const getUsersByRestaurant = async (data) =>
     (await getFunction(`getUsersByRestaurant/${data}`)).users;
 
+export const getManagersByRestaurant = async (data) =>
+    (await getFunction(`getManagersByRestaurant/${data}`)).users;
+
 export const addCashInService = async (data) =>
     postFunction('saveCashRegisterStartup', data);
 
@@ -46,3 +49,23 @@ export const approveRejectCashRegisterStartup = async (data) =>
 
 export const cancelCashRegisterStartup = async (data) =>
     patchFunction('cancelCashRegisterStartup', data);
+
+export const getCashInByDate = async (data) =>
+    (await getFunction(`getCashInByDate/${data}`)).cashIns;
+
+export const getCashOutByDate = async (data) =>
+    (await getFunction(`getCashOutByDate/${data}`)).cashOuts;
+
+export const getLastSafeCash = async (data) =>
+    (await getFunction(`getLastSafeCash/${data}`)).safeCash;
+
+export const countSafeCash = async () =>
+    (await getFunction('countSafeCash')).message;
+
+export const saveCashSafe = async (data) => postFunction('saveCashSafe', data);
+
+export const approveRejectSafeCash = async (data) =>
+    patchFunction('approveRejectSafeCash', data);
+
+export const cancelSafeCash = async (data) =>
+    patchFunction('cancelSafeCash', data);

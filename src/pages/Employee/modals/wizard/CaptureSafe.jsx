@@ -1,48 +1,12 @@
 /* eslint-disable indent */
 import React, {useState, useEffect} from 'react';
-
-import {Modal} from 'react-bootstrap';
-import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
-import {useSelector, useDispatch} from 'react-redux';
-import {addCashInService} from '@app/services/';
-import {
-    ListBox,
-    processListBoxDragAndDrop
-} from '@progress/kendo-react-listbox';
-import {getCashInAction} from '@app/store/reducers/cashInDucks';
-import {getToday} from '@app/services/utils';
+import {useWizard} from 'react-use-wizard';
+import {useDispatch, useSelector} from 'react-redux';
+import {getLastSafeCash} from '@app/services/index';
+import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 
-const ModalDetailsCashIn = ({onHide, show, idRow, action, user, employees}) => {
-    console.log(user);
-    return (
-        <Modal
-            onHide={onHide}
-            show={show}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Details Balance - {user.user || null}{' '}
-                    {user ? user.name : null}
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <BodyInfo
-                    idRow={idRow}
-                    action={action}
-                    user={user}
-                    employees={employees}
-                    onHide={onHide}
-                />
-            </Modal.Body>
-        </Modal>
-    );
-};
-
-const BodyInfo = ({idRow, action, user, employees, onHide}) => {
+const CaptureSafe = () => {
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -55,145 +19,133 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
         twenties: 0,
         fifties: 0,
         hundreads: 0,
-        comentaries: '',
-        date: '',
-        idEmployee: user.id
+        total: 0,
+        comentaries: ''
     });
     const dispatch = useDispatch();
-    const cashIn = useSelector((store) => store.cashIn);
-    const [actionButton, setActionButton] = useState();
+
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState();
+    const {nextStep, handleStep} = useWizard();
+    const reduxValues = useSelector((state) => state.safeCash);
     useEffect(() => {
-        const filtered = cashIn.details.find((element) => element.id === idRow);
-        if (filtered) {
-            setForm({
-                employees: [],
-                pennies: filtered.pennies,
-                nickels: filtered.nickels,
-                dimes: filtered.dimes,
-                quarters: filtered.quarters,
-                ones: filtered.ones,
-                twos: filtered.twos,
-                fives: filtered.fives,
-                tens: filtered.tens,
-                twenties: filtered.twenties,
-                fifties: filtered.fifties,
-                hundreads: filtered.hundreads,
-                comentaries: filtered.comentaries,
-                date: filtered.date
-            });
-        } else {
-            // const today = new Date();
-            setForm({...form, date: getToday()});
-        }
-        if (action) {
-            switch (action) {
-                case 'add':
-                    setActionButton('Register');
-                    break;
-                default:
-                    console.log('como chingas');
-                    break;
-            }
-        }
-    }, []);
-
-    // LISTBOX DRAGANDDROP
-    const [state, setState] = React.useState({
-        notDiscontinued: [],
-        discontinued: [],
-        draggedItem: {}
-    });
-    useEffect(() => {
-        employees = employees.map((employee) => {
-            return {...employee, Discontinued: false};
-        });
-        employees.push({
-            idEmployee: 111111111111111,
-            name: 'Drop here the employee',
-            Discontinued: true
-        });
-        setState({
-            notDiscontinued: employees.filter(
-                (product) => !product.Discontinued
-            ),
-            discontinued: employees.filter((product) => product.Discontinued),
-            draggedItem: {}
-        });
-    }, []);
-    const handleDragStart = (e) => {
-        setState({...state, draggedItem: e.dataItem});
-    };
-
-    const handleDrop = (e) => {
-        const result = processListBoxDragAndDrop(
-            state.notDiscontinued,
-            state.discontinued,
-            state.draggedItem,
-            e.dataItem,
-            'idEmployee'
-        );
-        setState({
-            ...state,
-            notDiscontinued: result.listBoxOneData,
-            discontinued: result.listBoxTwoData
-        });
-    };
-    const addCashIn = async () => {
-        try {
-            const request = form;
-            request.employees = state.discontinued;
-            const response = await addCashInService(request);
-            if (response.message === 'existentEmployees') {
-                setError(
-                    `The followewing employees are already captured: ${response.existentsEmployees.join(
-                        ', '
-                    )}`
+        (async () => {
+            console.log(reduxValues);
+            const lastSafeCash = await getLastSafeCash(reduxValues.wizardDate);
+            console.log(lastSafeCash);
+            const initValues = {
+                pennies: 0,
+                nickels: 0,
+                dimes: 0,
+                quarters: 0,
+                ones: 0,
+                twos: 0,
+                fives: 0,
+                tens: 0,
+                twenties: 0,
+                fifties: 0,
+                hundreads: 0,
+                total: 0,
+                comentaries: ''
+            };
+            if (lastSafeCash) {
+                console.log(lastSafeCash);
+                initValues.pennies += lastSafeCash.pennies;
+                initValues.nickels += lastSafeCash.nickels;
+                initValues.dimes += lastSafeCash.dimes;
+                initValues.quarters += lastSafeCash.quarters;
+                initValues.ones += lastSafeCash.ones;
+                initValues.twos += lastSafeCash.twos;
+                initValues.fives += lastSafeCash.fives;
+                initValues.tens += lastSafeCash.tens;
+                initValues.twenties += lastSafeCash.twenties;
+                initValues.fifties += lastSafeCash.fifties;
+                initValues.hundreads += lastSafeCash.hundreds;
+                dispatch(
+                    wizardVoucher({
+                        type: 'wizardSafeStart',
+                        total: lastSafeCash
+                    })
                 );
-            } else {
-                dispatch(getCashInAction('reload'));
-                onHide();
             }
-        } catch (err) {
-            console.log(err);
-        }
-        console.log('click en add');
-    };
-    const submit = () => {
-        switch (action) {
-            case 'add':
-                addCashIn();
-                break;
-            default:
-                console.log('default');
-                break;
-        }
-    };
+
+            reduxValues.wizardCashIns.forEach((cashIn) => {
+                initValues.pennies += cashIn.pennies;
+                initValues.nickels += cashIn.nickels;
+                initValues.dimes += cashIn.dimes;
+                initValues.quarters += cashIn.quarters;
+                initValues.ones += cashIn.ones;
+                initValues.twos += cashIn.twos;
+                initValues.fives += cashIn.fives;
+                initValues.tens += cashIn.tens;
+                initValues.twenties += cashIn.twenties;
+                initValues.fifties += cashIn.fifties;
+                initValues.hundreads += cashIn.hundreads;
+            });
+            reduxValues.wizardCashOuts.forEach((cashOut) => {
+                initValues.pennies -= cashOut.pennies;
+                initValues.nickels -= cashOut.nickels;
+                initValues.dimes -= cashOut.dimes;
+                initValues.quarters -= cashOut.quarters;
+                initValues.ones -= cashOut.ones;
+                initValues.twos -= cashOut.twos;
+                initValues.fives -= cashOut.fives;
+                initValues.tens -= cashOut.tens;
+                initValues.twenties -= cashOut.twenties;
+                initValues.fifties -= cashOut.fifties;
+                initValues.hundreads -= cashOut.hundreds;
+            });
+            reduxValues.wizardVouchers.forEach((voucher) => {
+                if (voucher.type === 'In') {
+                    initValues.pennies += voucher.pennies;
+                    initValues.nickels += voucher.nickels;
+                    initValues.dimes += voucher.dimes;
+                    initValues.quarters -= voucher.quarters;
+                    initValues.ones += voucher.ones;
+                    initValues.twos += voucher.twos;
+                    initValues.fives += voucher.fives;
+                    initValues.tens += voucher.tens;
+                    initValues.twenties += voucher.twenties;
+                    initValues.fifties += voucher.fifties;
+                    initValues.hundreads += voucher.hundreads;
+                } else {
+                    initValues.pennies -= voucher.pennies;
+                    initValues.nickels -= voucher.nickels;
+                    initValues.dimes -= voucher.dimes;
+                    initValues.quarters -= voucher.quarters;
+                    initValues.ones -= voucher.ones;
+                    initValues.twos -= voucher.twos;
+                    initValues.fives -= voucher.fives;
+                    initValues.tens -= voucher.tens;
+                    initValues.twenties -= voucher.twenties;
+                    initValues.fifties -= voucher.fifties;
+                    initValues.hundreads -= voucher.hundreads;
+                }
+            });
+            setForm(initValues);
+            dispatch(
+                wizardVoucher({
+                    type: 'wizardTotalExpected',
+                    initValues
+                })
+            );
+            console.log(initValues);
+            // sumar todos los valores y vaciarlos en los values
+        })();
+    }, []);
+
+    handleStep(() => {
+        dispatch(
+            wizardVoucher({
+                type: 'wizardTotalReal',
+                form
+            })
+        );
+    });
+
     return (
         <>
             <div className="card-body">
-                <div className="d-flex justify-content-end">
-                    <div className="d-flex align-items-center">
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '50px'}}
-                        >
-                            Date
-                        </span>
-                        <input
-                            type="date"
-                            className="form-control mr-3"
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    date: e.target.value
-                                })
-                            }
-                            value={form.date}
-                        />
-                    </div>
-                </div>
                 <div className="table_details">
                     <div className="d-flex p-2 text-center">
                         <div />
@@ -219,7 +171,11 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.pennies / 50)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -251,7 +207,11 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.nickels / 40)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -283,7 +243,11 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.dimes / 50)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -315,7 +279,11 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={Math.floor(form.quarters / 40)}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -540,6 +508,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                 </div>
                 <div className="d-flex justify-content-around">
                     <div className="flex-row p-2 justify-content-around">
+                        Real:
                         <div className="d-flex justify-content-around mb-3">
                             <div>
                                 <span
@@ -618,6 +587,143 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                 />
                             </div>
                         </div>
+                        Expected:
+                        <div className="d-flex justify-content-around mb-3">
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Coins Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        (Number(
+                                            reduxValues.wizardTotalExpected
+                                                .pennies
+                                        ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .nickels * 5
+                                            ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .dimes * 10
+                                            ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .quarters * 25
+                                            )) /
+                                        100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Bills Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(
+                                            reduxValues.wizardTotalExpected.ones
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .fives * 5
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .tens * 10
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .twenties * 20
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .fifties * 50
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .hundreads * 100
+                                        )
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Grand Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(
+                                            reduxValues.wizardTotalExpected.ones
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .fives * 5
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .tens * 10
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .twenties * 20
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .fifties * 50
+                                        ) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .hundreads * 100
+                                        ) +
+                                        (Number(
+                                            reduxValues.wizardTotalExpected
+                                                .pennies
+                                        ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .nickels * 5
+                                            ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .dimes * 10
+                                            ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .quarters * 25
+                                            )) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                        </div>
                         <div style={{minWidth: '300px'}}>
                             <span
                                 className="input-group-text"
@@ -630,59 +736,32 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                 type="text"
                                 className="form-control input-sm mr-3"
                                 style={{minWidth: '50px'}}
-                                defaultValue={form.comentaries}
                                 onChange={(e) =>
                                     setForm({
                                         ...form,
                                         comentaries: e.target.value
                                     })
                                 }
+                                value={form.comentaries}
                             />
                         </div>
                     </div>
-
-                    {!idRow ? (
-                        <div className="d-flex flex-wrap justify-content-around">
-                            <span style={{width: '100%', textAlign: 'center'}}>
-                                Employees
-                            </span>
-                            <ListBox
-                                data={state.notDiscontinued}
-                                textField="name"
-                                onDragStart={handleDragStart}
-                                onDrop={handleDrop}
-                            />
-                            <ListBox
-                                data={state.discontinued}
-                                textField="name"
-                                style={{
-                                    marginLeft: '12px'
-                                }}
-                                onDragStart={handleDragStart}
-                                onDrop={handleDrop}
-                            />
-                        </div>
-                    ) : null}
                 </div>
-
                 <p className="text-danger"> {error || null}</p>
-                {!idRow ? (
-                    <>
-                        {' '}
-                        <div>
-                            <input
-                                type="submit"
-                                className="btn btn-dark btn-lg"
-                                value={actionButton}
-                                onClick={() => submit()}
-                            />
-                        </div>
-                    </>
-                ) : null}
+
+                <div className="float-right">
+                    <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={() => nextStep()}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </>
     );
 };
 
-export default React.memo(ModalDetailsCashIn);
-React.memo(BodyInfo);
+export default CaptureSafe;
+React.memo(CaptureSafe);

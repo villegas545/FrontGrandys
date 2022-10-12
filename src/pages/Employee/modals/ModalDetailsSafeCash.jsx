@@ -5,9 +5,19 @@ import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector} from 'react-redux';
-import {addCashOutService} from '@app/services/';
+import {addCashOutService, countSafeCash} from '@app/services/';
+import WizardComponent from '@app/pages/Employee/modals/wizard/WizardComponent';
 
-const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
+const ModalDetailsSafeCash = ({onHide, show, idRow, action, user}) => {
+    const [count, setCount] = useState();
+    useEffect(() => {
+        if (show) {
+            (async () => {
+                console.log('hi morrillo');
+                setCount(await countSafeCash());
+            })();
+        }
+    }, [show]);
     console.log(user);
     return (
         <Modal
@@ -19,17 +29,32 @@ const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Details Balance - {user.user || null}{' '}
-                    {user ? user.name : null}
+                    Safe Cash
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <BodyInfo idRow={idRow} action={action} user={user} />
+                {count ? (
+                    <>
+                        {count === 'allow' ? (
+                            <WizardComponent
+                                idRow={idRow}
+                                action={action}
+                                user={user}
+                            />
+                        ) : (
+                            <div>
+                                You must accept pending registrations before
+                                continuing
+                            </div>
+                        )}
+                    </>
+                ) : null}
             </Modal.Body>
         </Modal>
     );
 };
 
+// eslint-disable-next-line no-unused-vars
 const BodyInfo = ({idRow, action, user}) => {
     console.log(user);
     const [form, setForm] = useState({
@@ -313,7 +338,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twos * 2}
+                                value={form.twos}
                                 disabled
                             />{' '}
                         </div>
@@ -582,4 +607,4 @@ const BodyInfo = ({idRow, action, user}) => {
     );
 };
 
-export default ModalDetailsCashOut;
+export default ModalDetailsSafeCash;
