@@ -2,7 +2,7 @@
 import axios from 'axios';
 import {currencyFormat} from '@app/services/utils';
 import {url as urlconf} from '../../config/index';
-// const url = `${urlconf}getCashRegisterStartup?startDate=12/12/2012&endDate=12/12/2012`;
+
 const url = `${urlconf}getCashRegisterEndups`;
 
 const dataInitial = {
@@ -12,7 +12,7 @@ const dataInitial = {
     cashTotal: 0
 };
 
-const GET_CASH_IN_SUCCESS = 'GET_CASH_IN_SUCCESS';
+const GET_CASH_OUT_SUCCESS = 'GET_CASH_OUT_SUCCESS';
 
 // actions
 export const getCashOutAction = (formData) => async (dispatch, getState) => {
@@ -65,7 +65,7 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
         });
         console.log('total', totalTotal);
         dispatch({
-            type: GET_CASH_IN_SUCCESS,
+            type: GET_CASH_OUT_SUCCESS,
             details: res,
             tableInfo,
             urlFilter,
@@ -78,7 +78,7 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
 
 export default function cashOutReducer(state = dataInitial, action) {
     switch (action.type) {
-        case GET_CASH_IN_SUCCESS:
+        case GET_CASH_OUT_SUCCESS:
             return {
                 ...state,
                 details: action.details,

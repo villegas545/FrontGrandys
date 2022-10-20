@@ -1,11 +1,12 @@
 /* eslint-disable indent */
 import React, {useState, useEffect} from 'react';
+import ReactLoading from 'react-loading';
 
 import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector} from 'react-redux';
-import {addCashOutService} from '@app/services/';
+import {addCashOutService, cashOutApiInfo} from '@app/services/';
 
 const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
     console.log(user);
@@ -48,7 +49,18 @@ const BodyInfo = ({idRow, action, user}) => {
         date: '',
         idEmployee: user.id
     });
+    const [cargando, setCargando] = React.useState(false);
+    useEffect(() => {
+        (async () => {
+            setCargando(true);
+            const apiInfo = await cashOutApiInfo('2022-10-04');
+            setCargando(false);
+            console.log(apiInfo);
+        })();
+    }, []);
+
     const cashOut = useSelector((store) => store.cashOut);
+    // eslint-disable-next-line no-unused-vars
     const [actionButton, setActionButton] = useState();
     useEffect(() => {
         const filtered = cashOut.details.find(
@@ -90,6 +102,7 @@ const BodyInfo = ({idRow, action, user}) => {
         }
         console.log('click en add');
     };
+    // eslint-disable-next-line no-unused-vars
     const submit = () => {
         switch (action) {
             case 'add':
@@ -463,121 +476,281 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                     </div>
                 </div>
-                <div className="d-flex p-2 justify-content-around">
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Coins Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                100
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Bills Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreds * 100)
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Grand Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreds * 100) +
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                    100
-                            }
-                            disabled
-                        />
-                    </div>
-                </div>
-                <div className="d-flex p-2 justify-content-around align-items-center">
-                    <div style={{width: '60%'}}>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Comments
-                        </span>
-                        <textarea
-                            title="Comments"
-                            type="text"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            defaultValue={form.comentaries}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    comentaries: e.target.value
-                                })
-                            }
-                        />
-                    </div>
-                    {!idRow ? (
-                        <>
-                            {' '}
+                <div className="d-flex justify-content-around align-items-center">
+                    <div className="flex-row p-2 justify-content-around">
+                        {/* REAL */}
+                        Real:
+                        <div className="d-flex justify-content-around mb-3">
                             <div>
-                                <input
-                                    type="submit"
-                                    className="btn btn-dark btn-lg"
-                                    value={actionButton}
-                                    onClick={() => submit()}
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Coins Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                        100
+                                    }
+                                    disabled
                                 />
                             </div>
-                        </>
-                    ) : null}
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Bills Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100)
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Grand Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        {/* EXPECTED */}
+                        Expected:
+                        <div className="d-flex justify-content-around mb-3">
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Pay in/out
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={0}
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Owed
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={0}
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Credit sales
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={0}
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        {/* CASH CUT */}
+                        Cash Cut:
+                        <div className="d-flex justify-content-around mb-3">
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Total Sales
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                        100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Expected
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100)
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Difference
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreads * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-row p-2 justify-content-around">
+                        {/* Comentarios */}
+                        <div style={{minWidth: '300px'}}>
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                Comments
+                            </span>
+                            <textarea
+                                title="Comments"
+                                type="text"
+                                className="form-control input-sm mr-3"
+                                style={{minWidth: '50px', height: '12rem'}}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        comentaries: e.target.value
+                                    })
+                                }
+                                value={form.comentaries}
+                            />
+                        </div>
+                        <p className="text-danger"> {true || null}</p>
+                        {!idRow ? (
+                            <>
+                                {' '}
+                                <div>
+                                    <input
+                                        type="submit"
+                                        className="btn btn-dark btn-lg w-100"
+                                        value={actionButton}
+                                        onClick={() => submit()}
+                                    />
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
                 </div>
             </div>
+
+            <ReactLoading
+                style={{
+                    display: cargando ? 'block' : 'none',
+                    position: 'absolute',
+                    zIndex: '9999',
+                    top: '30%',
+                    left: '50%',
+                    height: '150px',
+                    width: '150px',
+                    color: '#D11F1F'
+                }}
+                color="#D11F1F"
+                width="300px"
+                type="spinningBubbles"
+                height="100px"
+            />
         </>
     );
 };
