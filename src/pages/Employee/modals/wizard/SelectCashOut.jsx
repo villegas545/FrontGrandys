@@ -33,6 +33,7 @@ function SelectCashOut() {
                 100;
         const billsTotal =
                 element.ones +
+                element.twos * 2 +
                 element.fives * 5 +
                 element.twenties * 20 +
                 element.fifties * 50 +

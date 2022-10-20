@@ -23,7 +23,7 @@ const dataInitial = {
         tens: 0,
         twenties: 0,
         fifties: 0,
-        hundreads: 0,
+        hundreds: 0,
         total: 0
     },
     wizardDate: '',
@@ -72,7 +72,9 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             console.log(coinsTotal);
             const billsTotal =
                 element.ones +
+                element.twos * 2 +
                 element.fives * 5 +
+                element.tens * 10 +
                 element.twenties * 20 +
                 element.fifties * 50 +
                 element.hundreds * 100;
@@ -84,6 +86,14 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             console.log(currencyFormat(coinsTotal));
             element.coinsTotal = currencyFormat(coinsTotal);
             element.billsTotal = currencyFormat(billsTotal);
+            element.currencyinitSafe = currencyFormat(element.initSafe);
+            element.currencyVouchersIn = currencyFormat(element.vouchersIn);
+            element.currencyVouchersOut = currencyFormat(element.vouchersOut);
+            element.currencyDiference = currencyFormat(element.vouchersOut);
+            element.currencyExpectedAmount = currencyFormat(
+                element.expectedAmount - element.realAmount
+            );
+
             element.grandTotal = currencyFormat(coinsTotal + billsTotal);
             element.restaurant = element.Restaurant.name;
             element.user = element.User.name;

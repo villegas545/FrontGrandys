@@ -49,6 +49,7 @@ const CaptureVoucher = () => {
             formulario.id = nextId();
             formulario.total =
                 Number(form.ones) +
+                Number(form.twos * 2) +
                 Number(form.fives * 5) +
                 Number(form.tens * 10) +
                 Number(form.twenties * 20) +

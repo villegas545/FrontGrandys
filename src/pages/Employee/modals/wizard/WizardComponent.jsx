@@ -6,7 +6,7 @@ import CaptureVoucher from '@app/pages/Employee/modals/wizard/CaptureVoucher';
 import CaptureSafe from '@app/pages/Employee/modals/wizard/CaptureSafe';
 import Resume from '@app/pages/Employee/modals/wizard/Resume';
 
-function WizardComponent() {
+function WizardComponent({onHide}) {
     return (
         <>
             {' '}
@@ -15,7 +15,7 @@ function WizardComponent() {
                 <SelectCashOut />
                 <CaptureVoucher />
                 <CaptureSafe />
-                <Resume />
+                <Resume onHide={onHide} />
             </Wizard>
         </>
     );

@@ -1,16 +1,14 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable indent */
-import React, {useState, useEffect} from 'react';
-import {useWizard} from 'react-use-wizard';
-import {useDispatch, useSelector} from 'react-redux';
-import {getLastSafeCash} from '@app/services/index';
-import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
+import React from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {currencyFormat} from '@app/services/utils';
 import {saveCashSafe} from '@app/services/';
+import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Resume = () => {
+const Resume = ({onHide}) => {
     const reduxValues = useSelector((state) => state.safeCash);
-
+    const dispatch = useDispatch();
     const getCoinsTotal = (data) => {
         return (
             (Number(data.pennies) +
@@ -23,6 +21,7 @@ const Resume = () => {
     const getBillsTotal = (data) => {
         return (
             Number(data.ones) +
+            Number(data.twos * 2) +
             Number(data.fives * 5) +
             Number(data.tens * 10) +
             Number(data.twenties * 20) +
@@ -33,6 +32,7 @@ const Resume = () => {
     const getBillsTotalHundreads = (data) => {
         return (
             Number(data.ones) +
+            Number(data.twos * 2) +
             Number(data.fives * 5) +
             Number(data.tens * 10) +
             Number(data.twenties * 20) +
@@ -58,6 +58,7 @@ const Resume = () => {
         data.forEach((row) => {
             total +=
                 Number(row.ones) +
+                Number(row.twos * 2) +
                 Number(row.fives * 5) +
                 Number(row.tens * 10) +
                 Number(row.twenties * 20) +
@@ -71,6 +72,7 @@ const Resume = () => {
         data.forEach((row) => {
             total +=
                 Number(row.ones) +
+                Number(row.twos * 2) +
                 Number(row.fives * 5) +
                 Number(row.tens * 10) +
                 Number(row.twenties * 20) +
@@ -101,80 +103,66 @@ const Resume = () => {
         });
         return {totalIn, totalOut};
     };
-    const onSubmit = () => {
-        /* 
-    date: DataTypes.DATEONLY,
-      cashIn: DataTypes.DOUBLE,
-      cashOut: DataTypes.DOUBLE,
-      vouchersIn: DataTypes.DOUBLE,
-      vouchersOut: DataTypes.DOUBLE,
-      initSafe: DataTypes.DOUBLE,
-      endSafe: DataTypes.DOUBLE,
-      expectedAmount: DataTypes.DOUBLE,
-      realAmount: DataTypes.DOUBLE,
-      createdBy: DataTypes.STRING,
-      createdHour: DataTypes.STRING,
-      createdCommentaries: DataTypes.STRING,
-      received: DataTypes.STRING,
-      receivedHour: DataTypes.STRING,
-      receivedCommentaries: DataTypes.STRING,
-      idRestaurant: DataTypes.STRING,
-      status: DataTypes.STRING,
-      pennies: DataTypes.INTEGER,
-      nickels: DataTypes.INTEGER,
-      dimes: DataTypes.INTEGER,
-      quarters: DataTypes.INTEGER,
-      ones: DataTypes.INTEGER,
-      twos: DataTypes.INTEGER,
-      fives: DataTypes.INTEGER,
-      tens: DataTypes.INTEGER,
-      twenties: DataTypes.INTEGER,
-      fifties: DataTypes.INTEGER,
-      hundreds: DataTypes.INTEGER,
-      vouchers: DataTypes.JSON
-         */
-        const hoy = new Date();
-        saveCashSafe({
-            date: reduxValues.wizardDate,
-            cashIn:
-                getCoinsTotalArray(reduxValues.wizardCashIns) +
-                getBillsTotalArray(reduxValues.wizardCashIns),
-            cashOut:
-                getCoinsTotalArray(reduxValues.wizardCashOuts) +
-                getBillsTotalArrayCashOut(reduxValues.wizardCashOuts),
-            vouchersIn:
-                getCoinsVoucher(reduxValues.wizardVouchers).totalIn +
-                getCoinsVoucher(reduxValues.wizardVouchers).totalIn,
-            vouchersOut:
-                getCoinsVoucher(reduxValues.wizardVouchers).totalOut +
-                getCoinsVoucher(reduxValues.wizardVouchers).totalOut,
-            initSafe:
-                getCoinsTotal(reduxValues.wizardSafeStart) +
-                getBillsTotal(reduxValues.wizardSafeStart),
-            expectedAmount:
-                getCoinsTotal(reduxValues.wizardTotalExpected) +
-                getBillsTotal(reduxValues.wizardTotalExpected),
-            realAmount:
-                getCoinsTotal(reduxValues.wizardTotalReal) +
-                getBillsTotal(reduxValues.wizardTotalReal),
-            // created va en el back
-            createdHour: `${hoy.getHours()}:${hoy.getMinutes()}:${hoy.getSeconds()}`,
-            createdCommentaries: reduxValues.wizardTotalReal.comentaries,
-            // idRestaurant va en el back
-            // status va en el back
-            vouchers: reduxValues.wizardVouchers,
-            pennies: reduxValues.wizardTotalReal.pennies,
-            nickels: reduxValues.wizardTotalReal.nickels,
-            dimes: reduxValues.wizardTotalReal.dimes,
-            quarters: reduxValues.wizardTotalReal.quarters,
-            ones: reduxValues.wizardTotalReal.ones,
-            twos: reduxValues.wizardTotalReal.twos,
-            fives: reduxValues.wizardTotalReal.fives,
-            tens: reduxValues.wizardTotalReal.tens,
-            twenties: reduxValues.wizardTotalReal.twenties,
-            fifties: reduxValues.wizardTotalReal.fifties,
-            hundreds: reduxValues.wizardTotalReal.hundreads
-        });
+    const onSubmit = async () => {
+        try {
+            const hoy = new Date();
+            await saveCashSafe({
+                date: reduxValues.wizardDate,
+                cashIn:
+                    getCoinsTotalArray(reduxValues.wizardCashIns) +
+                    getBillsTotalArray(reduxValues.wizardCashIns),
+                cashOut:
+                    getCoinsTotalArray(reduxValues.wizardCashOuts) +
+                    getBillsTotalArrayCashOut(reduxValues.wizardCashOuts),
+                vouchersIn:
+                    getCoinsVoucher(reduxValues.wizardVouchers).totalIn +
+                    getCoinsVoucher(reduxValues.wizardVouchers).totalIn,
+                vouchersOut:
+                    getCoinsVoucher(reduxValues.wizardVouchers).totalOut +
+                    getCoinsVoucher(reduxValues.wizardVouchers).totalOut,
+                initSafe:
+                    getCoinsTotal(reduxValues.wizardSafeStart) +
+                    getBillsTotalHundreads(reduxValues.wizardSafeStart),
+                expectedAmount:
+                    getCoinsTotal(reduxValues.wizardTotalExpected) +
+                    getBillsTotal(reduxValues.wizardTotalExpected),
+                realAmount:
+                    getCoinsTotal(reduxValues.wizardTotalReal) +
+                    getBillsTotal(reduxValues.wizardTotalReal),
+                // created va en el back
+                createdHour: `${hoy.getHours()}:${hoy.getMinutes()}:${hoy.getSeconds()}`,
+                createdCommentaries: reduxValues.wizardTotalReal.comentaries,
+                // idRestaurant va en el back
+                // status va en el back
+                vouchers: reduxValues.wizardVouchers,
+                pennies: reduxValues.wizardTotalReal.pennies,
+                nickels: reduxValues.wizardTotalReal.nickels,
+                dimes: reduxValues.wizardTotalReal.dimes,
+                quarters: reduxValues.wizardTotalReal.quarters,
+                ones: reduxValues.wizardTotalReal.ones,
+                twos: reduxValues.wizardTotalReal.twos,
+                fives: reduxValues.wizardTotalReal.fives,
+                tens: reduxValues.wizardTotalReal.tens,
+                twenties: reduxValues.wizardTotalReal.twenties,
+                fifties: reduxValues.wizardTotalReal.fifties,
+                hundreds: reduxValues.wizardTotalReal.hundreads
+            });
+            toast('Successfully saved!', {
+                theme: 'colored',
+                type: 'success',
+                position: 'top-center',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+            });
+            dispatch(getSafeCashAction('reload'));
+            onHide();
+        } catch (error) {
+            console.log(error);
+        }
     };
     return (
         <>
@@ -447,6 +435,7 @@ const Resume = () => {
                     Save{' '}
                 </button>
             </div>
+            <ToastContainer />
         </>
     );
 };

@@ -6,7 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsSafeCash from '@app/pages/Employee/modals/ModalDetailsSafeCash';
 import {getRestaurantByLevel, getManagersByRestaurant} from '@app/services/';
-import {currencyFormat, getToday} from '@app/services/utils';
+import {getToday} from '@app/services/utils';
 
 const columns = [
     {
@@ -34,24 +34,28 @@ const columns = [
         accessor: 'receivedHour'
     },
     {
+        Header: 'Initial Safe',
+        accessor: 'currencyinitSafe'
+    },
+    {
         Header: 'Vouchers In',
-        accessor: 'vouchersIn'
+        accessor: 'currencyVouchersIn'
     },
     {
         Header: 'Vouchers Out',
-        accessor: 'vouchersOut'
-    },
-    {
-        Header: 'Coins Total',
-        accessor: 'coinsTotal'
-    },
-    {
-        Header: 'Bills Total',
-        accessor: 'billsTotal'
+        accessor: 'currencyVouchersOut'
     },
     {
         Header: 'Grand Total',
         accessor: 'grandTotal'
+    },
+    {
+        Header: 'Expected Total',
+        accessor: 'currencyExpectedAmount'
+    },
+    {
+        Header: 'Diference Total',
+        accessor: 'currencyDiference'
     },
     {
         Header: 'Status',
@@ -301,13 +305,6 @@ const SafeCash = () => {
                     </div>
 
                     <div className="d-flex justify-content-end align-items-md-center">
-                        <span>
-                            <b>
-                                {' '}
-                                Cash Total:{' '}
-                                {currencyFormat(safeCash.totalTotal)}
-                            </b>
-                        </span>{' '}
                         {localStorage.getItem('role') === 'Cash Manager' ||
                         localStorage.getItem('role') ===
                             'Cash Manager Assistant' ? (
