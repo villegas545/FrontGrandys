@@ -52,10 +52,6 @@ const columns = [
     {
         Header: 'Status',
         accessor: 'status'
-    },
-    {
-        Header: 'View Details',
-        accessor: 'viewDetails'
     }
 ];
 const CashOut = () => {
@@ -308,9 +304,7 @@ const CashOut = () => {
                                 Cash Total: {currencyFormat(cashOut.cashTotal)}
                             </b>
                         </span>{' '}
-                        {localStorage.getItem('role') === 'Cash Manager' ||
-                        localStorage.getItem('role') ===
-                            'Cash Manager Assistant' ? (
+                        {localStorage.getItem('role') !== 'Cash Admin' ? (
                             <input
                                 type="submit"
                                 value="Open Cash Out"

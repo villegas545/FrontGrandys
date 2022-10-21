@@ -7,6 +7,7 @@ import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector} from 'react-redux';
 import {addCashOutService, cashOutApiInfo} from '@app/services/';
+import {getToday} from '@app/services/utils';
 
 const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
     console.log(user);
@@ -38,6 +39,10 @@ const BodyInfo = ({idRow, action, user}) => {
         nickels: 0,
         dimes: 0,
         quarters: 0,
+        penniesRoll: 0,
+        nickelsRoll: 0,
+        dimesRoll: 0,
+        quartersRoll: 0,
         ones: 0,
         twos: 0,
         fives: 0,
@@ -49,14 +54,16 @@ const BodyInfo = ({idRow, action, user}) => {
         date: '',
         idEmployee: user.id
     });
+    const [apiInfo, setApiInfo] = React.useState();
     const [cargando, setCargando] = React.useState(false);
+    const getApiInfo = async (date) => {
+        setCargando(true);
+        setApiInfo(await cashOutApiInfo(date));
+        setCargando(false);
+    };
+
     useEffect(() => {
-        (async () => {
-            setCargando(true);
-            const apiInfo = await cashOutApiInfo('2022-10-04');
-            setCargando(false);
-            console.log(apiInfo);
-        })();
+        getApiInfo(getToday());
     }, []);
 
     const cashOut = useSelector((store) => store.cashOut);
@@ -113,6 +120,46 @@ const BodyInfo = ({idRow, action, user}) => {
                 break;
         }
     };
+
+    /* GET PIPO TOTAL */
+    const getPipoTotal = (apiData) => {
+        try {
+            let pipoTotal = 0;
+            apiData.userPipo.forEach((element) => {
+                console.log(element);
+                if (element.pipo_type === 'pay out') {
+                    pipoTotal -= element.amount;
+                } else {
+                    pipoTotal += element.amount;
+                }
+            });
+            console.log(pipoTotal);
+            return pipoTotal;
+        } catch (error) {
+            return 0;
+        }
+    };
+
+    /* GET SALES TYPE */
+    const owedTotal = (apiData) => {
+        try {
+            let cashOwed = 0;
+            let creditOwed = 0;
+            apiData.owed2House[0].payments.forEach((element) => {
+                console.log(element);
+                if (element.payment_type === 'Credit') {
+                    creditOwed = element.amount;
+                }
+                if (element.payment_type === 'Cash') {
+                    cashOwed = element.amount;
+                }
+            });
+            return {cashOwed, creditOwed};
+        } catch (error) {
+            return {cashOwed: 0, creditOwed: 0};
+        }
+    };
+
     return (
         <>
             <div className="card-body">
@@ -122,13 +169,14 @@ const BodyInfo = ({idRow, action, user}) => {
                         <input
                             type="date"
                             className="form-control mr-3"
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 setForm({
                                     ...form,
                                     date: e.target.value
-                                })
-                            }
-                            value={form.date}
+                                });
+                                getApiInfo(e.target.value);
+                            }}
+                            defaultValue={getToday()}
                         />
                     </div>
                 </div>
@@ -157,7 +205,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        penniesRoll: e.target.value
+                                    })
+                                }
+                                value={form.penniesRoll}
+                                className="form-control"
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -166,7 +224,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.pennies}
+                                value={
+                                    form.pennies / 100 +
+                                    (form.penniesRoll * 50) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -189,7 +250,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        nickelsRoll: e.target.value
+                                    })
+                                }
+                                value={form.nickelsRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -198,7 +269,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.nickels * 5}
+                                value={
+                                    (form.nickels * 5) / 100 +
+                                    (form.nickelsRoll * 5 * 40) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -221,7 +295,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        dimesRoll: e.target.value
+                                    })
+                                }
+                                value={form.dimesRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -230,7 +314,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.dimes * 10}
+                                value={
+                                    (form.dimes * 10) / 100 +
+                                    (form.dimesRoll * 10 * 50) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -253,7 +340,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        quartersRoll: e.target.value
+                                    })
+                                }
+                                value={form.quartersRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -262,7 +359,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.quarters * 25}
+                                value={
+                                    (form.quarters * 25) / 100 +
+                                    (form.quartersRoll * 25 * 40) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -499,7 +599,14 @@ const BodyInfo = ({idRow, action, user}) => {
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
                                             Number(form.quarters * 25)) /
-                                        100
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100
                                     }
                                     disabled
                                 />
@@ -519,11 +626,12 @@ const BodyInfo = ({idRow, action, user}) => {
                                     style={{minWidth: '50px'}}
                                     value={
                                         Number(form.ones) +
+                                        Number(form.twos * 2) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100)
+                                        Number(form.hundreds * 100)
                                     }
                                     disabled
                                 />
@@ -543,77 +651,91 @@ const BodyInfo = ({idRow, action, user}) => {
                                     style={{minWidth: '50px'}}
                                     value={
                                         Number(form.ones) +
+                                        Number(form.twos * 2) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100) +
+                                        Number(form.hundreds * 100) +
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
                                             Number(form.quarters * 25)) /
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
                                             100
                                     }
                                     disabled
                                 />
                             </div>
                         </div>
-                        {/* EXPECTED */}
-                        Expected:
-                        <div className="d-flex justify-content-around mb-3">
-                            <div>
-                                <span
-                                    className="input-group-text"
-                                    style={{minWidth: '100px'}}
-                                >
-                                    Pay in/out
-                                </span>
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control input-sm mr-3"
-                                    style={{minWidth: '50px'}}
-                                    value={0}
-                                    disabled
-                                />
-                            </div>
-                            <div>
-                                <span
-                                    className="input-group-text"
-                                    style={{minWidth: '100px'}}
-                                >
-                                    Owed
-                                </span>
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control input-sm mr-3"
-                                    style={{minWidth: '50px'}}
-                                    value={0}
-                                    disabled
-                                />
-                            </div>
-                            <div>
-                                <span
-                                    className="input-group-text"
-                                    style={{minWidth: '100px'}}
-                                >
-                                    Credit sales
-                                </span>
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control input-sm mr-3"
-                                    style={{minWidth: '50px'}}
-                                    value={0}
-                                    disabled
-                                />
-                            </div>
-                        </div>
-                        {/* CASH CUT */}
+                        {apiInfo ? (
+                            <>
+                                {/* EXPECTED */}
+                                Expected:
+                                <div className="d-flex justify-content-around mb-3">
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Pay in/out
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={getPipoTotal(apiInfo)}
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Cash Sales
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={owedTotal(apiInfo).cashOwed}
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Credit sales
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={
+                                                owedTotal(apiInfo).creditOwed
+                                            }
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                        ;{/* CASH CUT */}
                         Cash Cut:
                         <div className="d-flex justify-content-around mb-3">
                             <div>
@@ -658,7 +780,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100)
+                                        Number(form.hundreds * 100)
                                     }
                                     disabled
                                 />
@@ -682,7 +804,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100) +
+                                        Number(form.hundreds * 100) +
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
