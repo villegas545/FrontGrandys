@@ -735,7 +735,7 @@ const BodyInfo = ({idRow, action, user}) => {
                                 </div>
                             </>
                         ) : null}
-                        ;{/* CASH CUT */}
+                        {/* CASH CUT */}
                         Cash Cut:
                         <div className="d-flex justify-content-around mb-3">
                             <div>
@@ -752,11 +752,25 @@ const BodyInfo = ({idRow, action, user}) => {
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
                                     value={
+                                        Number(form.ones) +
+                                        Number(form.twos * 2) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreds * 100) +
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
                                             Number(form.quarters * 25)) /
-                                        100
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100
                                     }
                                     disabled
                                 />
@@ -775,12 +789,8 @@ const BodyInfo = ({idRow, action, user}) => {
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
                                     value={
-                                        Number(form.ones) +
-                                        Number(form.fives * 5) +
-                                        Number(form.tens * 10) +
-                                        Number(form.twenties * 20) +
-                                        Number(form.fifties * 50) +
-                                        Number(form.hundreds * 100)
+                                        owedTotal(apiInfo).cashOwed +
+                                        getPipoTotal(apiInfo)
                                     }
                                     disabled
                                 />
@@ -798,8 +808,9 @@ const BodyInfo = ({idRow, action, user}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
+                                        Number(form.twos * 2) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
@@ -809,8 +820,17 @@ const BodyInfo = ({idRow, action, user}) => {
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
                                             Number(form.quarters * 25)) /
-                                            100
-                                    }
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100 -
+                                        owedTotal(apiInfo).cashOwed +
+                                        getPipoTotal(apiInfo)
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
