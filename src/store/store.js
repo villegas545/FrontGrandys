@@ -9,6 +9,7 @@ import cashInReducer from '@app/store/reducers/cashInDucks';
 import cashOutReducer from '@app/store/reducers/cashOutDucks';
 import safeCashReducer from '@app/store/reducers/safeCashDucks';
 import localVariablesReducer from '@app/store/reducers/localVariables';
+import reactLoadingReducer from '@app/store/reducers/reactLoadingDucks';
 
 const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
         cashOut: cashOutReducer,
         safeCash: safeCashReducer,
         localVariables: localVariablesReducer,
+        reactLoading: reactLoadingReducer,
         auth: authSlice.reducer,
         ui: uiSlice.reducer
     }

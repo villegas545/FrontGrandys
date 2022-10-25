@@ -1,46 +1,21 @@
-/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {FileUploader} from 'react-drag-drop-files';
 import axios from 'axios';
 import {confirmAlert} from 'react-confirm-alert';
-import ReactLoading from 'react-loading';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestActionByApi} from '@app/store/reducers/restsDucks';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import {url as urlconf} from '../config';
 import '../styles/csv.scss';
 
 const fileTypes = ['only csv files', 'vnd.ms-excel'];
 
-function Csv() {
+const Csv = () => {
     const dispatch = useDispatch();
-    const notify = () =>
-        toast('Uploaded success!!!!', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true
-        });
-    const notify2 = () =>
-        toast('Uploaded success!!!!', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true
-        });
 
     const [file, setFile] = useState(null);
     const [validacion, setValidacion] = useState(false);
-    const [cargando, setCargando] = React.useState(false);
     const [restName, setRestName] = useState(null);
     const [restDate, setRestDate] = useState(null);
     const [restTemp, setRestTemp] = useState(null);
@@ -57,7 +32,9 @@ function Csv() {
     const urlFile = `${urlconf}csvToJson`;
     // __________llamar restaurantes
     React.useEffect(async () => {
-        await dispatch(getRestActionByApi(localStorage.getItem('restaurantApi')));
+        await dispatch(
+            getRestActionByApi(localStorage.getItem('restaurantApi'))
+        );
         setRestName(rest.api);
     }, []);
 
@@ -80,17 +57,17 @@ function Csv() {
                 }
             );
             console.log(respuesta);
-            notify();
+            toast.success('Uploaded success!');
         } catch (err) {
             console.log('todo salio mal');
         }
-        setCargando(false);
+        dispatch(changeReactLoading(false));
     };
     const altaCsv = async () => {
         const f = new FormData();
         f.append('archivo', file);
         const api = localStorage.getItem('restaurantApi');
-        
+
         const respuesta = await axios.post(`${urlFile}/file/${api}`, f, {
             headers: {
                 authorization: `bearerHeader: ${localStorage.getItem('token')}`
@@ -99,7 +76,8 @@ function Csv() {
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
             // alert('Archivo cargado correctamente');
-            notify2();
+
+            toast.success('Uploaded success!');
         } else {
             const numberDates = respuesta.data.dateList.length;
             confirmAlert({
@@ -109,9 +87,11 @@ function Csv() {
                     {
                         label: 'Yes',
                         onClick: () => {
-                            setCargando(true);
+                            dispatch(changeReactLoading(true));
                             /*  datePopulate(respuesta.data.dateList); */
-                            alert("date not available, please wait for the next update");
+                            toast.error(
+                                'date not available, please wait for the next update'
+                            );
                         }
                     },
                     {
@@ -125,7 +105,6 @@ function Csv() {
     const submit = async (e) => {
         e.preventDefault();
         if (
-
             restDate == null ||
             restTemp == null ||
             restWeat == null ||
@@ -136,7 +115,7 @@ function Csv() {
             qPromo == null ||
             tips == null
         ) {
-            alert('Please fill all the fields');
+            toast.error('Please fill all the fields');
             return;
         }
 
@@ -169,7 +148,7 @@ function Csv() {
         );
         console.log(respuesta);
         if (respuesta.data.message === 'ok') {
-            notify();
+            toast.success('Uploaded success!');
         } else {
             const numberDates = respuesta.data.dateList.length;
             confirmAlert({
@@ -179,7 +158,7 @@ function Csv() {
                     {
                         label: 'Yes',
                         onClick: () => {
-                            setCargando(true);
+                            dispatch(changeReactLoading(true));
                             datePopulate(respuesta.data.dateList);
                         }
                     },
@@ -235,13 +214,11 @@ function Csv() {
                             <div className="form-group">
                                 <label htmlFor="Restaurant">Restaurant</label>
                                 <input
-                                 
                                     type="text"
                                     className="form-control"
-                                    value=   {rest.name}
+                                    value={rest.name}
                                     readOnly
                                 />
-                               
                             </div>
                         </div>
                         <div className="ownform">
@@ -341,9 +318,7 @@ function Csv() {
                                         <option value="-">Out</option>
                                     </select>
                                 </div>
-                                <span className="input-group-text">
-                                    Amount
-                                </span>
+                                <span className="input-group-text">Amount</span>
                                 <input
                                     onChange={(e) =>
                                         setRestTrans(e.target.value)
@@ -448,26 +423,8 @@ function Csv() {
                     </div>
                 </div>
             </div>
-
-            <ReactLoading
-                style={{
-                    display: cargando ? 'block' : 'none',
-                    position: 'absolute',
-                    zIndex: '9999',
-                    top: '30%',
-                    left: '50%',
-                    height: '150px',
-                    width: '150px',
-                    color: '#D11F1F'
-                }}
-                color="#D11F1F"
-                width="300px"
-                type="spinningBubbles"
-                height="100px"
-            />
-            <ToastContainer />
         </>
     );
-}
+};
 
 export default Csv;

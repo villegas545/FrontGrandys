@@ -1,13 +1,10 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import TableChecks from '@app/components/table/TableChecks';
 import TableReports from '@app/components/table/TableReports';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
 import {useSelector, useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
-import ReactLoading from 'react-loading';
 import axios from 'axios';
 import {
     getChecksAction,
@@ -15,28 +12,11 @@ import {
     getChecksCleanDatesSuccess,
     updateChecksAction
 } from '@app/store/reducers/checksDucks';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import {confirmAlert} from 'react-confirm-alert';
-import {nodeName} from 'jquery';
-import round from 'round';
 import {url as urlconf} from '../config/index';
 
-function Checks() {
-    console.log('pagina checks recargada');
-    const notify = React.useCallback(
-        () =>
-            toast('Downloaded!!!!, Please press "Search Button" again', {
-                theme: 'colored',
-                type: 'success',
-                position: 'top-center',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
-            }),
-        []
-    );
-
+const Checks = () => {
     const dispatch = useDispatch();
 
     const columns = React.useCallback(
@@ -96,7 +76,6 @@ function Checks() {
     const [startYear, setStartYear] = React.useState(1);
     const [endYear, setEndYear] = React.useState(1);
     const [byWeek, setByWeek] = React.useState('byDay');
-    const [cargando, setCargando] = React.useState(false);
     const [role, setRole] = React.useState('');
     const [api, setApi] = React.useState('');
     const datePopulate = async (recibeDates) => {
@@ -114,12 +93,15 @@ function Checks() {
                 }
             );
             console.log(respuesta);
-            notify();
+            toast.success(
+                'Downloaded!!!!, Please press "Search Button" again!'
+            );
             dispatch(getChecksCleanDatesSuccess());
         } catch (err) {
             console.log('todo salio mal');
+            toast.error(err);
         }
-        setCargando(false);
+        dispatch(changeReactLoading(false));
     };
     React.useEffect(() => {
         setRole(localStorage.getItem('role'));
@@ -140,16 +122,9 @@ function Checks() {
                     {
                         label: 'Yes',
                         onClick: () => {
-                            setCargando(true);
-                            //  if (force) {
+                            dispatch(changeReactLoading(true));
                             datePopulate(dates);
                             setForce(false);
-                            // } else {
-                            // alert(
-                            //       'date not available, please wait for the next update'
-                            //  );
-                            //  setCargando(false);
-                            // }
                         }
                     },
                     {
@@ -162,7 +137,7 @@ function Checks() {
 
     const weekSelector = async (e, accion) => {
         e.preventDefault();
-        setCargando(true);
+        dispatch(changeReactLoading(true));
         try {
             await dispatch(getChecksActionClean());
             if (accion === 'force') {
@@ -187,31 +162,16 @@ function Checks() {
                     )
                 );
             }
-            setCargando(false);
+            dispatch(changeReactLoading(false));
         } catch (error) {
             console.log(error);
-            setCargando(false);
+            dispatch(changeReactLoading(false));
         }
     };
     return (
         <>
             {/* <!-- Content Header (Page header) --> */}
-            <ReactLoading
-                style={{
-                    display: cargando ? 'block' : 'none',
-                    position: 'absolute',
-                    zIndex: '9999',
-                    top: '30%',
-                    left: '50%',
-                    height: '150px',
-                    width: '150px',
-                    color: '#D11F1F'
-                }}
-                color="#D11F1F"
-                width="300px"
-                type="spinningBubbles"
-                height="100px"
-            />
+
             <section className="content-header">
                 <div className="container-fluid">
                     <h1>DataTables</h1>
@@ -417,9 +377,8 @@ function Checks() {
                           </div>
                       ))}
             </div>
-            <ToastContainer />
         </>
     );
-}
+};
 
 export default React.memo(Checks);

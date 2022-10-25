@@ -12,14 +12,11 @@ import {
     modalClose,
     syncUsers
 } from '@app/store/reducers/usersDucks';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ReactLoading from 'react-loading';
-
+import {toast} from 'react-toastify';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import Table from '../components/table/Table';
 
-function MyVerticallyCenteredModal(props) {
-    console.log(props);
+const MyVerticallyCenteredModal = (props) => {
     const {action} = props;
     return (
         <Modal
@@ -39,14 +36,13 @@ function MyVerticallyCenteredModal(props) {
             </Modal.Body>
         </Modal>
     );
-}
+};
 
 function Users() {
     const [role, setRole] = React.useState('');
     const [idState, setIdState] = React.useState(0);
     const [action, setAction] = React.useState(true);
     const [modalShow, setModalShow] = React.useState(false);
-    const [cargando, setCargando] = React.useState(false);
     const dispatch = useDispatch();
     const users = useSelector((store) => store.users.array);
     const closeModal = useSelector((store) => store.users.modalClose);
@@ -104,21 +100,6 @@ function Users() {
             dispatch(modalClose(false));
         }
     }, [closeModal]);
-    /*  const prueba = () => {
-        console.log('chido');
-    };  */
-    const notify = () =>
-        toast('Success', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined
-        });
 
     return (
         <>
@@ -148,10 +129,10 @@ function Users() {
                                         value="Sync Users"
                                         className=" btn btn-danger btn-sm mr-3 text-lg"
                                         onClick={async () => {
-                                            setCargando(true);
+                                            dispatch(changeReactLoading(true));
                                             await dispatch(syncUsers());
-                                            setCargando(false);
-                                            notify();
+                                            dispatch(changeReactLoading(false));
+                                            toast.success('Success!');
                                         }}
                                     />
                                     {action ? (
@@ -180,25 +161,6 @@ function Users() {
                 deleteItem={deleteItem}
                 updateItem={updateItem}
             />
-            <ToastContainer />
-            <ReactLoading
-                style={{
-                    display: cargando ? 'block' : 'none',
-                    position: 'absolute',
-                    zIndex: '9999',
-                    top: '30%',
-                    left: '50%',
-                    height: '150px',
-                    width: '150px',
-                    color: '#D11F1F'
-                }}
-                color="#D11F1F"
-                width="300px"
-                type="spinningBubbles"
-                height="100px"
-            />
-            {/* <Table headers={headers} prueba={prueba} /> */}
-            {/* <input type="submit" value="test" onClick={() => prueba()} /> */}
         </>
     );
 }

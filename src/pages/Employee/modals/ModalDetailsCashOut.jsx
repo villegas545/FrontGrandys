@@ -1,9 +1,7 @@
 /* eslint-disable indent */
 import React, {useState, useEffect} from 'react';
-import ReactLoading from 'react-loading';
 // eslint-disable-next-line no-unused-vars
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
 import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
@@ -11,6 +9,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {addCashOutService, cashOutApiInfo} from '@app/services/';
 import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
 import {getToday} from '@app/services/utils';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 
 const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
     return (
@@ -64,12 +63,11 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
         idEmployee: user.id
     });
     const [apiInfo, setApiInfo] = React.useState();
-    const [cargando, setCargando] = React.useState(false);
     const [error, setError] = React.useState();
     const getApiInfo = async (date) => {
-        setCargando(true);
+        dispatch(changeReactLoading(true));
         setApiInfo(await cashOutApiInfo(date));
-        setCargando(false);
+        dispatch(changeReactLoading(false));
     };
 
     useEffect(() => {
@@ -186,9 +184,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
             dataform.creditSales = Number(creditSales).toFixed(2);
             dataform.expected = Number(expected).toFixed(2);
             dataform.difference = Number(difference).toFixed(2);
-            setCargando(true);
+            dispatch(changeReactLoading(true));
             const response = await addCashOutService(dataform);
-            setCargando(false);
+            dispatch(changeReactLoading(false));
             if (response.message === 'existentEmployees') {
                 setError(
                     `The employee already has an Open Cash Out Registry, "Please Close It First"`
@@ -206,6 +204,8 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                     draggable: true,
                     progress: undefined
                 }); */
+                toast.success('The registry is saved');
+
                 onHide();
             }
         } catch (err) {
@@ -931,24 +931,6 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                 </div>
                 <p className="text-danger"> {error || null}</p>
             </div>
-            <ToastContainer />
-
-            <ReactLoading
-                style={{
-                    display: cargando ? 'block' : 'none',
-                    position: 'absolute',
-                    zIndex: '9999',
-                    top: '30%',
-                    left: '50%',
-                    height: '150px',
-                    width: '150px',
-                    color: '#D11F1F'
-                }}
-                color="#D11F1F"
-                width="300px"
-                type="spinningBubbles"
-                height="100px"
-            />
         </>
     );
 };

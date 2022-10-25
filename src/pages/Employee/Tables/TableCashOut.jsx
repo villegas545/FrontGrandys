@@ -4,9 +4,7 @@
 /* eslint-disable react/button-has-type */
 import React, {useState} from 'react';
 import {useTable, usePagination} from 'react-table';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-// import styled from 'styled-components';
+import { toast} from 'react-toastify';
 
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -22,20 +20,6 @@ function TableCashOut({columns, data}) {
     // notificacion tostify
     const [modalShow, setModalShow] = React.useState(false);
     const dispatch = useDispatch();
-
-    const notify = () =>
-        toast('Successfully changed!', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
-        });
-
     // Use the state and functions returned from useTable to build your UI
     const {
         getTableProps,
@@ -100,7 +84,7 @@ function TableCashOut({columns, data}) {
                     label: 'Yes',
                     onClick: () => {
                         actionButton(id, action);
-                        notify();
+                        toast.success('Success!');
                     }
                 },
                 {
@@ -261,10 +245,7 @@ function TableCashOut({columns, data}) {
                     {'>>'}
                 </button>{' '}
             </div>
-            <ToastContainer />
-            {
-                // Este modal es para abrirlo desde el details dentro de la tabla
-            }
+        
             <ModalDetailsCashOut
                 show={modalShow}
                 onHide={() => setModalShow(false)}

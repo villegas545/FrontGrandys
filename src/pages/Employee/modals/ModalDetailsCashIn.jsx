@@ -48,6 +48,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
         nickels: 0,
         dimes: 0,
         quarters: 0,
+        penniesRoll: 0,
+        nickelsRoll: 0,
+        dimesRoll: 0,
+        quartersRoll: 0,
         ones: 0,
         twos: 0,
         fives: 0,
@@ -73,6 +77,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                 nickels: filtered.nickels,
                 dimes: filtered.dimes,
                 quarters: filtered.quarters,
+                penniesRoll: filtered.penniesRoll,
+                nickelsRoll: filtered.nickelsRoll,
+                dimesRoll: filtered.dimesRoll,
+                quartersRoll: filtered.quartersRoll,
                 ones: filtered.ones,
                 twos: filtered.twos,
                 fives: filtered.fives,
@@ -219,7 +227,17 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        penniesRoll: e.target.value
+                                    })
+                                }
+                                value={form.penniesRoll}
+                                className="form-control"
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -228,7 +246,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.pennies}
+                                value={
+                                    form.pennies / 100 +
+                                    (form.penniesRoll * 50) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -251,7 +272,17 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        nickelsRoll: e.target.value
+                                    })
+                                }
+                                value={form.nickelsRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -260,7 +291,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.nickels * 5}
+                                value={
+                                    (form.nickels * 5) / 100 +
+                                    (form.nickelsRoll * 5 * 40) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -283,7 +317,20 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        dimesRoll: e.target.value
+                                    })
+                                }
+                                value={
+                                    (form.dimes * 10) / 100 +
+                                    (form.dimesRoll * 10 * 50) / 100
+                                }
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -315,7 +362,17 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        quartersRoll: e.target.value
+                                    })
+                                }
+                                value={form.quartersRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -324,7 +381,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.quarters * 25}
+                                value={
+                                    (form.quarters * 25) / 100 +
+                                    (form.quartersRoll * 25 * 40) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -559,7 +619,14 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
                                             Number(form.quarters * 25)) /
-                                        100
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100
                                     }
                                     disabled
                                 />
@@ -612,6 +679,13 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
                                             Number(form.quarters * 25)) /
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
                                             100
                                     }
                                     disabled

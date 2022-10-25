@@ -17,9 +17,11 @@ const GET_CASH_IN_SUCCESS = 'GET_CASH_IN_SUCCESS';
 // actions
 export const getCashInAction = (formData) => async (dispatch, getState) => {
     try {
-        console.log(getState());
         let urlFilter;
         if (formData === 'reload') {
+            if (getState().cashOut.lastFilter === '') {
+                return;
+            }
             urlFilter = getState().cashIn.lastFilter;
         } else {
             urlFilter = `${url}?startDate=${formData.startDate}&endDate=${formData.endDate}&restaurant=${formData.restaurant}&employee=${formData.employee}&status=${formData.status}`;

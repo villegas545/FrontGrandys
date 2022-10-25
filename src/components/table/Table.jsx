@@ -2,7 +2,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import {useTable, usePagination} from 'react-table';
-import {ToastContainer, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import styled from 'styled-components';
 
@@ -10,21 +10,6 @@ import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function Table({columns, data, deleteItem, updateItem}) {
-    // notificacion tostify
-    const notify = () =>
-        toast('Successfuly deleted!!!!', {
-            theme: 'colored',
-            type: 'error',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
-        });
-
-    // Use the state and functions returned from useTable to build your UI
     const {
         getTableProps,
         getTableBodyProps,
@@ -61,7 +46,7 @@ function Table({columns, data, deleteItem, updateItem}) {
                     label: 'Yes',
                     onClick: () => {
                         deleteItem(id);
-                        notify();
+                        toast.success(' Successfuly deleted!');
                     }
                 },
                 {
@@ -193,7 +178,6 @@ function Table({columns, data, deleteItem, updateItem}) {
                     {'>>'}
                 </button>{' '}
             </div>
-            <ToastContainer />
         </>
     );
 }

@@ -1,12 +1,7 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable no-shadow */
-/* eslint-disable react/button-has-type */
 import React, {useState} from 'react';
 import {useTable, usePagination} from 'react-table';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-// import styled from 'styled-components';
-
+import {toast} from 'react-toastify';
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
@@ -14,9 +9,8 @@ import {
     approveRejectCashRegisterStartup,
     cancelCashRegisterStartup
 } from '@app/services';
-import { useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {getCashInAction} from '@app/store/reducers/cashInDucks';
-
 
 function TableCashIn({columns, data}) {
     // notificacion tostify
@@ -69,24 +63,26 @@ function TableCashIn({columns, data}) {
         switch (action) {
         case 'approve':
             await approveRejectCashRegisterStartup({
-                idRequestCashRegisterStartup:id,
-                approved:"Approved"
-            })
+                idRequestCashRegisterStartup: id,
+                approved: 'Approved'
+            });
             break;
         case 'reject':
             await approveRejectCashRegisterStartup({
-                idRequestCashRegisterStartup:id,
-                rejected:"Rejected"
-            })
+                idRequestCashRegisterStartup: id,
+                rejected: 'Rejected'
+            });
             break;
         case 'cancel':
-            await cancelCashRegisterStartup({idRequestCashRegisterStartup:id})
+            await cancelCashRegisterStartup({
+                idRequestCashRegisterStartup: id
+            });
             break;
         default:
             console.log('never');
             break;
         }
-        dispatch(getCashInAction("reload"))
+        dispatch(getCashInAction('reload'));
     };
     // Confirmacion de accion
     const confirm = (id, action) => {
@@ -156,36 +152,51 @@ function TableCashIn({columns, data}) {
                                     />
                                 </td>
                                 <td>
-                                    { localStorage.getItem("role")==="Employee" && row.original.status==="Pending" ?
-                                        <><input
-                                            type="submit"
-                                            value="Approve"
-                                            className="btn btn-success"
-                                            onClick={() =>
-                                                confirm(row.original.id, 'approve')
-                                            }
-                                        />
-                                        <input
-                                            type="submit"
-                                            value="Reject"
-                                            className="btn btn-warning ml-2"
-                                            onClick={() =>
-                                                confirm(row.original.id, 'reject')
-                                            }
-                                        />
-                                        </>
-                                        :null}
-                                    { localStorage.getItem("role")==="Manager" && row.original.status==="Approved" ?
-                                        <>
-                                            <input
-                                                type="submit"
-                                                value="Cancel"
-                                                className="btn btn-danger ml-2"
-                                                onClick={() =>
-                                                    confirm(row.original.id, 'cancel')
-                                                }
-                                            />
-                                        </>:null}
+                                    {localStorage.getItem('role') ===
+                                        'Employee' &&
+                                    row.original.status === 'Pending' ? (
+                                            <>
+                                                <input
+                                                    type="submit"
+                                                    value="Approve"
+                                                    className="btn btn-success"
+                                                    onClick={() =>
+                                                        confirm(
+                                                            row.original.id,
+                                                            'approve'
+                                                        )
+                                                    }
+                                                />
+                                                <input
+                                                    type="submit"
+                                                    value="Reject"
+                                                    className="btn btn-warning ml-2"
+                                                    onClick={() =>
+                                                        confirm(
+                                                            row.original.id,
+                                                            'reject'
+                                                        )
+                                                    }
+                                                />
+                                            </>
+                                        ) : null}
+                                    {localStorage.getItem('role') ===
+                                        'Manager' &&
+                                    row.original.status === 'Approved' ? (
+                                            <>
+                                                <input
+                                                    type="submit"
+                                                    value="Cancel"
+                                                    className="btn btn-danger ml-2"
+                                                    onClick={() =>
+                                                        confirm(
+                                                            row.original.id,
+                                                            'cancel'
+                                                        )
+                                                    }
+                                                />
+                                            </>
+                                        ) : null}
                                 </td>
                             </tr>
                         );
@@ -194,6 +205,7 @@ function TableCashIn({columns, data}) {
             </table>
             <div className="pagination ">
                 <button
+                    type="button"
                     onClick={() => gotoPage(0)}
                     disabled={!canPreviousPage}
                     className="btn btn-secondary ml-2"
@@ -201,6 +213,7 @@ function TableCashIn({columns, data}) {
                     {'<<'}
                 </button>{' '}
                 <button
+                    type="button"
                     onClick={() => previousPage()}
                     disabled={!canPreviousPage}
                     className="btn btn-secondary ml-2"
@@ -221,13 +234,14 @@ function TableCashIn({columns, data}) {
                     className="form-select"
                     style={{'margin-left': '15px'}}
                 >
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
+                    {[10, 20, 30, 40, 50].map((pageSizes) => (
+                        <option key={pageSizes} value={pageSizes}>
+                            Show {pageSizes}
                         </option>
                     ))}
                 </select>
                 <button
+                    type="button"
                     onClick={() => nextPage()}
                     disabled={!canNextPage}
                     className="btn btn-secondary ml-2"
@@ -235,6 +249,7 @@ function TableCashIn({columns, data}) {
                     {'>'}
                 </button>{' '}
                 <button
+                    type="button"
                     onClick={() => gotoPage(pageCount - 1)}
                     disabled={!canNextPage}
                     className="btn btn-secondary ml-2"
@@ -242,7 +257,6 @@ function TableCashIn({columns, data}) {
                     {'>>'}
                 </button>{' '}
             </div>
-            <ToastContainer />
             {
                 // Este modal es para abrirlo desde el details dentro de la tabla
             }

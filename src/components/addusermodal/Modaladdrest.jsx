@@ -1,6 +1,5 @@
 import React from 'react';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
 import {useSelector, useDispatch} from 'react-redux';
 import {modalClose} from '@app/store/reducers/restsDucks';
 
@@ -27,32 +26,6 @@ function Modaladdrest({action}) {
         return true;
     };
 
-    const notifyError = () =>
-        toast('No empty fields allowed or passwords doesn´t match', {
-            theme: 'colored',
-            type: 'error',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
-        });
-
-    const notify = () =>
-        toast('Success', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
-        });
-
     const submit = async (e) => {
         e.preventDefault();
         if (await validate()) {
@@ -64,11 +37,10 @@ function Modaladdrest({action}) {
                 userName
             };
             action(records);
-            /* await axios.post('http://localhost:5000/api/user', records); */
-            notify();
+            toast.success('Success!');
             await dispatch(modalClose(true));
         } else {
-            notifyError();
+            toast.error('No empty fields allowed or passwords doesn´t match');
         }
     };
 
@@ -142,7 +114,6 @@ function Modaladdrest({action}) {
                 </div>
             </div>
             {/* <!-- /.card-body --> */}
-            <ToastContainer />
         </form>
     );
 }

@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React, {useEffect} from 'react';
-import {ToastContainer, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector, useDispatch} from 'react-redux';
 import {modalClose} from '@app/store/reducers/usersDucks';
@@ -38,15 +38,8 @@ function Modaladduser({action}) {
         } else {
             setRestaurant('Empty');
         }
-        console.log(registros);
     }, []);
-    /* useEffect(() => {
-        if (roles === 'Admin') {
-            setRestaurant('803e93eae8c5f709ba4d91bb7f09A796');
-        } else {
-            setRestaurant('Empty');
-        }
-    }, [roles]); */
+
     //! Validacion de manejadores
     const validateMgmt = () => {
         if (
@@ -94,32 +87,6 @@ function Modaladduser({action}) {
         setRolx(localStorage.getItem('role'));
     }, []);
 
-    const notifyError = () =>
-        toast('No empty fields allowed or passwords doesn´t match', {
-            theme: 'colored',
-            type: 'error',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
-        });
-
-    const notify = () =>
-        toast('Success', {
-            theme: 'colored',
-            type: 'success',
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
-        });
-
     const submit = async (e) => {
         e.preventDefault();
         const records = {
@@ -129,13 +96,13 @@ function Modaladduser({action}) {
             roles,
             restaurantApi: restaurant
         };
-
         if (await validate()) {
             action(records);
-            notify();
+            toast.success('Success!');
+
             await dispatch(modalClose(true));
         } else {
-            notifyError();
+            toast.error('No empty fields allowed or passwords doesn´t match!');
         }
     };
 
@@ -282,7 +249,6 @@ function Modaladduser({action}) {
                 </div>
             </div>
             {/* <!-- /.card-body --> */}
-            <ToastContainer />
         </form>
     );
 }

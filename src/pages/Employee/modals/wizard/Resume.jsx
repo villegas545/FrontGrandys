@@ -3,8 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {currencyFormat} from '@app/services/utils';
 import {saveCashSafe} from '@app/services/';
 import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
 
 const Resume = ({onHide}) => {
     const reduxValues = useSelector((state) => state.safeCash);
@@ -15,7 +14,12 @@ const Resume = ({onHide}) => {
                 Number(data.nickels * 5) +
                 Number(data.dimes * 10) +
                 Number(data.quarters * 25)) /
-            100
+                100 +
+            (Number(data.penniesRoll * 50) +
+                Number(data.nickelsRoll * 5 * 40) +
+                Number(data.dimesRoll * 10 * 50) +
+                Number(data.quartersRoll * 25 * 40)) /
+                100
         );
     };
     const getBillsTotal = (data) => {
@@ -49,7 +53,12 @@ const Resume = ({onHide}) => {
                     Number(row.nickels * 5) +
                     Number(row.dimes * 10) +
                     Number(row.quarters * 25)) /
-                100;
+                    100 +
+                (Number(row.penniesRoll * 50) +
+                    Number(row.nickelsRoll * 5 * 40) +
+                    Number(row.dimesRoll * 10 * 50) +
+                    Number(row.quartersRoll * 25 * 40)) /
+                    100;
         });
         return total;
     };
@@ -139,6 +148,10 @@ const Resume = ({onHide}) => {
                 nickels: reduxValues.wizardTotalReal.nickels,
                 dimes: reduxValues.wizardTotalReal.dimes,
                 quarters: reduxValues.wizardTotalReal.quarters,
+                penniesRoll: reduxValues.wizardTotalReal.penniesRoll,
+                nickelsRoll: reduxValues.wizardTotalReal.nickelsRoll,
+                dimesRoll: reduxValues.wizardTotalReal.dimesRoll,
+                quartersRoll: reduxValues.wizardTotalReal.quartersRoll,
                 ones: reduxValues.wizardTotalReal.ones,
                 twos: reduxValues.wizardTotalReal.twos,
                 fives: reduxValues.wizardTotalReal.fives,
@@ -147,17 +160,7 @@ const Resume = ({onHide}) => {
                 fifties: reduxValues.wizardTotalReal.fifties,
                 hundreds: reduxValues.wizardTotalReal.hundreads
             });
-            toast('Successfully saved!', {
-                theme: 'colored',
-                type: 'success',
-                position: 'top-center',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined
-            });
+            toast.success('Success!');
             dispatch(getSafeCashAction('reload'));
             onHide();
         } catch (error) {
@@ -435,7 +438,6 @@ const Resume = ({onHide}) => {
                     Save{' '}
                 </button>
             </div>
-            <ToastContainer />
         </>
     );
 };

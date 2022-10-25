@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 
 import {Modal} from 'react-bootstrap';
 import axios from 'axios';
-import ReactLoading from 'react-loading';
-import {ToastContainer, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import {updateAuth} from '@app/store/reducers/localVariables';
 import {useDispatch} from 'react-redux';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import {url as urlconf} from '../../config';
 import EmployeeTab from './EmployeeTab';
 
-function ModalPinCode({show, onHide, action}) {
+const ModalPinCode = ({show, onHide, action}) => {
     const [pinCode, setPinCode] = useState('');
     return (
         <Modal
@@ -56,10 +56,9 @@ function ModalPinCode({show, onHide, action}) {
             </Modal.Body>
         </Modal>
     );
-}
+};
 function Employee() {
     const [modalShow, setModalShow] = useState(false);
-    const [cargando, setCargando] = useState(false);
     // eslint-disable-next-line no-unused-vars
     const [user, setUser] = useState('');
     const dispatch = useDispatch();
@@ -67,22 +66,9 @@ function Employee() {
     useEffect(() => {
         setModalShow(true);
     }, []);
-    const notify = React.useCallback(
-        () =>
-            toast('Incorrect pincode', {
-                theme: 'colored',
-                type: 'error',
-                position: 'top-center',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
-            }),
-        []
-    );
+
     const login = async (pinCode) => {
-        setCargando(true);
+        dispatch(changeReactLoading(true));
         try {
             const respuesta = await axios.post(
                 `${urlconf}employeeLogin`,
@@ -115,14 +101,14 @@ function Employee() {
                 setUser('algo');
                 setModalShow(false);
             } else {
-                notify();
+                toast.success('Incorrect pincode!');
             }
             console.log(respuesta);
         } catch (err) {
-            notify();
+            toast.success('Incorrect pincode!');
             console.log(err);
         }
-        setCargando(false);
+        dispatch(changeReactLoading(false));
     };
     return (
         <>
@@ -137,23 +123,6 @@ function Employee() {
                 onHide={() => setModalShow(false)}
                 action={login}
             />
-            <ReactLoading
-                style={{
-                    display: cargando ? 'block' : 'none',
-                    position: 'absolute',
-                    zIndex: '9999',
-                    top: '30%',
-                    left: '50%',
-                    height: '150px',
-                    width: '150px',
-                    color: '#D11F1F'
-                }}
-                color="#D11F1F"
-                width="300px"
-                type="spinningBubbles"
-                height="100px"
-            />
-            <ToastContainer />
         </>
     );
 }
