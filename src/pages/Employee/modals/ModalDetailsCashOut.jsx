@@ -1,16 +1,18 @@
 /* eslint-disable indent */
 import React, {useState, useEffect} from 'react';
 import ReactLoading from 'react-loading';
-
+// eslint-disable-next-line no-unused-vars
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {addCashOutService, cashOutApiInfo} from '@app/services/';
+import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
 import {getToday} from '@app/services/utils';
 
 const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
-    console.log(user);
     return (
         <Modal
             onHide={onHide}
@@ -26,14 +28,21 @@ const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <BodyInfo idRow={idRow} action={action} user={user} />
+                <BodyInfo
+                    idRow={idRow}
+                    action={action}
+                    user={user}
+                    onHide={onHide}
+                />
             </Modal.Body>
         </Modal>
     );
 };
 
-const BodyInfo = ({idRow, action, user}) => {
+// eslint-disable-next-line no-unused-vars
+const BodyInfo = ({idRow, action, user, onHide}) => {
     console.log(user);
+    const dispatch = useDispatch();
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -50,12 +59,13 @@ const BodyInfo = ({idRow, action, user}) => {
         twenties: 0,
         fifties: 0,
         hundreds: 0,
-        comentaries: '',
-        date: '',
+        comments: '',
+        date: getToday(),
         idEmployee: user.id
     });
     const [apiInfo, setApiInfo] = React.useState();
     const [cargando, setCargando] = React.useState(false);
+    const [error, setError] = React.useState();
     const getApiInfo = async (date) => {
         setCargando(true);
         setApiInfo(await cashOutApiInfo(date));
@@ -70,9 +80,7 @@ const BodyInfo = ({idRow, action, user}) => {
     // eslint-disable-next-line no-unused-vars
     const [actionButton, setActionButton] = useState();
     useEffect(() => {
-        const filtered = cashOut.details.find(
-            (element) => element.id === idRow
-        );
+        const filtered = cashOut.data.find((element) => element.id === idRow);
         if (filtered) {
             setForm({
                 pennies: filtered.pennies,
@@ -86,7 +94,7 @@ const BodyInfo = ({idRow, action, user}) => {
                 twenties: filtered.twenties,
                 fifties: filtered.fifties,
                 hundreds: filtered.hundreds,
-                comentaries: filtered.comentaries,
+                coments: filtered.comentaries,
                 date: filtered.date
             });
         }
@@ -101,25 +109,6 @@ const BodyInfo = ({idRow, action, user}) => {
             }
         }
     }, []);
-    const addCashOut = async () => {
-        try {
-            await addCashOutService(form);
-        } catch (error) {
-            console.log(error);
-        }
-        console.log('click en add');
-    };
-    // eslint-disable-next-line no-unused-vars
-    const submit = () => {
-        switch (action) {
-            case 'add':
-                addCashOut();
-                break;
-            default:
-                console.log('default');
-                break;
-        }
-    };
 
     /* GET PIPO TOTAL */
     const getPipoTotal = (apiData) => {
@@ -135,7 +124,7 @@ const BodyInfo = ({idRow, action, user}) => {
             });
             console.log(pipoTotal);
             return pipoTotal;
-        } catch (error) {
+        } catch (err) {
             return 0;
         }
     };
@@ -155,8 +144,73 @@ const BodyInfo = ({idRow, action, user}) => {
                 }
             });
             return {cashOwed, creditOwed};
-        } catch (error) {
+        } catch (err) {
             return {cashOwed: 0, creditOwed: 0};
+        }
+    };
+
+    //! Envio de formulario
+    const submit = async () => {
+        try {
+            const coinsTotal =
+                (Number(form.pennies) +
+                    Number(form.nickels * 5) +
+                    Number(form.dimes * 10) +
+                    Number(form.quarters * 25)) /
+                    100 +
+                (Number(form.penniesRoll * 50) +
+                    Number(form.nickelsRoll * 5 * 40) +
+                    Number(form.dimesRoll * 10 * 50) +
+                    Number(form.quartersRoll * 25 * 40)) /
+                    100;
+            const billsTotal =
+                Number(form.ones) +
+                Number(form.twos * 2) +
+                Number(form.fives * 5) +
+                Number(form.tens * 10) +
+                Number(form.twenties * 20) +
+                Number(form.fifties * 50) +
+                Number(form.hundreds * 100);
+            const grandTotal = Number(coinsTotal) + Number(billsTotal);
+            const pipo = getPipoTotal(apiInfo);
+            const cashSales = owedTotal(apiInfo).cashOwed;
+            const creditSales = owedTotal(apiInfo).creditOwed;
+            const expected = Number(cashSales) + Number(pipo);
+            const difference = Number(grandTotal) - Number(expected);
+            const dataform = form;
+            dataform.coinsTotal = Number(coinsTotal).toFixed(2);
+            dataform.billsTotal = Number(billsTotal).toFixed(2);
+            dataform.grandTotal = Number(grandTotal).toFixed(2);
+            dataform.pipo = Number(pipo).toFixed(2);
+            dataform.cashSales = Number(cashSales).toFixed(2);
+            dataform.creditSales = Number(creditSales).toFixed(2);
+            dataform.expected = Number(expected).toFixed(2);
+            dataform.difference = Number(difference).toFixed(2);
+            setCargando(true);
+            const response = await addCashOutService(dataform);
+            setCargando(false);
+            if (response.message === 'existentEmployees') {
+                setError(
+                    `The employee already has an Open Cash Out Registry, "Please Close It First"`
+                );
+            } else {
+                dispatch(getCashOutAction('reload'));
+                /* toast('The registry is saved', {
+                    theme: 'colored',
+                    type: 'success',
+                    position: 'top-center',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined
+                }); */
+                onHide();
+            }
+        } catch (err) {
+            console.log(err);
+            setError('err.data.error');
         }
     };
 
@@ -853,10 +907,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 onChange={(e) =>
                                     setForm({
                                         ...form,
-                                        comentaries: e.target.value
+                                        comments: e.target.value
                                     })
                                 }
-                                value={form.comentaries}
+                                value={form.comments}
                             />
                         </div>
                         <p className="text-danger"> {true || null}</p>
@@ -875,7 +929,9 @@ const BodyInfo = ({idRow, action, user}) => {
                         ) : null}
                     </div>
                 </div>
+                <p className="text-danger"> {error || null}</p>
             </div>
+            <ToastContainer />
 
             <ReactLoading
                 style={{

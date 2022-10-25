@@ -318,7 +318,7 @@ const CashOut = () => {
                             />
                         ) : null}
                     </div>
-                    <TableCashOut columns={columns} data={cashOut.tableInfo} />
+                    <TableCashOut columns={columns} data={cashOut.data} />
                     {
                         // Este modal es para abrirlo desde el opencash in, desde el boton rojo
                     }
