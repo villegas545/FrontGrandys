@@ -101,11 +101,11 @@ function Employee() {
                 setUser('algo');
                 setModalShow(false);
             } else {
-                toast.success('Incorrect pincode!');
+                toast.error('Incorrect pincode!');
             }
             console.log(respuesta);
         } catch (err) {
-            toast.success('Incorrect pincode!');
+            toast.error('Incorrect pincode!');
             console.log(err);
         }
         dispatch(changeReactLoading(false));

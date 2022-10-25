@@ -2,7 +2,6 @@
 import TableCashIn from '@app/pages/Employee/Tables/TableCashIn';
 import {getCashInAction} from '@app/store/reducers/cashInDucks';
 import React, {useEffect, useState} from 'react';
-
 import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';

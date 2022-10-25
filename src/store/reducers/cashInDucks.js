@@ -45,7 +45,12 @@ export const getCashInAction = (formData) => async (dispatch, getState) => {
                     element.nickels * 5 +
                     element.dimes * 10 +
                     element.quarters * 25) /
-                100;
+                    100 +
+                (element.penniesRoll * 50 +
+                    element.nickelsRoll * 5 * 40 +
+                    element.dimesRoll * 10 * 50 +
+                    element.quartersRoll * 25 * 40) /
+                    100;
             const billsTotal =
                 element.ones +
                 element.twos * 2 +

@@ -2,7 +2,7 @@
 const dataInitial = {
     state: false
 };
-const CHANGES_REACT_LOADING = 'CHANGES_VARIABLES';
+const CHANGES_REACT_LOADING = 'CHANGES_REACT_LOADING';
 
 export const changeReactLoading = (newValue) => (dispatch) => {
     try {
