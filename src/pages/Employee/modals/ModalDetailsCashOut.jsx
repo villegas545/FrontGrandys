@@ -1,14 +1,18 @@
 /* eslint-disable indent */
 import React, {useState, useEffect} from 'react';
-
+import ReactLoading from 'react-loading';
+// eslint-disable-next-line no-unused-vars
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
-import {useSelector} from 'react-redux';
-import {addCashOutService} from '@app/services/';
+import {useSelector, useDispatch} from 'react-redux';
+import {addCashOutService, cashOutApiInfo} from '@app/services/';
+import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
+import {getToday} from '@app/services/utils';
 
 const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
-    console.log(user);
     return (
         <Modal
             onHide={onHide}
@@ -24,19 +28,30 @@ const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <BodyInfo idRow={idRow} action={action} user={user} />
+                <BodyInfo
+                    idRow={idRow}
+                    action={action}
+                    user={user}
+                    onHide={onHide}
+                />
             </Modal.Body>
         </Modal>
     );
 };
 
-const BodyInfo = ({idRow, action, user}) => {
+// eslint-disable-next-line no-unused-vars
+const BodyInfo = ({idRow, action, user, onHide}) => {
     console.log(user);
+    const dispatch = useDispatch();
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
         dimes: 0,
         quarters: 0,
+        penniesRoll: 0,
+        nickelsRoll: 0,
+        dimesRoll: 0,
+        quartersRoll: 0,
         ones: 0,
         twos: 0,
         fives: 0,
@@ -44,16 +59,28 @@ const BodyInfo = ({idRow, action, user}) => {
         twenties: 0,
         fifties: 0,
         hundreds: 0,
-        comentaries: '',
-        date: '',
+        comments: '',
+        date: getToday(),
         idEmployee: user.id
     });
+    const [apiInfo, setApiInfo] = React.useState();
+    const [cargando, setCargando] = React.useState(false);
+    const [error, setError] = React.useState();
+    const getApiInfo = async (date) => {
+        setCargando(true);
+        setApiInfo(await cashOutApiInfo(date));
+        setCargando(false);
+    };
+
+    useEffect(() => {
+        getApiInfo(getToday());
+    }, []);
+
     const cashOut = useSelector((store) => store.cashOut);
+    // eslint-disable-next-line no-unused-vars
     const [actionButton, setActionButton] = useState();
     useEffect(() => {
-        const filtered = cashOut.details.find(
-            (element) => element.id === idRow
-        );
+        const filtered = cashOut.data.find((element) => element.id === idRow);
         if (filtered) {
             setForm({
                 pennies: filtered.pennies,
@@ -67,7 +94,7 @@ const BodyInfo = ({idRow, action, user}) => {
                 twenties: filtered.twenties,
                 fifties: filtered.fifties,
                 hundreds: filtered.hundreds,
-                comentaries: filtered.comentaries,
+                coments: filtered.comentaries,
                 date: filtered.date
             });
         }
@@ -82,24 +109,111 @@ const BodyInfo = ({idRow, action, user}) => {
             }
         }
     }, []);
-    const addCashOut = async () => {
+
+    /* GET PIPO TOTAL */
+    const getPipoTotal = (apiData) => {
         try {
-            await addCashOutService(form);
-        } catch (error) {
-            console.log(error);
+            let pipoTotal = 0;
+            apiData.userPipo.forEach((element) => {
+                console.log(element);
+                if (element.pipo_type === 'pay out') {
+                    pipoTotal -= element.amount;
+                } else {
+                    pipoTotal += element.amount;
+                }
+            });
+            console.log(pipoTotal);
+            return pipoTotal;
+        } catch (err) {
+            return 0;
         }
-        console.log('click en add');
     };
-    const submit = () => {
-        switch (action) {
-            case 'add':
-                addCashOut();
-                break;
-            default:
-                console.log('default');
-                break;
+
+    /* GET SALES TYPE */
+    const owedTotal = (apiData) => {
+        try {
+            let cashOwed = 0;
+            let creditOwed = 0;
+            apiData.owed2House[0].payments.forEach((element) => {
+                console.log(element);
+                if (element.payment_type === 'Credit') {
+                    creditOwed = element.amount;
+                }
+                if (element.payment_type === 'Cash') {
+                    cashOwed = element.amount;
+                }
+            });
+            return {cashOwed, creditOwed};
+        } catch (err) {
+            return {cashOwed: 0, creditOwed: 0};
         }
     };
+
+    //! Envio de formulario
+    const submit = async () => {
+        try {
+            const coinsTotal =
+                (Number(form.pennies) +
+                    Number(form.nickels * 5) +
+                    Number(form.dimes * 10) +
+                    Number(form.quarters * 25)) /
+                    100 +
+                (Number(form.penniesRoll * 50) +
+                    Number(form.nickelsRoll * 5 * 40) +
+                    Number(form.dimesRoll * 10 * 50) +
+                    Number(form.quartersRoll * 25 * 40)) /
+                    100;
+            const billsTotal =
+                Number(form.ones) +
+                Number(form.twos * 2) +
+                Number(form.fives * 5) +
+                Number(form.tens * 10) +
+                Number(form.twenties * 20) +
+                Number(form.fifties * 50) +
+                Number(form.hundreds * 100);
+            const grandTotal = Number(coinsTotal) + Number(billsTotal);
+            const pipo = getPipoTotal(apiInfo);
+            const cashSales = owedTotal(apiInfo).cashOwed;
+            const creditSales = owedTotal(apiInfo).creditOwed;
+            const expected = Number(cashSales) + Number(pipo);
+            const difference = Number(grandTotal) - Number(expected);
+            const dataform = form;
+            dataform.coinsTotal = Number(coinsTotal).toFixed(2);
+            dataform.billsTotal = Number(billsTotal).toFixed(2);
+            dataform.grandTotal = Number(grandTotal).toFixed(2);
+            dataform.pipo = Number(pipo).toFixed(2);
+            dataform.cashSales = Number(cashSales).toFixed(2);
+            dataform.creditSales = Number(creditSales).toFixed(2);
+            dataform.expected = Number(expected).toFixed(2);
+            dataform.difference = Number(difference).toFixed(2);
+            setCargando(true);
+            const response = await addCashOutService(dataform);
+            setCargando(false);
+            if (response.message === 'existentEmployees') {
+                setError(
+                    `The employee already has an Open Cash Out Registry, "Please Close It First"`
+                );
+            } else {
+                dispatch(getCashOutAction('reload'));
+                /* toast('The registry is saved', {
+                    theme: 'colored',
+                    type: 'success',
+                    position: 'top-center',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined
+                }); */
+                onHide();
+            }
+        } catch (err) {
+            console.log(err);
+            setError('err.data.error');
+        }
+    };
+
     return (
         <>
             <div className="card-body">
@@ -109,13 +223,14 @@ const BodyInfo = ({idRow, action, user}) => {
                         <input
                             type="date"
                             className="form-control mr-3"
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 setForm({
                                     ...form,
                                     date: e.target.value
-                                })
-                            }
-                            value={form.date}
+                                });
+                                getApiInfo(e.target.value);
+                            }}
+                            defaultValue={getToday()}
                         />
                     </div>
                 </div>
@@ -144,7 +259,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        penniesRoll: e.target.value
+                                    })
+                                }
+                                value={form.penniesRoll}
+                                className="form-control"
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -153,7 +278,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.pennies}
+                                value={
+                                    form.pennies / 100 +
+                                    (form.penniesRoll * 50) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -176,7 +304,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        nickelsRoll: e.target.value
+                                    })
+                                }
+                                value={form.nickelsRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -185,7 +323,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.nickels * 5}
+                                value={
+                                    (form.nickels * 5) / 100 +
+                                    (form.nickelsRoll * 5 * 40) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -208,7 +349,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        dimesRoll: e.target.value
+                                    })
+                                }
+                                value={form.dimesRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -217,7 +368,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.dimes * 10}
+                                value={
+                                    (form.dimes * 10) / 100 +
+                                    (form.dimesRoll * 10 * 50) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -240,7 +394,17 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                         <div>
                             {' '}
-                            <input type="text" className="form-control" />{' '}
+                            <input
+                                type="text"
+                                className="form-control"
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        quartersRoll: e.target.value
+                                    })
+                                }
+                                value={form.quartersRoll}
+                            />{' '}
                         </div>
                         <div>
                             {' '}
@@ -249,7 +413,10 @@ const BodyInfo = ({idRow, action, user}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.quarters * 25}
+                                value={
+                                    (form.quarters * 25) / 100 +
+                                    (form.quartersRoll * 25 * 40) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -463,121 +630,325 @@ const BodyInfo = ({idRow, action, user}) => {
                         </div>
                     </div>
                 </div>
-                <div className="d-flex p-2 justify-content-around">
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Coins Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                100
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Bills Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreds * 100)
-                            }
-                            disabled
-                        />
-                    </div>
-                    <div>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Grand Total
-                        </span>
-                        <CurrencyFormat
-                            displayType="text"
-                            thousandSeparator
-                            prefix="$"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            value={
-                                Number(form.ones) +
-                                Number(form.fives * 5) +
-                                Number(form.tens * 10) +
-                                Number(form.twenties * 20) +
-                                Number(form.fifties * 50) +
-                                Number(form.hundreds * 100) +
-                                (Number(form.pennies) +
-                                    Number(form.nickels * 5) +
-                                    Number(form.dimes * 10) +
-                                    Number(form.quarters * 25)) /
-                                    100
-                            }
-                            disabled
-                        />
-                    </div>
-                </div>
-                <div className="d-flex p-2 justify-content-around align-items-center">
-                    <div style={{width: '60%'}}>
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '100px'}}
-                        >
-                            Comments
-                        </span>
-                        <textarea
-                            title="Comments"
-                            type="text"
-                            className="form-control input-sm mr-3"
-                            style={{minWidth: '50px'}}
-                            defaultValue={form.comentaries}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    comentaries: e.target.value
-                                })
-                            }
-                        />
-                    </div>
-                    {!idRow ? (
-                        <>
-                            {' '}
+                <div className="d-flex justify-content-around align-items-center">
+                    <div className="flex-row p-2 justify-content-around">
+                        {/* REAL */}
+                        Real:
+                        <div className="d-flex justify-content-around mb-3">
                             <div>
-                                <input
-                                    type="submit"
-                                    className="btn btn-dark btn-lg"
-                                    value={actionButton}
-                                    onClick={() => submit()}
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Coins Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100
+                                    }
+                                    disabled
                                 />
                             </div>
-                        </>
-                    ) : null}
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Bills Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.twos * 2) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreds * 100)
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Grand Total
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.twos * 2) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreds * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        {apiInfo ? (
+                            <>
+                                {/* EXPECTED */}
+                                Expected:
+                                <div className="d-flex justify-content-around mb-3">
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Pay in/out
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={getPipoTotal(apiInfo)}
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Cash Sales
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={owedTotal(apiInfo).cashOwed}
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Credit sales
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={
+                                                owedTotal(apiInfo).creditOwed
+                                            }
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                        {/* CASH CUT */}
+                        Cash Cut:
+                        <div className="d-flex justify-content-around mb-3">
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Total Sales
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        Number(form.ones) +
+                                        Number(form.twos * 2) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreds * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Expected
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={
+                                        owedTotal(apiInfo).cashOwed +
+                                        getPipoTotal(apiInfo)
+                                    }
+                                    disabled
+                                />
+                            </div>
+                            <div>
+                                <span
+                                    className="input-group-text"
+                                    style={{minWidth: '100px'}}
+                                >
+                                    Difference
+                                </span>
+                                <CurrencyFormat
+                                    displayType="text"
+                                    thousandSeparator
+                                    prefix="$"
+                                    className="form-control input-sm mr-3"
+                                    style={{minWidth: '50px'}}
+                                    value={(
+                                        Number(form.ones) +
+                                        Number(form.twos * 2) +
+                                        Number(form.fives * 5) +
+                                        Number(form.tens * 10) +
+                                        Number(form.twenties * 20) +
+                                        Number(form.fifties * 50) +
+                                        Number(form.hundreds * 100) +
+                                        (Number(form.pennies) +
+                                            Number(form.nickels * 5) +
+                                            Number(form.dimes * 10) +
+                                            Number(form.quarters * 25)) /
+                                            100 +
+                                        (Number(form.penniesRoll * 50) +
+                                            Number(form.nickelsRoll * 5 * 40) +
+                                            Number(form.dimesRoll * 10 * 50) +
+                                            Number(
+                                                form.quartersRoll * 25 * 40
+                                            )) /
+                                            100 -
+                                        owedTotal(apiInfo).cashOwed +
+                                        getPipoTotal(apiInfo)
+                                    ).toFixed(2)}
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-row p-2 justify-content-around">
+                        {/* Comentarios */}
+                        <div style={{minWidth: '300px'}}>
+                            <span
+                                className="input-group-text"
+                                style={{minWidth: '100px'}}
+                            >
+                                Comments
+                            </span>
+                            <textarea
+                                title="Comments"
+                                type="text"
+                                className="form-control input-sm mr-3"
+                                style={{minWidth: '50px', height: '12rem'}}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        comments: e.target.value
+                                    })
+                                }
+                                value={form.comments}
+                            />
+                        </div>
+                        <p className="text-danger"> {true || null}</p>
+                        {!idRow ? (
+                            <>
+                                {' '}
+                                <div>
+                                    <input
+                                        type="submit"
+                                        className="btn btn-dark btn-lg w-100"
+                                        value={actionButton}
+                                        onClick={() => submit()}
+                                    />
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
                 </div>
+                <p className="text-danger"> {error || null}</p>
             </div>
+            <ToastContainer />
+
+            <ReactLoading
+                style={{
+                    display: cargando ? 'block' : 'none',
+                    position: 'absolute',
+                    zIndex: '9999',
+                    top: '30%',
+                    left: '50%',
+                    height: '150px',
+                    width: '150px',
+                    color: '#D11F1F'
+                }}
+                color="#D11F1F"
+                width="300px"
+                type="spinningBubbles"
+                height="100px"
+            />
         </>
     );
 };

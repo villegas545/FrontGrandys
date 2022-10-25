@@ -6,7 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalDetailsCashOut';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
-import {currencyFormat} from '@app/services/utils';
+import {currencyFormat, getToday} from '@app/services/utils';
 
 const columns = [
     {
@@ -52,10 +52,6 @@ const columns = [
     {
         Header: 'Status',
         accessor: 'status'
-    },
-    {
-        Header: 'View Details',
-        accessor: 'viewDetails'
     }
 ];
 const CashOut = () => {
@@ -70,14 +66,29 @@ const CashOut = () => {
         restaurant: '',
         employee: '',
         status: '',
-        startDate: '',
-        endDate: ''
+        startDate: getToday(),
+        endDate: getToday()
     });
 
     useEffect(() => {
         (async () => {
-            // dispatch(getCashOutAction());
-            setRestaurants(await getRestaurantByLevel());
+            const resRestaurant = await getRestaurantByLevel();
+            setRestaurants(resRestaurant);
+            if (
+                localStorage.getItem('role') === 'Cash Manager' ||
+                localStorage.getItem('role') === 'Cash Manager Assistant'
+            ) {
+                if (resRestaurant.length === 1) {
+                    setEmployees(
+                        await getUsersByRestaurant(
+                            resRestaurant[0].idRestaurant
+                        )
+                    );
+                }
+            }
+            if (localStorage.getItem('role') === 'Cash Employee') {
+                console.log('hi');
+            }
         })();
     }, []);
 
@@ -124,13 +135,16 @@ const CashOut = () => {
                                     });
                                 }}
                             >
-                                <option selected>Select a value</option>
+                                {restaurants.length > 1 ? (
+                                    <option selected>Select a value</option>
+                                ) : null}
                                 {restaurants.map((restaurant) => (
                                     <option value={restaurant.idRestaurant}>
                                         {restaurant.restaurantName}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') === 'Admin' ? (
+                                {localStorage.getItem('role') ===
+                                'Cash Admin' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -159,13 +173,21 @@ const CashOut = () => {
                                     })
                                 }
                             >
-                                <option selected>Select a value</option>
+                                {localStorage.getItem('role') !==
+                                'Cash Employee' ? (
+                                    <option selected>Select a value</option>
+                                ) : (
+                                    <option>
+                                        {localStorage.getItem('user')}
+                                    </option>
+                                )}
                                 {employees.map((employee) => (
                                     <option value={employee.idEmployee}>
                                         {employee.name}
                                     </option>
                                 ))}
-                                {localStorage.getItem('role') !== 'Employee' ? (
+                                {localStorage.getItem('role') !==
+                                'Cash Employee' ? (
                                     <option value="all">All</option>
                                 ) : null}
                             </select>
@@ -226,6 +248,7 @@ const CashOut = () => {
                                         startDate: e.target.value
                                     })
                                 }
+                                defaultValue={getToday()}
                             />
                         </div>
                         <div
@@ -252,6 +275,7 @@ const CashOut = () => {
                                         endDate: e.target.value
                                     })
                                 }
+                                defaultValue={getToday()}
                             />
                         </div>
                         <div
@@ -273,25 +297,17 @@ const CashOut = () => {
                         </div>
                     </div>
 
-                    <div
-                        className="d-flex justify-content-end align-items-md-center"
-                        /*      style={{
-                            display: 'flex',
-                            flexFlow: 'row nowrap',
-                            flex: '1 10%'
-                        }} */
-                    >
+                    <div className="d-flex justify-content-end align-items-md-center">
                         <span>
                             <b>
                                 {' '}
                                 Cash Total: {currencyFormat(cashOut.cashTotal)}
                             </b>
                         </span>{' '}
-                        {localStorage.getItem('role') === 'Manager' ||
-                        localStorage.getItem('role') === 'Manager Assistant' ? (
+                        {localStorage.getItem('role') !== 'Cash Admin' ? (
                             <input
                                 type="submit"
-                                value="Open Cash In"
+                                value="Open Cash Out"
                                 className="form-control btn btn-danger btn-xs mr-3 text-md ml-5"
                                 style={{
                                     minWidth: '40px',
@@ -302,7 +318,7 @@ const CashOut = () => {
                             />
                         ) : null}
                     </div>
-                    <TableCashOut columns={columns} data={cashOut.tableInfo} />
+                    <TableCashOut columns={columns} data={cashOut.data} />
                     {
                         // Este modal es para abrirlo desde el opencash in, desde el boton rojo
                     }

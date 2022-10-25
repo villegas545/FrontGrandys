@@ -42,7 +42,7 @@ export const addCashInService = async (data) =>
     postFunction('saveCashRegisterStartup', data);
 
 export const addCashOutService = async (data) =>
-    postFunction('saveCashRegisterStartup', data);
+    postFunction('saveCashRegisterEndups', data);
 
 export const approveRejectCashRegisterStartup = async (data) =>
     patchFunction('approveRejectCashRegisterStartup', data);
@@ -55,6 +55,9 @@ export const getCashInByDate = async (data) =>
 
 export const getCashOutByDate = async (data) =>
     (await getFunction(`getCashOutByDate/${data}`)).cashOuts;
+
+export const cashOutApiInfo = async (data) =>
+    getFunction(`cashOutApiInfo/${data}`);
 
 export const getLastSafeCash = async (data) =>
     (await getFunction(`getLastSafeCash/${data}`)).safeCash;
@@ -69,3 +72,6 @@ export const approveRejectSafeCash = async (data) =>
 
 export const cancelSafeCash = async (data) =>
     patchFunction('cancelSafeCash', data);
+
+export const getPipoByUser = async (data) =>
+    patchFunction('getPipoByUser', data);
