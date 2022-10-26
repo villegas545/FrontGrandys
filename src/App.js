@@ -11,11 +11,11 @@ import {useWindowSize} from '@app/hooks/useWindowSize';
 import {calculateWindowSize} from '@app/utils/helpers';
 import {useDispatch, useSelector} from 'react-redux';
 import {setWindowSize} from '@app/store/reducers/ui';
-import ReactLoading from 'react-loading';
+import BlockUi from 'react-block-ui';
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
-
 import './App.scss';
+import 'react-block-ui/style.css';
 
 const App = () => {
     const windowSize = useWindowSize();
@@ -32,50 +32,36 @@ const App = () => {
 
     return (
         <>
-            <Router>
-                <Switch>
-                    <PublicRoute exact path="/login">
-                        <Login />
-                    </PublicRoute>
-                    <PublicRoute exact path="/register">
-                        <Register />
-                    </PublicRoute>
-                    <PublicRoute exact path="/forgot-password">
-                        <ForgetPassword />
-                    </PublicRoute>
-                    <PublicRoute exact path="/recover-password">
-                        <RecoverPassword />
-                    </PublicRoute>
-                    <PublicRoute exact path="/resetpassword/:token">
-                        <ResetPassword />
-                    </PublicRoute>
-                    <PublicRoute exact path="/privacy-policy">
-                        <PrivacyPolicy />
-                    </PublicRoute>
-                    <PublicRoute exact path="/callback">
-                        <h1>Callback</h1>
-                    </PublicRoute>
-                    <PrivateRoute path="/">
-                        <Main />
-                    </PrivateRoute>
-                </Switch>
-            </Router>
-            <ReactLoading
-                style={{
-                    display: loadingReact ? 'block' : 'none',
-                    position: 'absolute',
-                    zIndex: '9999',
-                    top: '30%',
-                    left: '50%',
-                    height: '150px',
-                    width: '150px',
-                    color: '#D11F1F'
-                }}
-                color="#D11F1F"
-                width="300px"
-                type="spinningBubbles"
-                height="100px"
-            />
+            <BlockUi tag="div" blocking={loadingReact} message="Please Wait">
+                <Router>
+                    <Switch>
+                        <PublicRoute exact path="/login">
+                            <Login />
+                        </PublicRoute>
+                        <PublicRoute exact path="/register">
+                            <Register />
+                        </PublicRoute>
+                        <PublicRoute exact path="/forgot-password">
+                            <ForgetPassword />
+                        </PublicRoute>
+                        <PublicRoute exact path="/recover-password">
+                            <RecoverPassword />
+                        </PublicRoute>
+                        <PublicRoute exact path="/resetpassword/:token">
+                            <ResetPassword />
+                        </PublicRoute>
+                        <PublicRoute exact path="/privacy-policy">
+                            <PrivacyPolicy />
+                        </PublicRoute>
+                        <PublicRoute exact path="/callback">
+                            <h1>Callback</h1>
+                        </PublicRoute>
+                        <PrivateRoute path="/">
+                            <Main />
+                        </PrivateRoute>
+                    </Switch>
+                </Router>
+            </BlockUi>
         </>
     );
 };

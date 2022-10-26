@@ -89,12 +89,16 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             element.currencyinitSafe = currencyFormat(element.initSafe);
             element.currencyVouchersIn = currencyFormat(element.vouchersIn);
             element.currencyVouchersOut = currencyFormat(element.vouchersOut);
-            element.currencyDiference = currencyFormat(element.vouchersOut);
-            element.currencyExpectedAmount = currencyFormat(
+            element.currencyDiference = currencyFormat(
                 element.expectedAmount - element.realAmount
             );
+            element.currencyExpectedAmount = currencyFormat(
+                element.expectedAmount
+            );
+            element.currencyCashIn = element.cashIn;
+            element.currencyCashOut = element.cashOut;
 
-            element.grandTotal = currencyFormat(coinsTotal + billsTotal);
+            element.grandTotal = currencyFormat(element.realAmount);
             element.restaurant = element.Restaurant.name;
             element.user = element.User.name;
             return element;

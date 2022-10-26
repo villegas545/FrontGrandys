@@ -18,20 +18,12 @@ const columns = [
         accessor: 'restaurant'
     },
     {
-        Header: 'Created By',
+        Header: 'Created',
         accessor: 'user'
     },
     {
-        Header: 'Created Time',
-        accessor: 'createdHour'
-    },
-    {
-        Header: 'Received By',
+        Header: 'Received',
         accessor: 'received'
-    },
-    {
-        Header: 'Received Time',
-        accessor: 'receivedHour'
     },
     {
         Header: 'Initial Safe',
@@ -44,6 +36,14 @@ const columns = [
     {
         Header: 'Vouchers Out',
         accessor: 'currencyVouchersOut'
+    },
+    {
+        Header: 'Cash Ins',
+        accessor: 'currencyCashIn'
+    },
+    {
+        Header: 'Cash Outs',
+        accessor: 'currencyCashOut'
     },
     {
         Header: 'Grand Total',

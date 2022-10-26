@@ -7,18 +7,23 @@ import { toast} from 'react-toastify';
 
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
 import {
     approveRejectSafeCash,
     cancelSafeCash
 } from '@app/services';
 import { useDispatch} from 'react-redux';
 import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
-
+import {Link} from "react-router-dom"
+import ModalReceivedCreatedInfo from '@app/pages/Employee/modals/ModalReceivedCreatedInfo';
+import ModalVouchers from '@app/pages/Employee/modals/ModalVouchers';
+import ModalTotals from '@app/pages/Employee/modals/wizard/ModalTotals';
 
 function TableSafeCash({columns, data}) {
     // notificacion tostify
-    const [modalShow, setModalShow] = React.useState(false);
+    const [modalCreatedInfoShow, setModalCreatedInfoShow] = React.useState(false);
+    const [modalVouchers,setModalVouchers]=useState(false)
+    const [modalTotals,setModalTotals]=useState(false)
+    const [createdReceived,setCreatedReceived]=useState()
     const dispatch = useDispatch();
 
 
@@ -50,11 +55,11 @@ function TableSafeCash({columns, data}) {
         usePagination
     );
     const [idRow, setIdRow] = useState();
-    const [userSelected, setUserSelected] = useState('');
+    const [vouchers,setVouchers]=useState();
+    const [totals,setTotals]=useState();
     const actionButton = async (id, action) => {
         switch (action) {
         case 'approve':
-       
             await approveRejectSafeCash({
                 idRequestSafeCash:id,
                 approved:"Approved"
@@ -94,7 +99,35 @@ function TableSafeCash({columns, data}) {
             ]
         });
     };
-
+    const renderColumn =(cell)=>{
+        if(cell.column.Header==="Created"){
+            return (<Link to="#" onClick={()=>{
+                setModalCreatedInfoShow(true)
+                setCreatedReceived("Created")
+                setIdRow(cell);
+            }}>{cell.render('Cell')}</Link>)
+        }
+        if(cell.column.Header==="Received"){
+            return (<Link to="#" onClick={()=>{
+                setModalCreatedInfoShow(true)
+                setCreatedReceived("Received")
+                setIdRow(cell);
+            }}>{cell.render('Cell')}</Link>)
+        }
+        if(cell.column.Header==="Vouchers In" || cell.column.Header==="Vouchers Out"){
+            return (<Link to="#" onClick={()=>{
+                setModalVouchers(true)
+                setVouchers(cell.row.original.vouchers)
+            }}>{cell.render('Cell')}</Link>)
+        }
+        if(cell.column.Header==="Grand Total"){
+            return (<Link to="#" onClick={()=>{
+                setModalTotals(true)
+                setTotals(cell.row.original)
+            }}>{cell.render('Cell')}</Link>)
+        }
+        return (cell.render('Cell'))                                   
+    }
     // Render the UI for your table
     return (
         <>
@@ -111,7 +144,6 @@ function TableSafeCash({columns, data}) {
                                     {column.render('Header')}
                                 </th>
                             ))}
-                            <th>Details</th>
                             <th>Actions</th>
                         </tr>
                     ))}
@@ -120,28 +152,20 @@ function TableSafeCash({columns, data}) {
                     {page.map((row, index) => {
                         prepareRow(row);
                         console.log(row.original);
-                        return (
+                        return(
                             <tr {...row.getRowProps()}>
                                 <td>{index + 1}</td>
-                                {row.cells.map((cell) => {
-                                    return (
+                                {row.cells.map((cell) => (
+                                    <>
                                         <td {...cell.getCellProps()}>
-                                            {cell.render('Cell')}
+                                            {
+                                                renderColumn(cell)
+                                            }
                                         </td>
-                                    );
-                                })}
-                                <td>
-                                    <input
-                                        type="submit"
-                                        value="Details..."
-                                        className="btn btn-secondary"
-                                        onClick={() => {
-                                            setModalShow(true);
-                                            setIdRow(row.original.id);
-                                            setUserSelected(row.original);
-                                        }}
-                                    />
-                                </td>
+                                    </>
+                                ))
+                                }
+                      
                                 <td>
                                     { (localStorage.getItem("role")==="Cash Manager Assistant" || localStorage.getItem("role")==="Cash Manager") && row.original.status==="Pending" ?
                                         <><input
@@ -229,14 +253,22 @@ function TableSafeCash({columns, data}) {
                     {'>>'}
                 </button>{' '}
             </div>
-            {
-                // Este modal es para abrirlo desde el details dentro de la tabla
-            }
-            <ModalDetailsCashIn
-                show={modalShow}
-                onHide={() => setModalShow(false)}
+         
+            <ModalReceivedCreatedInfo
+                show={modalCreatedInfoShow}
+                onHide={() => setModalCreatedInfoShow(false)}
                 idRow={idRow}
-                user={userSelected}
+                text={createdReceived}
+            />
+            <ModalVouchers
+                show={modalVouchers}
+                onHide={() => setModalVouchers(false)}
+                vouchers={vouchers}
+            />
+            <ModalTotals
+                show={modalTotals}
+                onHide={() => setModalTotals(false)}
+                money={totals}
             />
         </>
     );

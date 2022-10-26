@@ -75,30 +75,40 @@ function Users() {
     }, []);
     //! ADD USER
     const addUser = async (records) => {
+        dispatch(changeReactLoading(true));
         await dispatch(addUsersAction(records));
+        dispatch(changeReactLoading(false));
     };
     //! UPDATE USER
     const updateUser = async (records) => {
         console.log(users);
+        dispatch(changeReactLoading(true));
         await dispatch(updateUsersAction(records, idState));
+        dispatch(changeReactLoading(false));
     };
     const updateItem = async (id) => {
+        dispatch(changeReactLoading(true));
         await dispatch(recordsUpdate(id));
         setIdState(id);
         setAction(false);
         setModalShow(true);
         console.log(id);
+        dispatch(changeReactLoading(false));
     };
     //! DELETE USER
     const deleteItem = async (id) => {
+        dispatch(changeReactLoading(true));
         await dispatch(deleteUsersAction(id));
+        dispatch(changeReactLoading(false));
     };
     React.useEffect(async () => {
+        dispatch(changeReactLoading(true));
         await dispatch(getUsersAction());
         if (closeModal === true) {
             setModalShow(false);
             dispatch(modalClose(false));
         }
+        dispatch(changeReactLoading(false));
     }, [closeModal]);
 
     return (

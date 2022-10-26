@@ -8,6 +8,7 @@ import store from '@store/store';
 
 import './index.scss';
 import './i18n';
+
 import * as serviceWorker from './serviceWorker';
 
 toast.configure({
