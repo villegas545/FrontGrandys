@@ -39,7 +39,7 @@ const columns = [
     },
     {
         Header: 'Owed to House',
-        accessor: 'owedToHouse'
+        accessor: 'expected'
     },
     {
         Header: 'Difference',
@@ -47,7 +47,7 @@ const columns = [
     },
     {
         Header: 'Strike',
-        accessor: 'strike'
+        accessor: 'strikes'
     },
     {
         Header: 'Status',
@@ -301,8 +301,32 @@ const CashOut = () => {
                         <span>
                             <b>
                                 {' '}
-                                Cash Total: {currencyFormat(cashOut.cashTotal)}
+                                Cash Total:{' '}
+                                {currencyFormat(cashOut.cashTotalTotal)}
                             </b>
+                        </span>{' '}
+                        <span>
+                            <b>
+                                {' '}
+                                Total PIPO: {currencyFormat(cashOut.pipoTotal)}
+                            </b>
+                        </span>{' '}
+                        <span>
+                            <b>
+                                {' '}
+                                Total owed2House:{' '}
+                                {currencyFormat(cashOut.owedTotal)}
+                            </b>
+                        </span>{' '}
+                        <span>
+                            <b>
+                                {' '}
+                                Total Difference:{' '}
+                                {currencyFormat(cashOut.strikesTotal)}
+                            </b>
+                        </span>{' '}
+                        <span>
+                            <b> Total Strikes: {cashOut.strikesTotal}</b>
                         </span>{' '}
                         {localStorage.getItem('role') !== 'Cash Admin' ? (
                             <input

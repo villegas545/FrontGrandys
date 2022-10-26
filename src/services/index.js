@@ -75,3 +75,6 @@ export const cancelSafeCash = async (data) =>
 
 export const getPipoByUser = async (data) =>
     patchFunction('getPipoByUser', data);
+
+export const getCashInByEmployeeAndDate = async (data) =>
+    (await getFunction(`getCashInByEmployeeAndDate/${data}`)).response;

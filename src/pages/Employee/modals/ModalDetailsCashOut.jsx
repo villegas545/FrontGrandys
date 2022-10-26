@@ -6,7 +6,11 @@ import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector, useDispatch} from 'react-redux';
-import {addCashOutService, cashOutApiInfo} from '@app/services/';
+import {
+    addCashOutService,
+    cashOutApiInfo,
+    getCashInByEmployeeAndDate
+} from '@app/services/';
 import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
 import {getToday} from '@app/services/utils';
 import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
@@ -63,16 +67,48 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
         idEmployee: user.id
     });
     const [apiInfo, setApiInfo] = React.useState();
+    const [cashIn, setCashIn] = React.useState(0);
     const [error, setError] = React.useState();
     const getApiInfo = async (date) => {
         dispatch(changeReactLoading(true));
         setApiInfo(await cashOutApiInfo(date));
+        const resCashIn = await getCashInByEmployeeAndDate(date);
+        if (resCashIn) {
+            const coinsTotal =
+                (resCashIn.pennies +
+                    resCashIn.nickels * 5 +
+                    resCashIn.dimes * 10 +
+                    resCashIn.quarters * 25) /
+                    100 +
+                (resCashIn.penniesRoll * 50 +
+                    resCashIn.nickelsRoll * 5 * 40 +
+                    resCashIn.dimesRoll * 10 * 50 +
+                    resCashIn.quartersRoll * 25 * 40) /
+                    100;
+            const billsTotal =
+                resCashIn.ones +
+                resCashIn.twos * 2 +
+                resCashIn.fives * 5 +
+                resCashIn.fives * 10 +
+                resCashIn.twenties * 20 +
+                resCashIn.fifties * 50 +
+                resCashIn.hundreads * 100;
+            const totalTotal = Number(coinsTotal) + Number(billsTotal);
+            setCashIn(totalTotal);
+        } else {
+            setCashIn(0);
+        }
+
         dispatch(changeReactLoading(false));
     };
 
     useEffect(() => {
         getApiInfo(getToday());
     }, []);
+
+    useEffect(() => {
+        console.log(cashIn);
+    }, [cashIn]);
 
     const cashOut = useSelector((store) => store.cashOut);
     // eslint-disable-next-line no-unused-vars
@@ -173,7 +209,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
             const pipo = getPipoTotal(apiInfo);
             const cashSales = owedTotal(apiInfo).cashOwed;
             const creditSales = owedTotal(apiInfo).creditOwed;
-            const expected = Number(cashSales) + Number(pipo);
+            const expected = Number(cashIn) + Number(cashSales) + Number(pipo);
             const difference = Number(grandTotal) - Number(expected);
             const dataform = form;
             dataform.coinsTotal = Number(coinsTotal).toFixed(2);
@@ -184,6 +220,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
             dataform.creditSales = Number(creditSales).toFixed(2);
             dataform.expected = Number(expected).toFixed(2);
             dataform.difference = Number(difference).toFixed(2);
+            dataform.cashIn = Number(cashIn).toFixed(2);
             dispatch(changeReactLoading(true));
             const response = await addCashOutService(dataform);
             dispatch(changeReactLoading(false));
@@ -797,7 +834,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     className="input-group-text"
                                     style={{minWidth: '100px'}}
                                 >
-                                    Total Sales
+                                    Cash In
                                 </span>
                                 <CurrencyFormat
                                     displayType="text"
@@ -805,27 +842,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
-                                        Number(form.ones) +
-                                        Number(form.twos * 2) +
-                                        Number(form.fives * 5) +
-                                        Number(form.tens * 10) +
-                                        Number(form.twenties * 20) +
-                                        Number(form.fifties * 50) +
-                                        Number(form.hundreds * 100) +
-                                        (Number(form.pennies) +
-                                            Number(form.nickels * 5) +
-                                            Number(form.dimes * 10) +
-                                            Number(form.quarters * 25)) /
-                                            100 +
-                                        (Number(form.penniesRoll * 50) +
-                                            Number(form.nickelsRoll * 5 * 40) +
-                                            Number(form.dimesRoll * 10 * 50) +
-                                            Number(
-                                                form.quartersRoll * 25 * 40
-                                            )) /
-                                            100
-                                    }
+                                    value={cashIn}
                                     disabled
                                 />
                             </div>
@@ -843,8 +860,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
                                     value={
-                                        owedTotal(apiInfo).cashOwed +
-                                        getPipoTotal(apiInfo)
+                                        Number(cashIn) +
+                                        Number(owedTotal(apiInfo).cashOwed) +
+                                        Number(getPipoTotal(apiInfo))
                                     }
                                     disabled
                                 />
@@ -882,8 +900,11 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                 form.quartersRoll * 25 * 40
                                             )) /
                                             100 -
-                                        owedTotal(apiInfo).cashOwed +
-                                        getPipoTotal(apiInfo)
+                                        (Number(cashIn) +
+                                            Number(
+                                                owedTotal(apiInfo).cashOwed
+                                            ) +
+                                            Number(getPipoTotal(apiInfo)))
                                     ).toFixed(2)}
                                     disabled
                                 />

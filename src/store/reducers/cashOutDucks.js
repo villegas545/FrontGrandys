@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+import {currencyFormat} from '@app/services/utils';
 import axios from 'axios';
 import {url as urlconf} from '../../config/index';
 
@@ -6,7 +7,11 @@ const url = `${urlconf}getCashRegisterEndups`;
 
 const dataInitial = {
     data: [],
-    lastFilter: ''
+    lastFilter: '',
+    cashTotalTotal: 0,
+    strikesTotal: 0,
+    pipoTotal: 0,
+    owedTotal: 0
 };
 
 const GET_CASH_OUT_SUCCESS = 'GET_CASH_OUT_SUCCESS';
@@ -34,19 +39,46 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
                 }
             })
         ).data.response;
+
+        let cashTotalTotal = 0;
+        let strikesTotal = 0;
+        let pipoTotal = 0;
+        let owedTotal = 0;
+
         res = res.map((element) => {
+            cashTotalTotal += Number(element.grandTotal);
+            pipoTotal += Number(element.pipo);
+            owedTotal += Number(element.owedToHouse);
+            element.strikes = 0;
+            if (element.difference > 2 || element.difference < -2) {
+                element.strikes = 1;
+                strikesTotal += 1;
+            }
             element.user = element.User.name;
             element.restaurant = element.Restaurant.name;
+            element.coinsTotal = currencyFormat(element.coinsTotal);
+            element.billsTotal = currencyFormat(element.billsTotal);
+            element.grandTotal = currencyFormat(element.grandTotal);
+            element.pipo = currencyFormat(element.pipo);
+            element.difference = currencyFormat(element.difference);
+            element.owedToHouse = currencyFormat(element.owedToHouse);
+            element.cashSales = currencyFormat(element.cashSales);
+            element.creditSales = currencyFormat(element.creditSales);
+
             return element;
         });
 
         dispatch({
             type: GET_CASH_OUT_SUCCESS,
             data: res,
-            urlFilter
+            urlFilter,
+            cashTotalTotal,
+            strikesTotal,
+            pipoTotal,
+            owedTotal
         });
     } catch (error) {
-        console.log(error.data.response);
+        console.log(error);
     }
 };
 
@@ -56,7 +88,11 @@ export default function cashOutReducer(state = dataInitial, action) {
             return {
                 ...state,
                 data: action.data,
-                lastFilter: action.urlFilter
+                lastFilter: action.urlFilter,
+                cashTotalTotal: action.cashTotalTotal,
+                strikesTotal: action.strikesTotal,
+                pipoTotal: action.pipoTotal,
+                owedTotal: action.owedTotal
             };
         default:
             return state;
