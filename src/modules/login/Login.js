@@ -91,7 +91,8 @@ const Login = () => {
                     token: token2.data.token,
                     name: token2.data.user,
                     role: token2.data.role,
-                    restaurantApi: token2.data.restaurantApi
+                    restaurantApi: token2.data.restaurantApi,
+                    idUser: token2.data.idUser
                 })
             );
             dispatch(
@@ -99,7 +100,8 @@ const Login = () => {
                     token: token2.data.token,
                     user: token2.data.user,
                     role: token2.data.role,
-                    restaurantApi: token2.data.restaurantApi
+                    restaurantApi: token2.data.restaurantApi,
+                    idUser: token2.data.idUser
                 })
             );
             history.push('/');

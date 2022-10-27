@@ -61,16 +61,13 @@ export const getCashInAction = (formData) => async (dispatch, getState) => {
                 element.hundreads * 100;
             totalTotal =
                 Number(totalTotal) + Number(coinsTotal) + Number(billsTotal);
-            tableInfo.push({
-                id: element.id,
-                user: element.User.name,
-                restaurant: element.Restaurant.name,
-                date: element.date,
-                coinsTotal: currencyFormat(coinsTotal),
-                billsTotal: currencyFormat(billsTotal),
-                grandTotal: currencyFormat(coinsTotal + billsTotal),
-                status: element.status
-            });
+            element.user = element.User.name;
+            element.restaurant = element.Restaurant.name;
+            element.coinsTotal = currencyFormat(coinsTotal);
+            element.billsTotal = currencyFormat(billsTotal);
+            element.grandTotal = currencyFormat(coinsTotal + billsTotal);
+            element.idUser = element.User.id;
+            tableInfo.push(element);
         });
         console.log('total', totalTotal);
         dispatch({

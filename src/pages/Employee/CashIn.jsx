@@ -3,7 +3,7 @@ import TableCashIn from '@app/pages/Employee/Tables/TableCashIn';
 import {getCashInAction} from '@app/store/reducers/cashInDucks';
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalDetailsCashIn';
+import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalCashIn';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
 import {currencyFormat, getToday} from '@app/services/utils';
 
@@ -304,6 +304,7 @@ const CashIn = () => {
                             />
                         ) : null}
                     </div>
+                    <hr />
                     <TableCashIn columns={columns} data={cashIn.tableInfo} />
                     {
                         // Este modal es para abrirlo desde el opencash in, desde el boton rojo

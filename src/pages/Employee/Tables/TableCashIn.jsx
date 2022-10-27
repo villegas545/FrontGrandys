@@ -147,16 +147,14 @@ function TableCashIn({columns, data}) {
                                         className="btn btn-secondary"
                                         onClick={() => {
                                             setModalShow(true);
-                                            setIdRow(row.original.id);
+                                            setIdRow(row.original);
                                             setUserSelected(row.original);
                                         }}
                                     />
                                 </td>
                                 <td>
-                                    {(localStorage.getItem('role') ===
-                                        'Cash Employee' ||
-                                        localStorage.getItem('role') ===
-                                            'Cash Manager') &&
+                                    {localStorage.getItem('idUser').toString() ===
+                                       row.original.idUser.toString() &&
                                     row.original.status === 'Pending' ? (
                                         <>
                                             <input

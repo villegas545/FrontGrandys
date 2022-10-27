@@ -10,7 +10,6 @@ const EmployeeTab = () => {
 
     return (
         <>
-            {/*    Employee: {JSON.stringify(user)} */}
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
                     <button
@@ -37,20 +36,20 @@ const EmployeeTab = () => {
                     >
                         Cash Out
                     </button>
-                    {/*   {authVariable.role !== 'Cash Employee' ? ( */}
-                    <button
-                        className="nav-link btn-danger font-weight-bold text-uppercase"
-                        id="nav-safe-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#nav-safe"
-                        type="button"
-                        role="tab"
-                        aria-controls="nav-safe"
-                        aria-selected="false"
-                    >
-                        Safe cash
-                    </button>
-                    {/*          ) : null} */}
+                    {authVariable.role !== 'Cash Employee' ? (
+                        <button
+                            className="nav-link btn-danger font-weight-bold text-uppercase"
+                            id="nav-safe-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-safe"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-safe"
+                            aria-selected="false"
+                        >
+                            Safe cash
+                        </button>
+                    ) : null}
                 </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
@@ -72,17 +71,17 @@ const EmployeeTab = () => {
                 >
                     <CashOut />
                 </div>
-                {/*    {authVariable.role !== 'Cash Employee' ? ( */}
-                <div
-                    className="tab-pane fade"
-                    id="nav-safe"
-                    role="tabpanel"
-                    aria-labelledby="nav-safe-tab"
-                    tabIndex="0"
-                >
-                    <SafeCash />
-                </div>
-                {/*   ) : null} */}
+                {authVariable.role !== 'Cash Employee' ? (
+                    <div
+                        className="tab-pane fade"
+                        id="nav-safe"
+                        role="tabpanel"
+                        aria-labelledby="nav-safe-tab"
+                        tabIndex="0"
+                    >
+                        <SafeCash />
+                    </div>
+                ) : null}
             </div>
         </>
     );

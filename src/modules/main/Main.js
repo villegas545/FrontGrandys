@@ -46,6 +46,7 @@ const Main = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('role');
         localStorage.removeItem('restaurantApi');
+        localStorage.removeItem('idUser');
         dispatch(updateAuth({}));
         setIsAppLoaded(true);
         window.location.href = '/';
@@ -64,7 +65,8 @@ const Main = () => {
                     token: localStorage.token,
                     user: localStorage.user,
                     role: localStorage.role,
-                    restaurantApi: localStorage.restaurantApi
+                    restaurantApi: localStorage.restaurantApi,
+                    idUser: localStorage.idUser
                 })
             );
             console.log('validate');

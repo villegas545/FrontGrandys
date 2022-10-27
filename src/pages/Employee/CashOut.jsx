@@ -296,7 +296,6 @@ const CashOut = () => {
                             />
                         </div>
                     </div>
-
                     <div className="d-flex justify-content-around align-items-md-center">
                         <span>
                             <b>
@@ -342,6 +341,7 @@ const CashOut = () => {
                             />
                         ) : null}
                     </div>
+                    <hr />
                     <TableCashOut columns={columns} data={cashOut.data} />
                     {
                         // Este modal es para abrirlo desde el opencash in, desde el boton rojo

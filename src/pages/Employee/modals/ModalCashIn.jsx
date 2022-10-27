@@ -1,10 +1,20 @@
 /* eslint-disable indent */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+
 import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
+import {useSelector, useDispatch} from 'react-redux';
+import {addCashInService} from '@app/services/';
+import {
+    ListBox,
+    processListBoxDragAndDrop
+} from '@progress/kendo-react-listbox';
+import {getCashInAction} from '@app/store/reducers/cashInDucks';
+import {getToday} from '@app/services/utils';
 
-const ModalDetailsCashIn = ({onHide, show, idRow}) => {
+const ModalCashIn = ({onHide, show, idRow, action, user, employees}) => {
+    console.log(user);
     return (
         <Modal
             onHide={onHide}
@@ -13,16 +23,161 @@ const ModalDetailsCashIn = ({onHide, show, idRow}) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Details Balance - {user.user || null}{' '}
+                    {user ? user.name : null}
+                </Modal.Title>
+            </Modal.Header>
             <Modal.Body>
-                <BodyInfo idRow={idRow} onHide={onHide} />
+                <BodyInfo
+                    idRow={idRow}
+                    action={action}
+                    user={user}
+                    employees={employees}
+                    onHide={onHide}
+                />
             </Modal.Body>
         </Modal>
     );
 };
 
-const BodyInfo = ({idRow, onHide}) => {
-    const form = idRow;
-    console.log(idRow);
+const BodyInfo = ({idRow, action, user, employees, onHide}) => {
+    const [form, setForm] = useState({
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        penniesRoll: 0,
+        nickelsRoll: 0,
+        dimesRoll: 0,
+        quartersRoll: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreads: 0,
+        comentaries: '',
+        date: '',
+        idEmployee: user.id
+    });
+    const dispatch = useDispatch();
+    const cashIn = useSelector((store) => store.cashIn);
+    const [actionButton, setActionButton] = useState();
+    // eslint-disable-next-line no-unused-vars
+    const [error, setError] = useState();
+    useEffect(() => {
+        const filtered = cashIn.details.find((element) => element.id === idRow);
+        if (filtered) {
+            setForm({
+                employees: [],
+                pennies: filtered.pennies,
+                nickels: filtered.nickels,
+                dimes: filtered.dimes,
+                quarters: filtered.quarters,
+                penniesRoll: filtered.penniesRoll,
+                nickelsRoll: filtered.nickelsRoll,
+                dimesRoll: filtered.dimesRoll,
+                quartersRoll: filtered.quartersRoll,
+                ones: filtered.ones,
+                twos: filtered.twos,
+                fives: filtered.fives,
+                tens: filtered.tens,
+                twenties: filtered.twenties,
+                fifties: filtered.fifties,
+                hundreads: filtered.hundreads,
+                comentaries: filtered.comentaries,
+                date: filtered.date
+            });
+        } else {
+            // const today = new Date();
+            setForm({...form, date: getToday()});
+        }
+        if (action) {
+            switch (action) {
+                case 'add':
+                    setActionButton('Register');
+                    break;
+                default:
+                    console.log('como chingas');
+                    break;
+            }
+        }
+    }, []);
+
+    // LISTBOX DRAGANDDROP
+    const [state, setState] = React.useState({
+        notDiscontinued: [],
+        discontinued: [],
+        draggedItem: {}
+    });
+    useEffect(() => {
+        employees = employees.map((employee) => {
+            return {...employee, Discontinued: false};
+        });
+        employees.push({
+            idEmployee: 111111111111111,
+            name: 'Drop here the employee',
+            Discontinued: true
+        });
+        setState({
+            notDiscontinued: employees.filter(
+                (product) => !product.Discontinued
+            ),
+            discontinued: employees.filter((product) => product.Discontinued),
+            draggedItem: {}
+        });
+    }, []);
+    const handleDragStart = (e) => {
+        setState({...state, draggedItem: e.dataItem});
+    };
+
+    const handleDrop = (e) => {
+        const result = processListBoxDragAndDrop(
+            state.notDiscontinued,
+            state.discontinued,
+            state.draggedItem,
+            e.dataItem,
+            'idEmployee'
+        );
+        setState({
+            ...state,
+            notDiscontinued: result.listBoxOneData,
+            discontinued: result.listBoxTwoData
+        });
+    };
+    const addCashIn = async () => {
+        try {
+            const request = form;
+            request.employees = state.discontinued;
+            const response = await addCashInService(request);
+            if (response.message === 'existentEmployees') {
+                setError(
+                    `The followewing employees are already captured: ${response.existentsEmployees.join(
+                        ', '
+                    )}`
+                );
+            } else {
+                dispatch(getCashInAction('reload'));
+                onHide();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        console.log('click en add');
+    };
+    const submit = () => {
+        switch (action) {
+            case 'add':
+                addCashIn();
+                break;
+            default:
+                console.log('default');
+                break;
+        }
+    };
     return (
         <>
             <div className="card-body">
@@ -37,7 +192,12 @@ const BodyInfo = ({idRow, onHide}) => {
                         <input
                             type="date"
                             className="form-control mr-3"
-                            disabled
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    date: e.target.value
+                                })
+                            }
                             value={form.date}
                         />
                     </div>
@@ -55,7 +215,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             {' '}
                             <input
                                 type="text"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        pennies: e.target.value
+                                    })
+                                }
                                 value={form.pennies}
                                 className="form-control"
                             />{' '}
@@ -64,7 +229,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             {' '}
                             <input
                                 type="text"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        penniesRoll: e.target.value
+                                    })
+                                }
                                 value={form.penniesRoll}
                                 className="form-control"
                             />{' '}
@@ -91,7 +261,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        nickels: e.target.value
+                                    })
+                                }
                                 value={form.nickels}
                             />{' '}
                         </div>
@@ -100,7 +275,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        nickelsRoll: e.target.value
+                                    })
+                                }
                                 value={form.nickelsRoll}
                             />{' '}
                         </div>
@@ -126,7 +306,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        dimes: e.target.value
+                                    })
+                                }
                                 value={form.dimes}
                             />{' '}
                         </div>
@@ -135,7 +320,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        dimesRoll: e.target.value
+                                    })
+                                }
                                 value={form.dimesRoll}
                             />{' '}
                         </div>
@@ -161,7 +351,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        quarters: e.target.value
+                                    })
+                                }
                                 value={form.quarters}
                             />{' '}
                         </div>
@@ -170,7 +365,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        quartersRoll: e.target.value
+                                    })
+                                }
                                 value={form.quartersRoll}
                             />{' '}
                         </div>
@@ -202,7 +402,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        ones: e.target.value
+                                    })
+                                }
                                 value={form.ones}
                             />{' '}
                         </div>
@@ -226,7 +431,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        twos: e.target.value
+                                    })
+                                }
                                 value={form.twos}
                             />{' '}
                         </div>
@@ -250,7 +460,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        fives: e.target.value
+                                    })
+                                }
                                 value={form.fives}
                             />{' '}
                         </div>
@@ -274,7 +489,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        tens: e.target.value
+                                    })
+                                }
                                 value={form.tens}
                             />{' '}
                         </div>
@@ -298,7 +518,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        twenties: e.target.value
+                                    })
+                                }
                                 value={form.twenties}
                             />{' '}
                         </div>
@@ -322,7 +547,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        fifties: e.target.value
+                                    })
+                                }
                                 value={form.fifties}
                             />{' '}
                         </div>
@@ -345,7 +575,12 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        hundreads: e.target.value
+                                    })
+                                }
                                 value={form.hundreads}
                             />{' '}
                         </div>
@@ -472,22 +707,58 @@ const BodyInfo = ({idRow, onHide}) => {
                                 className="form-control input-sm mr-3"
                                 style={{minWidth: '50px'}}
                                 defaultValue={form.comentaries}
-                                disabled
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        comentaries: e.target.value
+                                    })
+                                }
                             />
                         </div>
                     </div>
+
+                    {!idRow ? (
+                        <div className="d-flex flex-wrap justify-content-around">
+                            <span style={{width: '100%', textAlign: 'center'}}>
+                                Employees
+                            </span>
+                            <ListBox
+                                data={state.notDiscontinued}
+                                textField="name"
+                                onDragStart={handleDragStart}
+                                onDrop={handleDrop}
+                            />
+                            <ListBox
+                                data={state.discontinued}
+                                textField="name"
+                                style={{
+                                    marginLeft: '12px'
+                                }}
+                                onDragStart={handleDragStart}
+                                onDrop={handleDrop}
+                            />
+                        </div>
+                    ) : null}
                 </div>
+
+                <p className="text-danger"> {error || null}</p>
+                {!idRow ? (
+                    <>
+                        {' '}
+                        <div>
+                            <input
+                                type="submit"
+                                className="btn btn-dark btn-lg"
+                                value={actionButton}
+                                onClick={() => submit()}
+                            />
+                        </div>
+                    </>
+                ) : null}
             </div>
-            <button
-                className="btn btn-secondary w-100"
-                type="button"
-                onClick={() => onHide()}
-            >
-                Close
-            </button>
         </>
     );
 };
 
-export default React.memo(ModalDetailsCashIn);
+export default React.memo(ModalCashIn);
 React.memo(BodyInfo);

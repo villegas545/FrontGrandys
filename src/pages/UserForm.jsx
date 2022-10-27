@@ -8,6 +8,7 @@ const UserForm = () => {
         localStorage.setItem('role', values.role);
         localStorage.setItem('restaurantApi', values.restaurantApi);
         localStorage.setItem('user', values.user);
+        localStorage.setItem('id', values.idUser);
     };
     return (
         <>

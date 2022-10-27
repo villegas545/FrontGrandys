@@ -90,12 +90,14 @@ function Employee() {
                     'restaurantApi',
                     respuesta.data.restaurantApi
                 );
+                localStorage.setItem('idUser', respuesta.data.idUser);
                 dispatch(
                     updateAuth({
                         role: respuesta.data.role,
                         token: respuesta.data.token,
                         user: respuesta.data.user,
-                        restaurantApi: respuesta.data.restaurantApi
+                        restaurantApi: respuesta.data.restaurantApi,
+                        idUser: respuesta.data.idUser
                     })
                 );
                 setUser('algo');
