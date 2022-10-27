@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {useTable, usePagination} from 'react-table';
@@ -61,26 +62,26 @@ function TableCashIn({columns, data}) {
     const [userSelected, setUserSelected] = useState('');
     const actionButton = async (id, action) => {
         switch (action) {
-        case 'approve':
-            await approveRejectCashRegisterStartup({
-                idRequestCashRegisterStartup: id,
-                approved: 'Approved'
-            });
-            break;
-        case 'reject':
-            await approveRejectCashRegisterStartup({
-                idRequestCashRegisterStartup: id,
-                rejected: 'Rejected'
-            });
-            break;
-        case 'cancel':
-            await cancelCashRegisterStartup({
-                idRequestCashRegisterStartup: id
-            });
-            break;
-        default:
-            console.log('never');
-            break;
+            case 'approve':
+                await approveRejectCashRegisterStartup({
+                    idRequestCashRegisterStartup: id,
+                    approved: 'Approved'
+                });
+                break;
+            case 'reject':
+                await approveRejectCashRegisterStartup({
+                    idRequestCashRegisterStartup: id,
+                    rejected: 'Rejected'
+                });
+                break;
+            case 'cancel':
+                await cancelCashRegisterStartup({
+                    idRequestCashRegisterStartup: id
+                });
+                break;
+            default:
+                console.log('never');
+                break;
         }
         dispatch(getCashInAction('reload'));
     };
@@ -152,51 +153,53 @@ function TableCashIn({columns, data}) {
                                     />
                                 </td>
                                 <td>
-                                    {localStorage.getItem('role') ===
-                                        'Employee' &&
+                                    {(localStorage.getItem('role') ===
+                                        'Cash Employee' ||
+                                        localStorage.getItem('role') ===
+                                            'Cash Manager') &&
                                     row.original.status === 'Pending' ? (
-                                            <>
-                                                <input
-                                                    type="submit"
-                                                    value="Approve"
-                                                    className="btn btn-success"
-                                                    onClick={() =>
-                                                        confirm(
-                                                            row.original.id,
-                                                            'approve'
-                                                        )
-                                                    }
-                                                />
-                                                <input
-                                                    type="submit"
-                                                    value="Reject"
-                                                    className="btn btn-warning ml-2"
-                                                    onClick={() =>
-                                                        confirm(
-                                                            row.original.id,
-                                                            'reject'
-                                                        )
-                                                    }
-                                                />
-                                            </>
-                                        ) : null}
+                                        <>
+                                            <input
+                                                type="submit"
+                                                value="Approve"
+                                                className="btn btn-success"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'approve'
+                                                    )
+                                                }
+                                            />
+                                            <input
+                                                type="submit"
+                                                value="Reject"
+                                                className="btn btn-warning ml-2"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'reject'
+                                                    )
+                                                }
+                                            />
+                                        </>
+                                    ) : null}
                                     {localStorage.getItem('role') ===
-                                        'Manager' &&
+                                        'Cash Manager' &&
                                     row.original.status === 'Approved' ? (
-                                            <>
-                                                <input
-                                                    type="submit"
-                                                    value="Cancel"
-                                                    className="btn btn-danger ml-2"
-                                                    onClick={() =>
-                                                        confirm(
-                                                            row.original.id,
-                                                            'cancel'
-                                                        )
-                                                    }
-                                                />
-                                            </>
-                                        ) : null}
+                                        <>
+                                            <input
+                                                type="submit"
+                                                value="Cancel"
+                                                className="btn btn-danger ml-2"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'cancel'
+                                                    )
+                                                }
+                                            />
+                                        </>
+                                    ) : null}
                                 </td>
                             </tr>
                         );

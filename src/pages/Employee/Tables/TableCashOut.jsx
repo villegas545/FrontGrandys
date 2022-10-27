@@ -4,7 +4,7 @@
 /* eslint-disable react/button-has-type */
 import React, {useState} from 'react';
 import {useTable, usePagination} from 'react-table';
-import { toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -136,7 +136,7 @@ function TableCashOut({columns, data}) {
                                         className="btn btn-secondary"
                                         onClick={() => {
                                             setModalShow(true);
-                                            setIdRow(row.original.id);
+                                            setIdRow(row.original);
                                             setUserSelected(row.original);
                                         }}
                                     />
@@ -245,7 +245,7 @@ function TableCashOut({columns, data}) {
                     {'>>'}
                 </button>{' '}
             </div>
-        
+
             <ModalDetailsCashOut
                 show={modalShow}
                 onHide={() => setModalShow(false)}

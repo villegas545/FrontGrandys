@@ -19,7 +19,7 @@ export const getCashInAction = (formData) => async (dispatch, getState) => {
     try {
         let urlFilter;
         if (formData === 'reload') {
-            if (getState().cashOut.lastFilter === '') {
+            if (getState().cashIn.lastFilter === '') {
                 return;
             }
             urlFilter = getState().cashIn.lastFilter;
@@ -55,7 +55,7 @@ export const getCashInAction = (formData) => async (dispatch, getState) => {
                 element.ones +
                 element.twos * 2 +
                 element.fives * 5 +
-                element.fives * 10 +
+                element.tens * 10 +
                 element.twenties * 20 +
                 element.fifties * 50 +
                 element.hundreads * 100;

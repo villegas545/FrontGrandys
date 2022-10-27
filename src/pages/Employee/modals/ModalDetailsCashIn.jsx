@@ -326,10 +326,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                         dimesRoll: e.target.value
                                     })
                                 }
-                                value={
-                                    (form.dimes * 10) / 100 +
-                                    (form.dimesRoll * 10 * 50) / 100
-                                }
+                                value={form.dimesRoll}
                             />{' '}
                         </div>
                         <div>
@@ -339,7 +336,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.dimes * 10}
+                                value={
+                                    (form.dimes * 10) / 100 +
+                                    (form.dimesRoll * 10 * 50) / 100
+                                }
                                 disabled
                             />{' '}
                         </div>
@@ -614,7 +614,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
@@ -627,7 +627,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                                 form.quartersRoll * 25 * 40
                                             )) /
                                             100
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -644,14 +644,15 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
+                                        Number(form.twos * 2) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
                                         Number(form.hundreads * 100)
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -668,8 +669,9 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
+                                        Number(form.twos * 2) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
@@ -687,7 +689,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                                 form.quartersRoll * 25 * 40
                                             )) /
                                             100
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>

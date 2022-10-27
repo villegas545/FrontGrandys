@@ -11,7 +11,8 @@ const dataInitial = {
     cashTotalTotal: 0,
     strikesTotal: 0,
     pipoTotal: 0,
-    owedTotal: 0
+    owedTotal: 0,
+    difTotal: 0
 };
 
 const GET_CASH_OUT_SUCCESS = 'GET_CASH_OUT_SUCCESS';
@@ -44,11 +45,13 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
         let strikesTotal = 0;
         let pipoTotal = 0;
         let owedTotal = 0;
+        let difTotal = 0;
 
         res = res.map((element) => {
             cashTotalTotal += Number(element.grandTotal);
             pipoTotal += Number(element.pipo);
-            owedTotal += Number(element.owedToHouse);
+            owedTotal += Number(element.expected);
+            difTotal += Number(element.difference);
             element.strikes = 0;
             if (element.difference > 2 || element.difference < -2) {
                 element.strikes = 1;
@@ -61,7 +64,7 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
             element.grandTotal = currencyFormat(element.grandTotal);
             element.pipo = currencyFormat(element.pipo);
             element.difference = currencyFormat(element.difference);
-            element.owedToHouse = currencyFormat(element.owedToHouse);
+            element.owedToHouse = currencyFormat(element.expected);
             element.cashSales = currencyFormat(element.cashSales);
             element.creditSales = currencyFormat(element.creditSales);
 
@@ -75,7 +78,8 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
             cashTotalTotal,
             strikesTotal,
             pipoTotal,
-            owedTotal
+            owedTotal,
+            difTotal
         });
     } catch (error) {
         console.log(error);
@@ -92,7 +96,8 @@ export default function cashOutReducer(state = dataInitial, action) {
                 cashTotalTotal: action.cashTotalTotal,
                 strikesTotal: action.strikesTotal,
                 pipoTotal: action.pipoTotal,
-                owedTotal: action.owedTotal
+                owedTotal: action.owedTotal,
+                difTotal: action.difTotal
             };
         default:
             return state;

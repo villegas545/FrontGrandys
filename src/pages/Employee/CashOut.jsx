@@ -4,7 +4,7 @@ import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
 import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
-import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalDetailsCashOut';
+import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalCashOut';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
 import {currencyFormat, getToday} from '@app/services/utils';
 
@@ -297,7 +297,7 @@ const CashOut = () => {
                         </div>
                     </div>
 
-                    <div className="d-flex justify-content-end align-items-md-center">
+                    <div className="d-flex justify-content-around align-items-md-center">
                         <span>
                             <b>
                                 {' '}
@@ -322,7 +322,7 @@ const CashOut = () => {
                             <b>
                                 {' '}
                                 Total Difference:{' '}
-                                {currencyFormat(cashOut.strikesTotal)}
+                                {currencyFormat(cashOut.difTotal)}
                             </b>
                         </span>{' '}
                         <span>
