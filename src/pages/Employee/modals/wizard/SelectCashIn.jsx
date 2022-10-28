@@ -112,7 +112,7 @@ function SelectCashIn() {
                     {tableInfo
                         ? tableInfo.map((row) => (
                             <tr key={row.id} >
-                                <td>{currencyFormat(getTotal(row))}</td>
+                                <td>{currencyFormat(getTotal(row).toFixed(2))}</td>
                                 <td>{row.User.name}</td>
                                 <td>{row.status}</td>
                                 <td>

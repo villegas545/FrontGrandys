@@ -181,10 +181,10 @@ const CaptureVoucher = () => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={(
                                     form.pennies / 100 +
                                     (form.penniesRoll * 50) / 100
-                                }
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -226,10 +226,10 @@ const CaptureVoucher = () => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={(
                                     (form.nickels * 5) / 100 +
                                     (form.nickelsRoll * 5 * 40) / 100
-                                }
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -271,10 +271,10 @@ const CaptureVoucher = () => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={(
                                     (form.dimes * 10) / 100 +
                                     (form.dimesRoll * 10 * 50) / 100
-                                }
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -316,10 +316,10 @@ const CaptureVoucher = () => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={(
                                     (form.quarters * 25) / 100 +
                                     (form.quartersRoll * 25 * 40) / 100
-                                }
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -549,7 +549,7 @@ const CaptureVoucher = () => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
@@ -562,7 +562,7 @@ const CaptureVoucher = () => {
                                                 form.quartersRoll * 25 * 40
                                             )) /
                                             100
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -579,14 +579,14 @@ const CaptureVoucher = () => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
                                         Number(form.hundreads * 100)
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -603,7 +603,7 @@ const CaptureVoucher = () => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
                                         Number(form.twos * 2) +
                                         Number(form.fives * 5) +
@@ -623,7 +623,7 @@ const CaptureVoucher = () => {
                                                 form.quartersRoll * 25 * 40
                                             )) /
                                             100
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>

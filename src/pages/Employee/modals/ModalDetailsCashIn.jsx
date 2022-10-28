@@ -22,7 +22,6 @@ const ModalDetailsCashIn = ({onHide, show, idRow}) => {
 
 const BodyInfo = ({idRow, onHide}) => {
     const form = idRow;
-    console.log(idRow);
     return (
         <>
             <div className="card-body">

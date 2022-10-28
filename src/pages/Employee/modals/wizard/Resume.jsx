@@ -180,7 +180,9 @@ const Resume = ({onHide}) => {
                             <span>
                                 <b>Coins:</b>
                                 {currencyFormat(
-                                    getCoinsTotal(reduxValues.wizardSafeStart)
+                                    getCoinsTotal(
+                                        reduxValues.wizardSafeStart
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -189,16 +191,18 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getBillsTotalHundreads(
                                         reduxValues.wizardSafeStart
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
                             <b>Total: </b>
                             {currencyFormat(
-                                getCoinsTotal(reduxValues.wizardSafeStart) +
+                                getCoinsTotal(
+                                    reduxValues.wizardSafeStart
+                                ).toFixed(2) +
                                     getBillsTotalHundreads(
                                         reduxValues.wizardSafeStart
-                                    )
+                                    ).toFixed(2)
                             )}{' '}
                         </div>
                         <br />
@@ -212,7 +216,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getCoinsTotal(
                                         reduxValues.wizardTotalExpected
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -221,7 +225,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getBillsTotal(
                                         reduxValues.wizardTotalExpected
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -230,7 +234,7 @@ const Resume = ({onHide}) => {
                                 getCoinsTotal(reduxValues.wizardTotalExpected) +
                                     getBillsTotal(
                                         reduxValues.wizardTotalExpected
-                                    )
+                                    ).toFixed(2)
                             )}
                         </div>
                         <br />
@@ -242,21 +246,29 @@ const Resume = ({onHide}) => {
                             <span>
                                 <b>Coins:</b>
                                 {currencyFormat(
-                                    getCoinsTotal(reduxValues.wizardTotalReal)
+                                    getCoinsTotal(
+                                        reduxValues.wizardTotalReal
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
                             <span>
                                 <b>Bills:</b>
                                 {currencyFormat(
-                                    getBillsTotal(reduxValues.wizardTotalReal)
+                                    getBillsTotal(
+                                        reduxValues.wizardTotalReal
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
                             <b>Total: </b>
                             {currencyFormat(
-                                getCoinsTotal(reduxValues.wizardTotalReal) +
-                                    getBillsTotal(reduxValues.wizardTotalReal)
+                                getCoinsTotal(
+                                    reduxValues.wizardTotalReal
+                                ).toFixed(2) +
+                                    getBillsTotal(
+                                        reduxValues.wizardTotalReal
+                                    ).toFixed(2)
                             )}{' '}
                         </div>
                         <br />
@@ -270,10 +282,10 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getCoinsTotal(
                                         reduxValues.wizardTotalExpected
-                                    ) -
+                                    ).toFixed(2) -
                                         getCoinsTotal(
                                             reduxValues.wizardTotalReal
-                                        )
+                                        ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -282,25 +294,27 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getBillsTotal(
                                         reduxValues.wizardTotalExpected
-                                    ) -
+                                    ).toFixed(2) -
                                         getBillsTotal(
                                             reduxValues.wizardTotalReal
-                                        )
+                                        ).toFixed(2)
                                 )}
                             </span>
                             <br />
                             <b>Total: </b>
                             {currencyFormat(
-                                getCoinsTotal(reduxValues.wizardTotalExpected) +
+                                getCoinsTotal(
+                                    reduxValues.wizardTotalExpected
+                                ).toFixed(2) +
                                     getBillsTotal(
                                         reduxValues.wizardTotalExpected
-                                    ) -
+                                    ).toFixed(2) -
                                     (getCoinsTotal(
                                         reduxValues.wizardTotalReal
-                                    ) +
+                                    ).toFixed(2) +
                                         getBillsTotal(
                                             reduxValues.wizardTotalReal
-                                        ))
+                                        ).toFixed(2))
                             )}
                         </div>
                     </div>
@@ -315,7 +329,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getCoinsTotalArray(
                                         reduxValues.wizardCashIns
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -324,16 +338,18 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getBillsTotalArray(
                                         reduxValues.wizardCashIns
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
                             <b>Total: </b>
                             {currencyFormat(
-                                getCoinsTotalArray(reduxValues.wizardCashIns) +
+                                getCoinsTotalArray(
+                                    reduxValues.wizardCashIns
+                                ).toFixed(2) +
                                     getBillsTotalArray(
                                         reduxValues.wizardCashIns
-                                    )
+                                    ).toFixed(2)
                             )}
                         </div>
                         <br />
@@ -347,7 +363,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getCoinsTotalArray(
                                         reduxValues.wizardCashOuts
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -356,7 +372,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getBillsTotalArrayCashOut(
                                         reduxValues.wizardCashOuts
-                                    )
+                                    ).toFixed(2)
                                 )}
                             </span>
                             <br />
@@ -365,7 +381,7 @@ const Resume = ({onHide}) => {
                                 getCoinsTotalArray(reduxValues.wizardCashOuts) +
                                     getBillsTotalArrayCashOut(
                                         reduxValues.wizardCashOuts
-                                    )
+                                    ).toFixed(2)
                             )}
                         </div>
                         <br />
@@ -377,25 +393,29 @@ const Resume = ({onHide}) => {
                             <span>
                                 <b>Coins:</b>
                                 {currencyFormat(
-                                    getCoinsVoucher(reduxValues.wizardVouchers)
-                                        .totalIn
+                                    getCoinsVoucher(
+                                        reduxValues.wizardVouchers
+                                    ).totalIn.toFixed(2)
                                 )}
                             </span>
                             <br />
                             <span>
                                 <b>Bills:</b>
                                 {currencyFormat(
-                                    getCoinsVoucher(reduxValues.wizardVouchers)
-                                        .totalIn
+                                    getCoinsVoucher(
+                                        reduxValues.wizardVouchers
+                                    ).totalIn.toFixed(2)
                                 )}
                             </span>
                             <br />
                             <b>Total: </b>
                             {currencyFormat(
-                                getCoinsVoucher(reduxValues.wizardVouchers)
-                                    .totalIn +
-                                    getCoinsVoucher(reduxValues.wizardVouchers)
-                                        .totalIn
+                                getCoinsVoucher(
+                                    reduxValues.wizardVouchers
+                                ).totalIn.toFixed(2) +
+                                    getCoinsVoucher(
+                                        reduxValues.wizardVouchers
+                                    ).totalIn.toFixed(2)
                             )}
                         </div>
                         <br />
@@ -407,25 +427,29 @@ const Resume = ({onHide}) => {
                             <span>
                                 <b>Coins:</b>
                                 {currencyFormat(
-                                    getCoinsVoucher(reduxValues.wizardVouchers)
-                                        .totalOut
+                                    getCoinsVoucher(
+                                        reduxValues.wizardVouchers
+                                    ).totalOut.toFixed(2)
                                 )}
                             </span>
                             <br />
                             <span>
                                 <b>Bills:</b>
                                 {currencyFormat(
-                                    getCoinsVoucher(reduxValues.wizardVouchers)
-                                        .totalOut
+                                    getCoinsVoucher(
+                                        reduxValues.wizardVouchers
+                                    ).totalOut.toFixed(2)
                                 )}
                             </span>
                             <br />
                             <b>Total: </b>
                             {currencyFormat(
-                                getCoinsVoucher(reduxValues.wizardVouchers)
-                                    .totalOut +
-                                    getCoinsVoucher(reduxValues.wizardVouchers)
-                                        .totalOut
+                                getCoinsVoucher(
+                                    reduxValues.wizardVouchers
+                                ).totalOut.toFixed(2) +
+                                    getCoinsVoucher(
+                                        reduxValues.wizardVouchers
+                                    ).totalOut.toFixed(2)
                             )}
                         </div>
                     </div>
