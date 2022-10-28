@@ -12,6 +12,7 @@ import {
     recordsUpdate,
     modalClose
 } from '@app/store/reducers/restsDucks';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import Table from '../components/table/Table';
 
 function MyVerticallyCenteredModal(props) {
@@ -64,27 +65,59 @@ function Rest() {
     }; */
 
     const addRest = async (records) => {
-        await dispatch(addRestAction(records));
+        dispatch(changeReactLoading(true));
+        try {
+            await dispatch(addRestAction(records));
+        } catch (err) {
+            console.log(err);
+        }
+        dispatch(changeReactLoading(false));
     };
     const updateRest = async (records) => {
-        await dispatch(updateRestAction(records, idState));
+        dispatch(changeReactLoading(true));
+        try {
+            await dispatch(updateRestAction(records, idState));
+        } catch (err) {
+            console.log(err);
+        }
+        dispatch(changeReactLoading(false));
     };
     const updateItem = async (id) => {
-        await dispatch(recordsUpdate(id));
-        setIdState(id);
-        setAction(false);
-        setModalShow(true);
-        console.log(id);
+        dispatch(changeReactLoading(true));
+        try {
+            await dispatch(recordsUpdate(id));
+            setIdState(id);
+            setAction(false);
+            setModalShow(true);
+            console.log(id);
+        } catch (err) {
+            console.log(err);
+        }
+        dispatch(changeReactLoading(false));
     };
     const deleteItem = async (id) => {
-        await dispatch(deleteRestAction(id));
-    };
-    React.useEffect(async () => {
-        await dispatch(getRestAction());
-        if (closeModal === true) {
-            setModalShow(false);
-            dispatch(modalClose(false));
+        dispatch(changeReactLoading(true));
+        try {
+            await dispatch(deleteRestAction(id));
+        } catch (err) {
+            console.log(err);
         }
+        dispatch(changeReactLoading(false));
+    };
+    React.useEffect(() => {
+        (async () => {
+            dispatch(changeReactLoading(true));
+            try {
+                await dispatch(getRestAction());
+                if (closeModal === true) {
+                    setModalShow(false);
+                    dispatch(modalClose(false));
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            dispatch(changeReactLoading(false));
+        })();
     }, [closeModal]);
     /*  const prueba = () => {
         console.log('chido');
@@ -103,11 +136,17 @@ function Rest() {
                                         value="Add Restaurant Api"
                                         className="form-control btn btn-danger btn-sm mr-3 text-lg"
                                         onClick={async () => {
-                                            await dispatch(
-                                                recordsUpdate('empty')
-                                            );
-                                            setModalShow(true);
-                                            setAction(true);
+                                            dispatch(changeReactLoading(true));
+                                            try {
+                                                await dispatch(
+                                                    recordsUpdate('empty')
+                                                );
+                                                setModalShow(true);
+                                                setAction(true);
+                                            } catch (err) {
+                                                console.log(err);
+                                            }
+                                            dispatch(changeReactLoading(true));
                                         }}
                                     />
                                     {action ? (

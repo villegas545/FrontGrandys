@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsSafeCash from '@app/pages/Employee/modals/ModalDetailsSafeCash';
 import {getRestaurantByLevel, getManagersByRestaurant} from '@app/services/';
 import {getToday} from '@app/services/utils';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 
 const columns = [
     {
@@ -80,21 +81,27 @@ const SafeCash = () => {
 
     useEffect(() => {
         (async () => {
-            const resRestaurant = await getRestaurantByLevel();
-            setRestaurants(resRestaurant);
-            if (
-                localStorage.getItem('role') === 'Cash Manager' ||
-                localStorage.getItem('role') === 'Cash Manager Assistant'
-            ) {
-                console.log('wipi');
-                if (resRestaurant.length === 1) {
-                    setEmployees(
-                        await getManagersByRestaurant(
-                            resRestaurant[0].idRestaurant
-                        )
-                    );
+            dispatch(changeReactLoading(true));
+            try {
+                const resRestaurant = await getRestaurantByLevel();
+                setRestaurants(resRestaurant);
+                if (
+                    localStorage.getItem('role') === 'Cash Manager' ||
+                    localStorage.getItem('role') === 'Cash Manager Assistant'
+                ) {
+                    console.log('wipi');
+                    if (resRestaurant.length === 1) {
+                        setEmployees(
+                            await getManagersByRestaurant(
+                                resRestaurant[0].idRestaurant
+                            )
+                        );
+                    }
                 }
+            } catch (err) {
+                console.log(err);
             }
+            dispatch(changeReactLoading(false));
         })();
     }, []);
 
@@ -131,15 +138,21 @@ const SafeCash = () => {
                                 className="form-control mr-3"
                                 style={{minWidth: '100px'}}
                                 onChange={async (e) => {
-                                    setEmployees(
-                                        await getManagersByRestaurant(
-                                            e.target.value
-                                        )
-                                    );
-                                    setFormSearch({
-                                        ...formSearch,
-                                        restaurant: e.target.value
-                                    });
+                                    dispatch(changeReactLoading(true));
+                                    try {
+                                        setEmployees(
+                                            await getManagersByRestaurant(
+                                                e.target.value
+                                            )
+                                        );
+                                        setFormSearch({
+                                            ...formSearch,
+                                            restaurant: e.target.value
+                                        });
+                                    } catch (err) {
+                                        console.log(err);
+                                    }
+                                    dispatch(changeReactLoading(false));
                                 }}
                             >
                                 {restaurants.length > 1 ? (

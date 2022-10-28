@@ -15,6 +15,7 @@ import {
 } from '@app/services';
 import {useDispatch} from 'react-redux';
 import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 
 function TableCashOut({columns, data}) {
     // notificacion tostify
@@ -50,29 +51,35 @@ function TableCashOut({columns, data}) {
     const [idRow, setIdRow] = useState();
     const [userSelected, setUserSelected] = useState('');
     const actionButton = async (id, action) => {
-        switch (action) {
-            case 'approve':
-                await approveRejectCashRegisterStartup({
-                    idRequestCashRegisterStartup: id,
-                    approved: 'Approved'
-                });
-                break;
-            case 'reject':
-                await approveRejectCashRegisterStartup({
-                    idRequestCashRegisterStartup: id,
-                    rejected: 'Rejected'
-                });
-                break;
-            case 'cancel':
-                await cancelCashRegisterStartup({
-                    idRequestCashRegisterStartup: id
-                });
-                break;
-            default:
-                console.log('never');
-                break;
+        dispatch(changeReactLoading(true));
+        try {
+            switch (action) {
+                case 'approve':
+                    await approveRejectCashRegisterStartup({
+                        idRequestCashRegisterStartup: id,
+                        approved: 'Approved'
+                    });
+                    break;
+                case 'reject':
+                    await approveRejectCashRegisterStartup({
+                        idRequestCashRegisterStartup: id,
+                        rejected: 'Rejected'
+                    });
+                    break;
+                case 'cancel':
+                    await cancelCashRegisterStartup({
+                        idRequestCashRegisterStartup: id
+                    });
+                    break;
+                default:
+                    console.log('never');
+                    break;
+            }
+            dispatch(getCashOutAction('reload'));
+        } catch (err) {
+            console.log(err);
         }
-        dispatch(getCashOutAction('reload'));
+        dispatch(changeReactLoading(false));
     };
     // Confirmacion de accion
     const confirm = (id, action) => {

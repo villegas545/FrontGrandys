@@ -32,10 +32,16 @@ const Csv = () => {
     const urlFile = `${urlconf}csvToJson`;
     // __________llamar restaurantes
     React.useEffect(async () => {
-        await dispatch(
-            getRestActionByApi(localStorage.getItem('restaurantApi'))
-        );
-        setRestName(rest.api);
+        dispatch(changeReactLoading(true));
+        try {
+            await dispatch(
+                getRestActionByApi(localStorage.getItem('restaurantApi'))
+            );
+            setRestName(rest.api);
+        } catch (err) {
+            console.log(err);
+        }
+        dispatch(changeReactLoading(false));
     }, []);
 
     const handleChange = (_file) => {
@@ -44,6 +50,7 @@ const Csv = () => {
     };
     const datePopulate = async (recibeDates) => {
         console.log(recibeDates);
+        dispatch(changeReactLoading(true));
         try {
             const respuesta = await axios.post(
                 `${urlconf}datepopulate`,
@@ -64,110 +71,123 @@ const Csv = () => {
         dispatch(changeReactLoading(false));
     };
     const altaCsv = async () => {
-        const f = new FormData();
-        f.append('archivo', file);
-        const api = localStorage.getItem('restaurantApi');
+        dispatch(changeReactLoading(true));
+        try {
+            const f = new FormData();
+            f.append('archivo', file);
+            const api = localStorage.getItem('restaurantApi');
 
-        const respuesta = await axios.post(`${urlFile}/file/${api}`, f, {
-            headers: {
-                authorization: `bearerHeader: ${localStorage.getItem('token')}`
-            }
-        });
-        console.log(respuesta);
-        if (respuesta.data.message === 'ok') {
-            // alert('Archivo cargado correctamente');
-
-            toast.success('Uploaded success!');
-        } else {
-            const numberDates = respuesta.data.dateList.length;
-            confirmAlert({
-                title: `${numberDates} dates are missing`,
-                message: `Do you want to download them? This may take about ${numberDates} minutes, please be patient`,
-                buttons: [
-                    {
-                        label: 'Yes',
-                        onClick: () => {
-                            dispatch(changeReactLoading(true));
-                            /*  datePopulate(respuesta.data.dateList); */
-                            toast.error(
-                                'date not available, please wait for the next update'
-                            );
-                        }
-                    },
-                    {
-                        label: 'No'
-                    }
-                ]
-            });
-        }
-    };
-
-    const submit = async (e) => {
-        e.preventDefault();
-        if (
-            restDate == null ||
-            restTemp == null ||
-            restWeat == null ||
-            restCash == null ||
-            restTruck == null ||
-            restTrans == null ||
-            restCCP == null ||
-            qPromo == null ||
-            tips == null
-        ) {
-            toast.error('Please fill all the fields');
-            return;
-        }
-
-        const data = [
-            {
-                restaurantId: restName,
-                date: restDate,
-                weatherTemp: restTemp,
-                weatherW: restWeat,
-                cash: restCash,
-                truck: restTruck,
-                transfer: restTrans,
-                storeCreditCardPursh: restCCP,
-                quarterlyProm1: qPromo,
-                Dep1: tips,
-                transferType: transfer
-            }
-        ];
-        const api = localStorage.getItem('restaurantApi');
-        const respuesta = await axios.post(
-            `${urlFile}/form/${api}`,
-            {data},
-            {
+            const respuesta = await axios.post(`${urlFile}/file/${api}`, f, {
                 headers: {
                     authorization: `bearerHeader: ${localStorage.getItem(
                         'token'
                     )}`
+                    // aqui poner catch
                 }
-            }
-        );
-        console.log(respuesta);
-        if (respuesta.data.message === 'ok') {
-            toast.success('Uploaded success!');
-        } else {
-            const numberDates = respuesta.data.dateList.length;
-            confirmAlert({
-                title: `${numberDates} dates are missing`,
-                message: `Do you want to download them? This may take about ${numberDates} minutes, please be patient`,
-                buttons: [
-                    {
-                        label: 'Yes',
-                        onClick: () => {
-                            dispatch(changeReactLoading(true));
-                            datePopulate(respuesta.data.dateList);
-                        }
-                    },
-                    {
-                        label: 'No'
-                    }
-                ]
             });
+            console.log(respuesta);
+            if (respuesta.data.message === 'ok') {
+                // alert('Archivo cargado correctamente');
+
+                toast.success('Uploaded success!');
+            } else {
+                const numberDates = respuesta.data.dateList.length;
+                confirmAlert({
+                    title: `${numberDates} dates are missing`,
+                    message: `Do you want to download them? This may take about ${numberDates} minutes, please be patient`,
+                    buttons: [
+                        {
+                            label: 'Yes',
+                            onClick: () => {
+                                /*  datePopulate(respuesta.data.dateList); */
+                                toast.error(
+                                    'date not available, please wait for the next update'
+                                );
+                            }
+                        },
+                        {
+                            label: 'No'
+                        }
+                    ]
+                });
+            }
+        } catch (err) {
+            console.log(err);
         }
+        dispatch(changeReactLoading(false));
+    };
+
+    const submit = async (e) => {
+        dispatch(changeReactLoading(true));
+        try {
+            e.preventDefault();
+            if (
+                restDate == null ||
+                restTemp == null ||
+                restWeat == null ||
+                restCash == null ||
+                restTruck == null ||
+                restTrans == null ||
+                restCCP == null ||
+                qPromo == null ||
+                tips == null
+            ) {
+                toast.error('Please fill all the fields');
+                return;
+            }
+
+            const data = [
+                {
+                    restaurantId: restName,
+                    date: restDate,
+                    weatherTemp: restTemp,
+                    weatherW: restWeat,
+                    cash: restCash,
+                    truck: restTruck,
+                    transfer: restTrans,
+                    storeCreditCardPursh: restCCP,
+                    quarterlyProm1: qPromo,
+                    Dep1: tips,
+                    transferType: transfer
+                }
+            ];
+            const api = localStorage.getItem('restaurantApi');
+            const respuesta = await axios.post(
+                `${urlFile}/form/${api}`,
+                {data},
+                {
+                    headers: {
+                        authorization: `bearerHeader: ${localStorage.getItem(
+                            'token'
+                        )}`
+                    }
+                }
+            );
+            console.log(respuesta);
+            if (respuesta.data.message === 'ok') {
+                toast.success('Uploaded success!');
+            } else {
+                const numberDates = respuesta.data.dateList.length;
+                confirmAlert({
+                    title: `${numberDates} dates are missing`,
+                    message: `Do you want to download them? This may take about ${numberDates} minutes, please be patient`,
+                    buttons: [
+                        {
+                            label: 'Yes',
+                            onClick: () => {
+                                datePopulate(respuesta.data.dateList);
+                            }
+                        },
+                        {
+                            label: 'No'
+                        }
+                    ]
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        dispatch(changeReactLoading(false));
     };
 
     return (

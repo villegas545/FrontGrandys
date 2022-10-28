@@ -1,31 +1,30 @@
+/* eslint-disable indent */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-shadow */
 /* eslint-disable react/button-has-type */
 import React, {useState} from 'react';
 import {useTable, usePagination} from 'react-table';
-import { toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {
-    approveRejectSafeCash,
-    cancelSafeCash
-} from '@app/services';
-import { useDispatch} from 'react-redux';
+import {approveRejectSafeCash, cancelSafeCash} from '@app/services';
+import {useDispatch} from 'react-redux';
 import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
-import {Link} from "react-router-dom"
+import {Link} from 'react-router-dom';
 import ModalReceivedCreatedInfo from '@app/pages/Employee/modals/ModalReceivedCreatedInfo';
 import ModalVouchers from '@app/pages/Employee/modals/ModalVouchers';
 import ModalTotals from '@app/pages/Employee/modals/wizard/ModalTotals';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 
 function TableSafeCash({columns, data}) {
     // notificacion tostify
-    const [modalCreatedInfoShow, setModalCreatedInfoShow] = React.useState(false);
-    const [modalVouchers,setModalVouchers]=useState(false)
-    const [modalTotals,setModalTotals]=useState(false)
-    const [createdReceived,setCreatedReceived]=useState()
+    const [modalCreatedInfoShow, setModalCreatedInfoShow] =
+        React.useState(false);
+    const [modalVouchers, setModalVouchers] = useState(false);
+    const [modalTotals, setModalTotals] = useState(false);
+    const [createdReceived, setCreatedReceived] = useState();
     const dispatch = useDispatch();
-
 
     // Use the state and functions returned from useTable to build your UI
     const {
@@ -55,30 +54,37 @@ function TableSafeCash({columns, data}) {
         usePagination
     );
     const [idRow, setIdRow] = useState();
-    const [vouchers,setVouchers]=useState();
-    const [totals,setTotals]=useState();
+    const [vouchers, setVouchers] = useState();
+    const [totals, setTotals] = useState();
     const actionButton = async (id, action) => {
-        switch (action) {
-        case 'approve':
-            await approveRejectSafeCash({
-                idRequestSafeCash:id,
-                approved:"Approved"
-            })
-            break;
-        case 'reject':
-            await approveRejectSafeCash({
-                idRequestSafeCash:id,
-                rejected:"Rejected"
-            })
-            break;
-        case 'cancel':
-            await cancelSafeCash({idRequestSafeCash:id})
-            break;
-        default:
-            console.log('never');
-            break;
+        dispatch(changeReactLoading(true));
+
+        try {
+            switch (action) {
+                case 'approve':
+                    await approveRejectSafeCash({
+                        idRequestSafeCash: id,
+                        approved: 'Approved'
+                    });
+                    break;
+                case 'reject':
+                    await approveRejectSafeCash({
+                        idRequestSafeCash: id,
+                        rejected: 'Rejected'
+                    });
+                    break;
+                case 'cancel':
+                    await cancelSafeCash({idRequestSafeCash: id});
+                    break;
+                default:
+                    console.log('never');
+                    break;
+            }
+            dispatch(getSafeCashAction('reload'));
+        } catch (err) {
+            console.log(err);
         }
-        dispatch(getSafeCashAction("reload"))
+        dispatch(changeReactLoading(false));
     };
     // Confirmacion de accion
     const confirm = (id, action) => {
@@ -99,35 +105,66 @@ function TableSafeCash({columns, data}) {
             ]
         });
     };
-    const renderColumn =(cell)=>{
-        if(cell.column.Header==="Created"){
-            return (<Link to="#" onClick={()=>{
-                setModalCreatedInfoShow(true)
-                setCreatedReceived("Created")
-                setIdRow(cell);
-            }}>{cell.render('Cell')}</Link>)
+    const renderColumn = (cell) => {
+        if (cell.column.Header === 'Created') {
+            return (
+                <Link
+                    to="#"
+                    onClick={() => {
+                        setModalCreatedInfoShow(true);
+                        setCreatedReceived('Created');
+                        setIdRow(cell);
+                    }}
+                >
+                    {cell.render('Cell')}
+                </Link>
+            );
         }
-        if(cell.column.Header==="Received"){
-            return (<Link to="#" onClick={()=>{
-                setModalCreatedInfoShow(true)
-                setCreatedReceived("Received")
-                setIdRow(cell);
-            }}>{cell.render('Cell')}</Link>)
+        if (cell.column.Header === 'Received') {
+            return (
+                <Link
+                    to="#"
+                    onClick={() => {
+                        setModalCreatedInfoShow(true);
+                        setCreatedReceived('Received');
+                        setIdRow(cell);
+                    }}
+                >
+                    {cell.render('Cell')}
+                </Link>
+            );
         }
-        if(cell.column.Header==="Vouchers In" || cell.column.Header==="Vouchers Out"){
-            return (<Link to="#" onClick={()=>{
-                setModalVouchers(true)
-                setVouchers(cell.row.original.vouchers)
-            }}>{cell.render('Cell')}</Link>)
+        if (
+            cell.column.Header === 'Vouchers In' ||
+            cell.column.Header === 'Vouchers Out'
+        ) {
+            return (
+                <Link
+                    to="#"
+                    onClick={() => {
+                        setModalVouchers(true);
+                        setVouchers(cell.row.original.vouchers);
+                    }}
+                >
+                    {cell.render('Cell')}
+                </Link>
+            );
         }
-        if(cell.column.Header==="Grand Total"){
-            return (<Link to="#" onClick={()=>{
-                setModalTotals(true)
-                setTotals(cell.row.original)
-            }}>{cell.render('Cell')}</Link>)
+        if (cell.column.Header === 'Grand Total') {
+            return (
+                <Link
+                    to="#"
+                    onClick={() => {
+                        setModalTotals(true);
+                        setTotals(cell.row.original);
+                    }}
+                >
+                    {cell.render('Cell')}
+                </Link>
+            );
         }
-        return (cell.render('Cell'))                                   
-    }
+        return cell.render('Cell');
+    };
     // Render the UI for your table
     return (
         <>
@@ -152,51 +189,65 @@ function TableSafeCash({columns, data}) {
                     {page.map((row, index) => {
                         prepareRow(row);
                         console.log(row.original);
-                        return(
+                        return (
                             <tr {...row.getRowProps()}>
                                 <td>{index + 1}</td>
                                 {row.cells.map((cell) => (
                                     <>
                                         <td {...cell.getCellProps()}>
-                                            {
-                                                renderColumn(cell)
-                                            }
+                                            {renderColumn(cell)}
                                         </td>
                                     </>
-                                ))
-                                }
-                      
+                                ))}
+
                                 <td>
-                                    { (localStorage.getItem("role")==="Cash Manager Assistant" || localStorage.getItem("role")==="Cash Manager") && row.original.status==="Pending" ?
-                                        <><input
-                                            type="submit"
-                                            value="Approve"
-                                            className="btn btn-success"
-                                            onClick={() =>
-                                                confirm(row.original.id, 'approve')
-                                            }
-                                        />
-                                        <input
-                                            type="submit"
-                                            value="Reject"
-                                            className="btn btn-warning ml-2"
-                                            onClick={() =>
-                                                confirm(row.original.id, 'reject')
-                                            }
-                                        />
+                                    {(localStorage.getItem('role') ===
+                                        'Cash Manager Assistant' ||
+                                        localStorage.getItem('role') ===
+                                            'Cash Manager') &&
+                                    row.original.status === 'Pending' ? (
+                                        <>
+                                            <input
+                                                type="submit"
+                                                value="Approve"
+                                                className="btn btn-success"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'approve'
+                                                    )
+                                                }
+                                            />
+                                            <input
+                                                type="submit"
+                                                value="Reject"
+                                                className="btn btn-warning ml-2"
+                                                onClick={() =>
+                                                    confirm(
+                                                        row.original.id,
+                                                        'reject'
+                                                    )
+                                                }
+                                            />
                                         </>
-                                        :null}
-                                    { localStorage.getItem("role")==="Manager" && row.original.status==="Approved" ?
+                                    ) : null}
+                                    {localStorage.getItem('role') ===
+                                        'Manager' &&
+                                    row.original.status === 'Approved' ? (
                                         <>
                                             <input
                                                 type="submit"
                                                 value="Cancel"
                                                 className="btn btn-danger ml-2"
                                                 onClick={() =>
-                                                    confirm(row.original.id, 'cancel')
+                                                    confirm(
+                                                        row.original.id,
+                                                        'cancel'
+                                                    )
                                                 }
                                             />
-                                        </>:null}
+                                        </>
+                                    ) : null}
                                 </td>
                             </tr>
                         );
@@ -253,7 +304,7 @@ function TableSafeCash({columns, data}) {
                     {'>>'}
                 </button>{' '}
             </div>
-         
+
             <ModalReceivedCreatedInfo
                 show={modalCreatedInfoShow}
                 onHide={() => setModalCreatedInfoShow(false)}
