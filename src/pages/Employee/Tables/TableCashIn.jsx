@@ -12,6 +12,7 @@ import {
 } from '@app/services';
 import {useDispatch} from 'react-redux';
 import {getCashInAction} from '@app/store/reducers/cashInDucks';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 
 function TableCashIn({columns, data}) {
     // notificacion tostify
@@ -61,29 +62,35 @@ function TableCashIn({columns, data}) {
     const [idRow, setIdRow] = useState();
     const [userSelected, setUserSelected] = useState('');
     const actionButton = async (id, action) => {
-        switch (action) {
-            case 'approve':
-                await approveRejectCashRegisterStartup({
-                    idRequestCashRegisterStartup: id,
-                    approved: 'Approved'
-                });
-                break;
-            case 'reject':
-                await approveRejectCashRegisterStartup({
-                    idRequestCashRegisterStartup: id,
-                    rejected: 'Rejected'
-                });
-                break;
-            case 'cancel':
-                await cancelCashRegisterStartup({
-                    idRequestCashRegisterStartup: id
-                });
-                break;
-            default:
-                console.log('never');
-                break;
+        dispatch(changeReactLoading(true));
+        try {
+            switch (action) {
+                case 'approve':
+                    await approveRejectCashRegisterStartup({
+                        idRequestCashRegisterStartup: id,
+                        approved: 'Approved'
+                    });
+                    break;
+                case 'reject':
+                    await approveRejectCashRegisterStartup({
+                        idRequestCashRegisterStartup: id,
+                        rejected: 'Rejected'
+                    });
+                    break;
+                case 'cancel':
+                    await cancelCashRegisterStartup({
+                        idRequestCashRegisterStartup: id
+                    });
+                    break;
+                default:
+                    console.log('never');
+                    break;
+            }
+            dispatch(getCashInAction('reload'));
+        } catch (err) {
+            console.log(err);
         }
-        dispatch(getCashInAction('reload'));
+        dispatch(changeReactLoading(false));
     };
     // Confirmacion de accion
     const confirm = (id, action) => {
@@ -153,8 +160,10 @@ function TableCashIn({columns, data}) {
                                     />
                                 </td>
                                 <td>
-                                    {localStorage.getItem('idUser').toString() ===
-                                       row.original.idUser.toString() &&
+                                    {localStorage
+                                        .getItem('idUser')
+                                        .toString() ===
+                                        row.original.idUser.toString() &&
                                     row.original.status === 'Pending' ? (
                                         <>
                                             <input

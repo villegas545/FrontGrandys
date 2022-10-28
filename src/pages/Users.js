@@ -76,39 +76,62 @@ function Users() {
     //! ADD USER
     const addUser = async (records) => {
         dispatch(changeReactLoading(true));
-        await dispatch(addUsersAction(records));
+        try {
+            await dispatch(addUsersAction(records));
+        } catch (err) {
+            console.log(err);
+        }
         dispatch(changeReactLoading(false));
     };
     //! UPDATE USER
     const updateUser = async (records) => {
-        console.log(users);
         dispatch(changeReactLoading(true));
-        await dispatch(updateUsersAction(records, idState));
+        try {
+            console.log(users);
+
+            await dispatch(updateUsersAction(records, idState));
+        } catch (err) {
+            console.log(err);
+        }
         dispatch(changeReactLoading(false));
     };
     const updateItem = async (id) => {
         dispatch(changeReactLoading(true));
-        await dispatch(recordsUpdate(id));
-        setIdState(id);
-        setAction(false);
-        setModalShow(true);
-        console.log(id);
+        try {
+            await dispatch(recordsUpdate(id));
+            setIdState(id);
+            setAction(false);
+            setModalShow(true);
+            console.log(id);
+        } catch (err) {
+            console.log(err);
+        }
         dispatch(changeReactLoading(false));
     };
     //! DELETE USER
     const deleteItem = async (id) => {
         dispatch(changeReactLoading(true));
-        await dispatch(deleteUsersAction(id));
-        dispatch(changeReactLoading(false));
-    };
-    React.useEffect(async () => {
-        dispatch(changeReactLoading(true));
-        await dispatch(getUsersAction());
-        if (closeModal === true) {
-            setModalShow(false);
-            dispatch(modalClose(false));
+        try {
+            await dispatch(deleteUsersAction(id));
+        } catch (err) {
+            console.log(err);
         }
         dispatch(changeReactLoading(false));
+    };
+    React.useEffect(() => {
+        (async () => {
+            dispatch(changeReactLoading(true));
+            try {
+                await dispatch(getUsersAction());
+                if (closeModal === true) {
+                    setModalShow(false);
+                    dispatch(modalClose(false));
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            dispatch(changeReactLoading(false));
+        })();
     }, [closeModal]);
 
     return (
@@ -126,11 +149,21 @@ function Users() {
                                             value="Add User"
                                             className=" btn btn-danger btn-sm mr-3 text-lg"
                                             onClick={async () => {
-                                                await dispatch(
-                                                    recordsUpdate('empty')
+                                                dispatch(
+                                                    changeReactLoading(true)
                                                 );
-                                                setModalShow(true);
-                                                setAction(true);
+                                                try {
+                                                    await dispatch(
+                                                        recordsUpdate('empty')
+                                                    );
+                                                    setModalShow(true);
+                                                    setAction(true);
+                                                } catch (err) {
+                                                    console.log(err);
+                                                }
+                                                dispatch(
+                                                    changeReactLoading(false)
+                                                );
                                             }}
                                         />
                                     ) : null}
@@ -140,9 +173,14 @@ function Users() {
                                         className=" btn btn-danger btn-sm mr-3 text-lg"
                                         onClick={async () => {
                                             dispatch(changeReactLoading(true));
-                                            await dispatch(syncUsers());
+                                            try {
+                                                await dispatch(syncUsers());
+
+                                                toast.success('Success!');
+                                            } catch (err) {
+                                                console.log(err);
+                                            }
                                             dispatch(changeReactLoading(false));
-                                            toast.success('Success!');
                                         }}
                                     />
                                     {action ? (

@@ -6,6 +6,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import ModalDetailsCashIn from '@app/pages/Employee/modals/ModalCashIn';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
 import {currencyFormat, getToday} from '@app/services/utils';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 
 const columns = [
     {
@@ -55,23 +56,29 @@ const CashIn = () => {
 
     useEffect(() => {
         (async () => {
-            const resRestaurant = await getRestaurantByLevel();
-            setRestaurants(resRestaurant);
-            if (
-                localStorage.getItem('role') === 'Cash Manager' ||
-                localStorage.getItem('role') === 'Cash Manager Assistant'
-            ) {
-                if (resRestaurant.length === 1) {
-                    setEmployees(
-                        await getUsersByRestaurant(
-                            resRestaurant[0].idRestaurant
-                        )
-                    );
+            dispatch(changeReactLoading(true));
+            try {
+                const resRestaurant = await getRestaurantByLevel();
+                setRestaurants(resRestaurant);
+                if (
+                    localStorage.getItem('role') === 'Cash Manager' ||
+                    localStorage.getItem('role') === 'Cash Manager Assistant'
+                ) {
+                    if (resRestaurant.length === 1) {
+                        setEmployees(
+                            await getUsersByRestaurant(
+                                resRestaurant[0].idRestaurant
+                            )
+                        );
+                    }
                 }
+                if (localStorage.getItem('role') === 'Cash Employee') {
+                    console.log('hi');
+                }
+            } catch (err) {
+                console.log(err);
             }
-            if (localStorage.getItem('role') === 'Cash Employee') {
-                console.log('hi');
-            }
+            dispatch(changeReactLoading(false));
         })();
     }, []);
 
@@ -108,15 +115,21 @@ const CashIn = () => {
                                 className="form-control mr-3"
                                 style={{minWidth: '100px'}}
                                 onChange={async (e) => {
-                                    setEmployees(
-                                        await getUsersByRestaurant(
-                                            e.target.value
-                                        )
-                                    );
-                                    setFormSearch({
-                                        ...formSearch,
-                                        restaurant: e.target.value
-                                    });
+                                    dispatch(changeReactLoading(true));
+                                    try {
+                                        setEmployees(
+                                            await getUsersByRestaurant(
+                                                e.target.value
+                                            )
+                                        );
+                                        setFormSearch({
+                                            ...formSearch,
+                                            restaurant: e.target.value
+                                        });
+                                    } catch (err) {
+                                        console.log(err);
+                                    }
+                                    dispatch(changeReactLoading(false));
                                 }}
                             >
                                 {restaurants.length > 1 ? (

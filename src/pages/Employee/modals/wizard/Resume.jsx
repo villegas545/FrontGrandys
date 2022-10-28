@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {currencyFormat} from '@app/services/utils';
 import {saveCashSafe} from '@app/services/';
 import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
+import BlockUi from 'react-block-ui';
 import {toast} from 'react-toastify';
 
 const Resume = ({onHide}) => {
     const reduxValues = useSelector((state) => state.safeCash);
+    const [block, setBlock] = useState(false);
     const dispatch = useDispatch();
     const getCoinsTotal = (data) => {
         return (
@@ -115,6 +117,7 @@ const Resume = ({onHide}) => {
     const onSubmit = async () => {
         try {
             const hoy = new Date();
+            setBlock(true);
             await saveCashSafe({
                 date: reduxValues.wizardDate,
                 cashIn:
@@ -166,302 +169,307 @@ const Resume = ({onHide}) => {
         } catch (error) {
             console.log(error);
         }
+        setBlock(false);
     };
     return (
         <>
-            <div className="card-body">
-                <div className="d-flex justify-content-around h5">
-                    <div>
+            <BlockUi tag="div" blocking={block} message="Please Wait">
+                <div className="card-body">
+                    <div className="d-flex justify-content-around h5">
                         <div>
-                            <span className="h4">
-                                <b>Safe Start</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
+                            <div>
+                                <span className="h4">
+                                    <b>Safe Start</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {currencyFormat(
+                                        getCoinsTotal(
+                                            reduxValues.wizardSafeStart
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getBillsTotalHundreads(
+                                            reduxValues.wizardSafeStart
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
-                                    getCoinsTotal(
-                                        reduxValues.wizardSafeStart
-                                    ).toFixed(2)
-                                )}
-                            </span>
+                                    getCoinsTotal(reduxValues.wizardSafeStart) +
+                                        getBillsTotalHundreads(
+                                            reduxValues.wizardSafeStart
+                                        )
+                                )}{' '}
+                            </div>
                             <br />
-                            <span>
-                                <b>Bills:</b>
-                                {currencyFormat(
-                                    getBillsTotalHundreads(
-                                        reduxValues.wizardSafeStart
-                                    ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsTotal(
-                                    reduxValues.wizardSafeStart
-                                ).toFixed(2) +
-                                    getBillsTotalHundreads(
-                                        reduxValues.wizardSafeStart
-                                    ).toFixed(2)
-                            )}{' '}
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h4">
-                                <b>Expected Values</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
-                                {currencyFormat(
-                                    getCoinsTotal(
-                                        reduxValues.wizardTotalExpected
-                                    ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <span>
-                                <b>Bills:</b>
-                                {currencyFormat(
-                                    getBillsTotal(
-                                        reduxValues.wizardTotalExpected
-                                    ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsTotal(reduxValues.wizardTotalExpected) +
-                                    getBillsTotal(
-                                        reduxValues.wizardTotalExpected
-                                    ).toFixed(2)
-                            )}
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h4">
-                                <b>Real Values</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
-                                {currencyFormat(
-                                    getCoinsTotal(
-                                        reduxValues.wizardTotalReal
-                                    ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <span>
-                                <b>Bills:</b>
-                                {currencyFormat(
-                                    getBillsTotal(
-                                        reduxValues.wizardTotalReal
-                                    ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsTotal(
-                                    reduxValues.wizardTotalReal
-                                ).toFixed(2) +
-                                    getBillsTotal(
-                                        reduxValues.wizardTotalReal
-                                    ).toFixed(2)
-                            )}{' '}
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h4">
-                                <b>Diference</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
+                            <div>
+                                <span className="h4">
+                                    <b>Expected Values</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {currencyFormat(
+                                        getCoinsTotal(
+                                            reduxValues.wizardTotalExpected
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getBillsTotal(
+                                            reduxValues.wizardTotalExpected
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
                                     getCoinsTotal(
                                         reduxValues.wizardTotalExpected
-                                    ).toFixed(2) -
+                                    ) +
+                                        getBillsTotal(
+                                            reduxValues.wizardTotalExpected
+                                        )
+                                )}
+                            </div>
+                            <br />
+                            <div>
+                                <span className="h4">
+                                    <b>Real Values</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {currencyFormat(
                                         getCoinsTotal(
                                             reduxValues.wizardTotalReal
-                                        ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <span>
-                                <b>Bills:</b>
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getBillsTotal(
+                                            reduxValues.wizardTotalReal
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
-                                    getBillsTotal(
-                                        reduxValues.wizardTotalExpected
-                                    ).toFixed(2) -
+                                    getCoinsTotal(reduxValues.wizardTotalReal) +
                                         getBillsTotal(
                                             reduxValues.wizardTotalReal
-                                        ).toFixed(2)
+                                        )
+                                )}{' '}
+                            </div>
+                            <br />
+                            <div>
+                                <span className="h4">
+                                    <b>Diference</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {currencyFormat(
+                                        getCoinsTotal(
+                                            reduxValues.wizardTotalExpected
+                                        ) -
+                                            getCoinsTotal(
+                                                reduxValues.wizardTotalReal
+                                            )
+                                    )}
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getBillsTotal(
+                                            reduxValues.wizardTotalExpected
+                                        ) -
+                                            getBillsTotal(
+                                                reduxValues.wizardTotalReal
+                                            )
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
+                                {currencyFormat(
+                                    getCoinsTotal(
+                                        reduxValues.wizardTotalExpected
+                                    ) +
+                                        getBillsTotal(
+                                            reduxValues.wizardTotalExpected
+                                        ) -
+                                        (getCoinsTotal(
+                                            reduxValues.wizardTotalReal
+                                        ) +
+                                            getBillsTotal(
+                                                reduxValues.wizardTotalReal
+                                            ))
                                 )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsTotal(
-                                    reduxValues.wizardTotalExpected
-                                ).toFixed(2) +
-                                    getBillsTotal(
-                                        reduxValues.wizardTotalExpected
-                                    ).toFixed(2) -
-                                    (getCoinsTotal(
-                                        reduxValues.wizardTotalReal
-                                    ).toFixed(2) +
-                                        getBillsTotal(
-                                            reduxValues.wizardTotalReal
-                                        ).toFixed(2))
-                            )}
+                            </div>
                         </div>
-                    </div>
-                    <div>
                         <div>
-                            <span className="h4">
-                                <b>Cash In</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
+                            <div>
+                                <span className="h4">
+                                    <b>Cash In</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {currencyFormat(
+                                        getCoinsTotalArray(
+                                            reduxValues.wizardCashIns
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getBillsTotalArray(
+                                            reduxValues.wizardCashIns
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
                                     getCoinsTotalArray(
                                         reduxValues.wizardCashIns
-                                    ).toFixed(2)
+                                    ) +
+                                        getBillsTotalArray(
+                                            reduxValues.wizardCashIns
+                                        )
                                 )}
-                            </span>
+                            </div>
                             <br />
-                            <span>
-                                <b>Bills:</b>
-                                {currencyFormat(
-                                    getBillsTotalArray(
-                                        reduxValues.wizardCashIns
-                                    ).toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsTotalArray(
-                                    reduxValues.wizardCashIns
-                                ).toFixed(2) +
-                                    getBillsTotalArray(
-                                        reduxValues.wizardCashIns
-                                    ).toFixed(2)
-                            )}
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h4">
-                                <b>Cash Out</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
+                            <div>
+                                <span className="h4">
+                                    <b>Cash Out</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {currencyFormat(
+                                        getCoinsTotalArray(
+                                            reduxValues.wizardCashOuts
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getBillsTotalArrayCashOut(
+                                            reduxValues.wizardCashOuts
+                                        )
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
                                     getCoinsTotalArray(
                                         reduxValues.wizardCashOuts
-                                    ).toFixed(2)
+                                    ) +
+                                        getBillsTotalArrayCashOut(
+                                            reduxValues.wizardCashOuts
+                                        )
                                 )}
-                            </span>
+                            </div>
                             <br />
-                            <span>
-                                <b>Bills:</b>
+                            <div>
+                                <span className="h4">
+                                    <b>Vouchers In Values:</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {
+                                        currencyFormat(
+                                            getCoinsVoucher(
+                                                reduxValues.wizardVouchers
+                                            )
+                                        ).totalIn
+                                    }
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getCoinsVoucher(
+                                            reduxValues.wizardVouchers
+                                        ).totalIn
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
-                                    getBillsTotalArrayCashOut(
-                                        reduxValues.wizardCashOuts
-                                    ).toFixed(2)
+                                    getCoinsVoucher(reduxValues.wizardVouchers)
+                                        .totalIn +
+                                        getCoinsVoucher(
+                                            reduxValues.wizardVouchers
+                                        ).totalIn
                                 )}
-                            </span>
+                            </div>
                             <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsTotalArray(reduxValues.wizardCashOuts) +
-                                    getBillsTotalArrayCashOut(
-                                        reduxValues.wizardCashOuts
-                                    ).toFixed(2)
-                            )}
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h4">
-                                <b>Vouchers In Values:</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
+                            <div>
+                                <span className="h4">
+                                    <b>Vouchers Out Values:</b>
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Coins:</b>
+                                    {
+                                        currencyFormat(
+                                            getCoinsVoucher(
+                                                reduxValues.wizardVouchers
+                                            )
+                                        ).totalOut
+                                    }
+                                </span>
+                                <br />
+                                <span>
+                                    <b>Bills:</b>
+                                    {currencyFormat(
+                                        getCoinsVoucher(
+                                            reduxValues.wizardVouchers
+                                        ).totalOut
+                                    )}
+                                </span>
+                                <br />
+                                <b>Total: </b>
                                 {currencyFormat(
-                                    getCoinsVoucher(
-                                        reduxValues.wizardVouchers
-                                    ).totalIn.toFixed(2)
+                                    getCoinsVoucher(reduxValues.wizardVouchers)
+                                        .totalOut +
+                                        getCoinsVoucher(
+                                            reduxValues.wizardVouchers
+                                        ).totalOut
                                 )}
-                            </span>
-                            <br />
-                            <span>
-                                <b>Bills:</b>
-                                {currencyFormat(
-                                    getCoinsVoucher(
-                                        reduxValues.wizardVouchers
-                                    ).totalIn.toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsVoucher(
-                                    reduxValues.wizardVouchers
-                                ).totalIn.toFixed(2) +
-                                    getCoinsVoucher(
-                                        reduxValues.wizardVouchers
-                                    ).totalIn.toFixed(2)
-                            )}
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h4">
-                                <b>Vouchers Out Values:</b>
-                            </span>
-                            <br />
-                            <span>
-                                <b>Coins:</b>
-                                {currencyFormat(
-                                    getCoinsVoucher(
-                                        reduxValues.wizardVouchers
-                                    ).totalOut.toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <span>
-                                <b>Bills:</b>
-                                {currencyFormat(
-                                    getCoinsVoucher(
-                                        reduxValues.wizardVouchers
-                                    ).totalOut.toFixed(2)
-                                )}
-                            </span>
-                            <br />
-                            <b>Total: </b>
-                            {currencyFormat(
-                                getCoinsVoucher(
-                                    reduxValues.wizardVouchers
-                                ).totalOut.toFixed(2) +
-                                    getCoinsVoucher(
-                                        reduxValues.wizardVouchers
-                                    ).totalOut.toFixed(2)
-                            )}
+                            </div>
                         </div>
                     </div>
+                    <button
+                        className="btn btn-primary w-100"
+                        type="button"
+                        onClick={() => onSubmit()}
+                    >
+                        Save{' '}
+                    </button>
                 </div>
-                <button
-                    className="btn btn-primary w-100"
-                    type="button"
-                    onClick={() => onSubmit()}
-                >
-                    Save{' '}
-                </button>
-            </div>
+            </BlockUi>
         </>
     );
 };

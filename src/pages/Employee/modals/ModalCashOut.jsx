@@ -72,36 +72,40 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
     const [cashIn, setCashIn] = React.useState(0);
     const [error, setError] = React.useState();
     const getApiInfo = async (date) => {
-        setBlock(true);
-        setApiInfo(await cashOutApiInfo(date));
-        const resCashIn = await getCashInByEmployeeAndDate(date);
-        if (resCashIn) {
-            const coinsTotal =
-                (resCashIn.pennies +
-                    resCashIn.nickels * 5 +
-                    resCashIn.dimes * 10 +
-                    resCashIn.quarters * 25) /
-                    100 +
-                (resCashIn.penniesRoll * 50 +
-                    resCashIn.nickelsRoll * 5 * 40 +
-                    resCashIn.dimesRoll * 10 * 50 +
-                    resCashIn.quartersRoll * 25 * 40) /
-                    100;
-            const billsTotal =
-                resCashIn.ones +
-                resCashIn.twos * 2 +
-                resCashIn.fives * 5 +
-                resCashIn.fives * 10 +
-                resCashIn.twenties * 20 +
-                resCashIn.fifties * 50 +
-                resCashIn.hundreads * 100;
-            const totalTotal = Number(coinsTotal) + Number(billsTotal);
-            setCashIn(totalTotal);
-        } else {
-            setCashIn(0);
-        }
+        try {
+            setBlock(true);
+            setApiInfo(await cashOutApiInfo(date));
+            const resCashIn = await getCashInByEmployeeAndDate(date);
+            if (resCashIn) {
+                const coinsTotal =
+                    (resCashIn.pennies +
+                        resCashIn.nickels * 5 +
+                        resCashIn.dimes * 10 +
+                        resCashIn.quarters * 25) /
+                        100 +
+                    (resCashIn.penniesRoll * 50 +
+                        resCashIn.nickelsRoll * 5 * 40 +
+                        resCashIn.dimesRoll * 10 * 50 +
+                        resCashIn.quartersRoll * 25 * 40) /
+                        100;
+                const billsTotal =
+                    resCashIn.ones +
+                    resCashIn.twos * 2 +
+                    resCashIn.fives * 5 +
+                    resCashIn.fives * 10 +
+                    resCashIn.twenties * 20 +
+                    resCashIn.fifties * 50 +
+                    resCashIn.hundreads * 100;
+                const totalTotal = Number(coinsTotal) + Number(billsTotal);
+                setCashIn(totalTotal);
+            } else {
+                setCashIn(0);
+            }
 
-        setBlock(false);
+            setBlock(false);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     useEffect(() => {

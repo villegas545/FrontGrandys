@@ -33,6 +33,7 @@ const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
 // eslint-disable-next-line no-unused-vars
 const BodyInfo = ({row, action, user, onHide}) => {
     console.log(row);
+
     const form = {
         pennies: row.pennies,
         nickels: row.nickels,

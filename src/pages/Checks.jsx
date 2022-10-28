@@ -3,6 +3,7 @@
 import React from 'react';
 import TableReports from '@app/components/table/TableReports';
 import {toast} from 'react-toastify';
+//! paso 1 useDispatch
 import {useSelector, useDispatch} from 'react-redux';
 import {isEmpty} from 'lodash';
 import axios from 'axios';
@@ -12,11 +13,13 @@ import {
     getChecksCleanDatesSuccess,
     updateChecksAction
 } from '@app/store/reducers/checksDucks';
+//! paso 2 ChangeReactLoading
 import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import {confirmAlert} from 'react-confirm-alert';
 import {url as urlconf} from '../config/index';
 
 const Checks = () => {
+    //! declarar el useDispatch
     const dispatch = useDispatch();
 
     const columns = React.useCallback(
@@ -79,6 +82,8 @@ const Checks = () => {
     const [role, setRole] = React.useState('');
     const [api, setApi] = React.useState('');
     const datePopulate = async (recibeDates) => {
+        //! paso 4 usar true / false antes y despues de awaits
+        dispatch(changeReactLoading(true));
         console.log(recibeDates);
         try {
             const respuesta = await axios.post(
@@ -122,7 +127,6 @@ const Checks = () => {
                     {
                         label: 'Yes',
                         onClick: () => {
-                            dispatch(changeReactLoading(true));
                             datePopulate(dates);
                             setForce(false);
                         }
