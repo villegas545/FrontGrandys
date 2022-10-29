@@ -24,7 +24,9 @@ const BodyInfo = ({onHide, idRow, text}) => {
                 <b>
                     {text} By: <br />
                 </b>
-                {text === 'Created' ? idRow.row.original.user : null}
+                {text === 'Created'
+                    ? idRow.row.original.user
+                    : idRow.row.original.received}
             </span>
             <br />
             <span>
