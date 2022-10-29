@@ -92,7 +92,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                     resCashIn.ones +
                     resCashIn.twos * 2 +
                     resCashIn.fives * 5 +
-                    resCashIn.fives * 10 +
+                    resCashIn.tens * 10 +
                     resCashIn.twenties * 20 +
                     resCashIn.fifties * 50 +
                     resCashIn.hundreads * 100;
@@ -322,10 +322,10 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         form.pennies / 100 +
-                                        (form.penniesRoll * 50) / 100
-                                    }
+                                            (form.penniesRoll * 50) / 100
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -367,10 +367,10 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         (form.nickels * 5) / 100 +
-                                        (form.nickelsRoll * 5 * 40) / 100
-                                    }
+                                            (form.nickelsRoll * 5 * 40) / 100
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -412,10 +412,10 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         (form.dimes * 10) / 100 +
-                                        (form.dimesRoll * 10 * 50) / 100
-                                    }
+                                            (form.dimesRoll * 10 * 50) / 100
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -457,10 +457,10 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         (form.quarters * 25) / 100 +
-                                        (form.quartersRoll * 25 * 40) / 100
-                                    }
+                                            (form.quartersRoll * 25 * 40) / 100
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -495,7 +495,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.ones}
+                                    value={Number(form.ones).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -524,7 +524,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.twos * 2}
+                                    value={Number(form.twos * 2).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -553,7 +553,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.fives * 5}
+                                    value={Number(form.fives * 5).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -582,7 +582,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.tens * 10}
+                                    value={Number(form.tens * 10).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -611,7 +611,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.twenties * 20}
+                                    value={Number(form.twenties * 20).toFixed(
+                                        2
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -639,7 +641,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.fifties * 50}
+                                    value={Number(form.fifties * 50).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -668,7 +670,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.hundreds * 100}
+                                    value={Number(form.hundreds * 100).toFixed(
+                                        2
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -692,7 +696,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             (Number(form.pennies) +
                                                 Number(form.nickels * 5) +
                                                 Number(form.dimes * 10) +
@@ -709,7 +713,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                     form.quartersRoll * 25 * 40
                                                 )) /
                                                 100
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -726,7 +730,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             Number(form.ones) +
                                             Number(form.twos * 2) +
                                             Number(form.fives * 5) +
@@ -734,7 +738,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                             Number(form.twenties * 20) +
                                             Number(form.fifties * 50) +
                                             Number(form.hundreds * 100)
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -751,7 +755,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             Number(form.ones) +
                                             Number(form.twos * 2) +
                                             Number(form.fives * 5) +
@@ -775,7 +779,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                     form.quartersRoll * 25 * 40
                                                 )) /
                                                 100
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -798,7 +802,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                 prefix="$"
                                                 className="form-control input-sm mr-3"
                                                 style={{minWidth: '50px'}}
-                                                value={getPipoTotal(apiInfo)}
+                                                value={getPipoTotal(
+                                                    apiInfo
+                                                ).toFixed(2)}
                                                 disabled
                                             />
                                         </div>
@@ -815,9 +821,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                 prefix="$"
                                                 className="form-control input-sm mr-3"
                                                 style={{minWidth: '50px'}}
-                                                value={
+                                                value={Number(
                                                     owedTotal(apiInfo).cashOwed
-                                                }
+                                                ).toFixed(2)}
                                                 disabled
                                             />
                                         </div>
@@ -834,10 +840,10 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                 prefix="$"
                                                 className="form-control input-sm mr-3"
                                                 style={{minWidth: '50px'}}
-                                                value={
+                                                value={Number(
                                                     owedTotal(apiInfo)
                                                         .creditOwed
-                                                }
+                                                ).toFixed(2)}
                                                 disabled
                                             />
                                         </div>
@@ -860,7 +866,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={cashIn}
+                                        value={cashIn.toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -877,13 +883,13 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             Number(cashIn) +
                                             Number(
                                                 owedTotal(apiInfo).cashOwed
                                             ) +
                                             Number(getPipoTotal(apiInfo))
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>

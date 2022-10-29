@@ -35,11 +35,17 @@ function SelectCashOut() {
                 element.nickels * 5 +
                 element.dimes * 10 +
                 element.quarters * 25) /
-            100;
+                100 +
+            (element.penniesRoll * 50 +
+                element.nickelsRoll * 5 * 40 +
+                element.dimesRoll * 10 * 50 +
+                element.quartersRoll * 25 * 40) /
+                100;
         const billsTotal =
             element.ones +
             element.twos * 2 +
             element.fives * 5 +
+            element.tens * 10 +
             element.twenties * 20 +
             element.fifties * 50 +
             element.hundreds * 100;
@@ -78,10 +84,10 @@ function SelectCashOut() {
             <BlockUi tag="div" blocking={block} message="Please Wait">
                 <div>
                     <span>
-                        <b> CashIn Total: {currencyFormat(totalState)}</b>
+                        <b> CashOut Total: {currencyFormat(totalState)}</b>
                     </span>{' '}
                     <span>
-                        <b> CashIn Count: {listCashOut.length}</b>
+                        <b> CashOut Count: {listCashOut.length}</b>
                     </span>{' '}
                     <table className="table table-light">
                         <thead>

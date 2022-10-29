@@ -92,6 +92,34 @@ const Resume = ({onHide}) => {
         });
         return total;
     };
+
+    const getBillsVoucher = (data) => {
+        let totalIn = 0;
+        let totalOut = 0;
+        data.forEach((row) => {
+            if (row.type === 'In') {
+                totalIn +=
+                    Number(row.ones) +
+                    Number(row.twos * 2) +
+                    Number(row.fives * 5) +
+                    Number(row.tens * 10) +
+                    Number(row.twenties * 20) +
+                    Number(row.fifties * 50) +
+                    Number(row.hundreads * 100);
+            } else {
+                totalOut -=
+                    Number(row.ones) +
+                    Number(row.twos * 2) +
+                    Number(row.fives * 5) +
+                    Number(row.tens * 10) +
+                    Number(row.twenties * 20) +
+                    Number(row.fifties * 50) +
+                    Number(row.hundreads * 100);
+            }
+        });
+        return {totalIn, totalOut};
+    };
+
     const getCoinsVoucher = (data) => {
         let totalIn = 0;
         let totalOut = 0;
@@ -101,14 +129,22 @@ const Resume = ({onHide}) => {
                     (Number(row.pennies) +
                         Number(row.nickels * 5) +
                         Number(row.dimes * 10) +
-                        Number(row.quarters * 25)) /
+                        Number(row.quarters * 25) +
+                        Number(row.penniesRoll) * 50 +
+                        Number(row.nickelsRoll * 5 * 40) +
+                        Number(row.dimesRoll * 10 * 50) +
+                        Number(row.quartersRoll * 25 * 40)) /
                     100;
             } else {
-                totalOut +=
+                totalOut -=
                     (Number(row.pennies) +
                         Number(row.nickels * 5) +
                         Number(row.dimes * 10) +
-                        Number(row.quarters * 25)) /
+                        Number(row.quarters * 25) +
+                        Number(row.penniesRoll) * 50 +
+                        Number(row.nickelsRoll * 5 * 40) +
+                        Number(row.dimesRoll * 10 * 50) +
+                        Number(row.quartersRoll * 25 * 40)) /
                     100;
             }
         });
@@ -128,10 +164,10 @@ const Resume = ({onHide}) => {
                     getBillsTotalArrayCashOut(reduxValues.wizardCashOuts),
                 vouchersIn:
                     getCoinsVoucher(reduxValues.wizardVouchers).totalIn +
-                    getCoinsVoucher(reduxValues.wizardVouchers).totalIn,
+                    getBillsVoucher(reduxValues.wizardVouchers).totalIn,
                 vouchersOut:
                     getCoinsVoucher(reduxValues.wizardVouchers).totalOut +
-                    getCoinsVoucher(reduxValues.wizardVouchers).totalOut,
+                    getBillsVoucher(reduxValues.wizardVouchers).totalOut,
                 initSafe:
                     getCoinsTotal(reduxValues.wizardSafeStart) +
                     getBillsTotalHundreads(reduxValues.wizardSafeStart),
@@ -397,19 +433,17 @@ const Resume = ({onHide}) => {
                                 <br />
                                 <span>
                                     <b>Coins:</b>
-                                    {
-                                        currencyFormat(
-                                            getCoinsVoucher(
-                                                reduxValues.wizardVouchers
-                                            )
+                                    {currencyFormat(
+                                        getCoinsVoucher(
+                                            reduxValues.wizardVouchers
                                         ).totalIn
-                                    }
+                                    )}
                                 </span>
                                 <br />
                                 <span>
                                     <b>Bills:</b>
                                     {currencyFormat(
-                                        getCoinsVoucher(
+                                        getBillsVoucher(
                                             reduxValues.wizardVouchers
                                         ).totalIn
                                     )}
@@ -419,7 +453,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getCoinsVoucher(reduxValues.wizardVouchers)
                                         .totalIn +
-                                        getCoinsVoucher(
+                                        getBillsVoucher(
                                             reduxValues.wizardVouchers
                                         ).totalIn
                                 )}
@@ -432,19 +466,17 @@ const Resume = ({onHide}) => {
                                 <br />
                                 <span>
                                     <b>Coins:</b>
-                                    {
-                                        currencyFormat(
-                                            getCoinsVoucher(
-                                                reduxValues.wizardVouchers
-                                            )
+                                    {currencyFormat(
+                                        getCoinsVoucher(
+                                            reduxValues.wizardVouchers
                                         ).totalOut
-                                    }
+                                    )}
                                 </span>
                                 <br />
                                 <span>
                                     <b>Bills:</b>
                                     {currencyFormat(
-                                        getCoinsVoucher(
+                                        getBillsVoucher(
                                             reduxValues.wizardVouchers
                                         ).totalOut
                                     )}
@@ -454,7 +486,7 @@ const Resume = ({onHide}) => {
                                 {currencyFormat(
                                     getCoinsVoucher(reduxValues.wizardVouchers)
                                         .totalOut +
-                                        getCoinsVoucher(
+                                        getBillsVoucher(
                                             reduxValues.wizardVouchers
                                         ).totalOut
                                 )}

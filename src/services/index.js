@@ -78,3 +78,9 @@ export const getPipoByUser = async (data) =>
 
 export const getCashInByEmployeeAndDate = async (data) =>
     (await getFunction(`getCashInByEmployeeAndDate/${data}`)).response;
+
+export const approveRejectCashRegisterEndups = async (data) =>
+    patchFunction('approveRejectCashRegisterEndups', data);
+
+export const cancelCashRegisterEndups = async (data) =>
+    patchFunction('cancelCashRegisterEndups', data);

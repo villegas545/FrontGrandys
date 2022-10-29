@@ -10,8 +10,8 @@ import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalDetailsCashOut';
 import {
-    approveRejectCashRegisterStartup,
-    cancelCashRegisterStartup
+    approveRejectCashRegisterEndups,
+    cancelCashRegisterEndups
 } from '@app/services';
 import {useDispatch} from 'react-redux';
 import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
@@ -55,20 +55,20 @@ function TableCashOut({columns, data}) {
         try {
             switch (action) {
                 case 'approve':
-                    await approveRejectCashRegisterStartup({
-                        idRequestCashRegisterStartup: id,
+                    await approveRejectCashRegisterEndups({
+                        idRequestCashRegisterEndups: id,
                         approved: 'Approved'
                     });
                     break;
                 case 'reject':
-                    await approveRejectCashRegisterStartup({
-                        idRequestCashRegisterStartup: id,
+                    await approveRejectCashRegisterEndups({
+                        idRequestCashRegisterEndups: id,
                         rejected: 'Rejected'
                     });
                     break;
                 case 'cancel':
-                    await cancelCashRegisterStartup({
-                        idRequestCashRegisterStartup: id
+                    await cancelCashRegisterEndups({
+                        idRequestCashRegisterEndups: id
                     });
                     break;
                 default:

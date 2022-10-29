@@ -83,52 +83,76 @@ const CaptureSafe = () => {
                         total: lastSafeCash
                     })
                 );
+            } else {
+                const iniSafe = {
+                    pennies: 0,
+                    nickels: 0,
+                    dimes: 0,
+                    quarters: 0,
+                    penniesRoll: 0,
+                    nickelsRoll: 0,
+                    dimesRoll: 0,
+                    quartersRoll: 0,
+                    ones: 0,
+                    twos: 0,
+                    fives: 0,
+                    tens: 0,
+                    twenties: 0,
+                    fifties: 0,
+                    hundreads: 0
+                };
+                dispatch(
+                    wizardVoucher({
+                        type: 'wizardSafeStart',
+                        total: iniSafe
+                    })
+                );
             }
 
             reduxValues.wizardCashIns.forEach((cashIn) => {
-                initValues.pennies += cashIn.pennies;
-                initValues.nickels += cashIn.nickels;
-                initValues.dimes += cashIn.dimes;
-                initValues.quarters += cashIn.quarters;
-                initValues.penniesRoll += cashIn.penniesRoll;
-                initValues.nickelsRoll += cashIn.nickelsRoll;
-                initValues.dimesRoll += cashIn.dimesRoll;
-                initValues.quartersRoll += cashIn.quartersRoll;
-                initValues.ones += cashIn.ones;
-                initValues.twos += cashIn.twos;
-                initValues.fives += cashIn.fives;
-                initValues.tens += cashIn.tens;
-                initValues.twenties += cashIn.twenties;
-                initValues.fifties += cashIn.fifties;
-                initValues.hundreads += cashIn.hundreads;
+                initValues.pennies -= cashIn.pennies;
+                initValues.nickels -= cashIn.nickels;
+                initValues.dimes -= cashIn.dimes;
+                initValues.quarters -= cashIn.quarters;
+                initValues.penniesRoll -= cashIn.penniesRoll;
+                initValues.nickelsRoll -= cashIn.nickelsRoll;
+                initValues.dimesRoll -= cashIn.dimesRoll;
+                initValues.quartersRoll -= cashIn.quartersRoll;
+                initValues.ones -= cashIn.ones;
+                initValues.twos -= cashIn.twos;
+                initValues.fives -= cashIn.fives;
+                initValues.tens -= cashIn.tens;
+                initValues.twenties -= cashIn.twenties;
+                initValues.fifties -= cashIn.fifties;
+                initValues.hundreads -= cashIn.hundreads;
             });
             reduxValues.wizardCashOuts.forEach((cashOut) => {
-                initValues.pennies -= cashOut.pennies;
-                initValues.nickels -= cashOut.nickels;
-                initValues.dimes -= cashOut.dimes;
-                initValues.quarters -= cashOut.quarters;
-                initValues.penniesRoll -= cashOut.penniesRoll;
-                initValues.nickelsRoll -= cashOut.nickelsRoll;
-                initValues.dimesRoll -= cashOut.dimesRoll;
-                initValues.quartersRoll -= cashOut.quartersRoll;
-                initValues.ones -= cashOut.ones;
-                initValues.twos -= cashOut.twos;
-                initValues.fives -= cashOut.fives;
-                initValues.tens -= cashOut.tens;
-                initValues.twenties -= cashOut.twenties;
-                initValues.fifties -= cashOut.fifties;
-                initValues.hundreads -= cashOut.hundreds;
+                initValues.pennies += cashOut.pennies;
+                initValues.nickels += cashOut.nickels;
+                initValues.dimes += cashOut.dimes;
+                initValues.quarters += cashOut.quarters;
+                initValues.penniesRoll += cashOut.penniesRoll;
+                initValues.nickelsRoll += cashOut.nickelsRoll;
+                initValues.dimesRoll += cashOut.dimesRoll;
+                initValues.quartersRoll += cashOut.quartersRoll;
+                initValues.ones += cashOut.ones;
+                initValues.twos += cashOut.twos;
+                initValues.fives += cashOut.fives;
+                initValues.tens += cashOut.tens;
+                initValues.twenties += cashOut.twenties;
+                initValues.fifties += cashOut.fifties;
+                initValues.hundreads += cashOut.hundreds;
             });
             reduxValues.wizardVouchers.forEach((voucher) => {
                 if (voucher.type === 'In') {
                     initValues.pennies += voucher.pennies;
                     initValues.nickels += voucher.nickels;
                     initValues.dimes += voucher.dimes;
-                    initValues.quarters -= voucher.quarters;
+                    initValues.quarters += voucher.quarters;
                     initValues.penniesRoll += voucher.penniesRoll;
                     initValues.nickelsRoll += voucher.nickelsRoll;
                     initValues.dimesRoll += voucher.dimesRoll;
-                    initValues.quartersRoll -= voucher.quartersRoll;
+                    initValues.quartersRoll += voucher.quartersRoll;
                     initValues.ones += voucher.ones;
                     initValues.twos += voucher.twos;
                     initValues.fives += voucher.fives;
@@ -198,7 +222,7 @@ const CaptureSafe = () => {
                                             pennies: e.target.value
                                         })
                                     }
-                                    value={form.pennies}
+                                    value={Number(form.pennies)}
                                     className="form-control"
                                 />{' '}
                             </div>
@@ -212,7 +236,7 @@ const CaptureSafe = () => {
                                             penniesRoll: e.target.value
                                         })
                                     }
-                                    value={form.penniesRoll}
+                                    value={Number(form.penniesRoll)}
                                     className="form-control"
                                 />{' '}
                             </div>
@@ -223,10 +247,10 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         form.pennies / 100 +
-                                        (form.penniesRoll * 50) / 100
-                                    }
+                                            (form.penniesRoll * 50) / 100
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -244,7 +268,7 @@ const CaptureSafe = () => {
                                             nickels: e.target.value
                                         })
                                     }
-                                    value={form.nickels}
+                                    value={Number(form.nickels)}
                                 />{' '}
                             </div>
                             <div>
@@ -258,7 +282,7 @@ const CaptureSafe = () => {
                                             nickelsRoll: e.target.value
                                         })
                                     }
-                                    value={form.nickelsRoll}
+                                    value={Number(form.nickelsRoll)}
                                 />{' '}
                             </div>
                             <div>
@@ -268,10 +292,10 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         (form.nickels * 5) / 100 +
-                                        (form.nickelsRoll * 5 * 40) / 100
-                                    }
+                                            (form.nickelsRoll * 5 * 40) / 100
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -289,7 +313,7 @@ const CaptureSafe = () => {
                                             dimes: e.target.value
                                         })
                                     }
-                                    value={form.dimes}
+                                    value={Number(form.dimes)}
                                 />{' '}
                             </div>
                             <div>
@@ -303,7 +327,7 @@ const CaptureSafe = () => {
                                             dimesRoll: e.target.value
                                         })
                                     }
-                                    value={form.dimesRoll}
+                                    value={Number(form.dimesRoll)}
                                 />{' '}
                             </div>
                             <div>
@@ -313,10 +337,10 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         (form.dimes * 10) / 100 +
-                                        (form.dimesRoll * 10 * 50) / 100
-                                    }
+                                            (form.dimesRoll * 10 * 50) / 100
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -334,7 +358,7 @@ const CaptureSafe = () => {
                                             quarters: e.target.value
                                         })
                                     }
-                                    value={form.quarters}
+                                    value={Number(form.quarters)}
                                 />{' '}
                             </div>
                             <div>
@@ -348,7 +372,7 @@ const CaptureSafe = () => {
                                             quartersRoll: e.target.value
                                         })
                                     }
-                                    value={form.quartersRoll}
+                                    value={Number(form.quartersRoll)}
                                 />{' '}
                             </div>
                             <div>
@@ -358,10 +382,10 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={
+                                    value={Number(
                                         (form.quarters * 25) / 100 +
-                                        (form.quartersRoll * 25 * 40) / 100
-                                    }
+                                            (form.quartersRoll * 25 * 40) / 100
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -385,7 +409,7 @@ const CaptureSafe = () => {
                                             ones: e.target.value
                                         })
                                     }
-                                    value={form.ones}
+                                    value={Number(form.ones)}
                                 />{' '}
                             </div>
                             <div />
@@ -396,7 +420,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.ones}
+                                    value={Number(form.ones)}
                                     disabled
                                 />{' '}
                             </div>
@@ -414,7 +438,7 @@ const CaptureSafe = () => {
                                             twos: e.target.value
                                         })
                                     }
-                                    value={form.twos}
+                                    value={Number(form.twos)}
                                 />{' '}
                             </div>
                             <div />
@@ -425,7 +449,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.twos * 2}
+                                    value={Number(form.twos * 2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -443,7 +467,7 @@ const CaptureSafe = () => {
                                             fives: e.target.value
                                         })
                                     }
-                                    value={form.fives}
+                                    value={Number(form.fives)}
                                 />{' '}
                             </div>
                             <div />
@@ -454,7 +478,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.fives * 5}
+                                    value={Number(form.fives * 5)}
                                     disabled
                                 />{' '}
                             </div>
@@ -472,7 +496,7 @@ const CaptureSafe = () => {
                                             tens: e.target.value
                                         })
                                     }
-                                    value={form.tens}
+                                    value={Number(form.tens)}
                                 />{' '}
                             </div>
                             <div />
@@ -483,7 +507,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.tens * 10}
+                                    value={Number(form.tens * 10)}
                                     disabled
                                 />{' '}
                             </div>
@@ -501,7 +525,7 @@ const CaptureSafe = () => {
                                             twenties: e.target.value
                                         })
                                     }
-                                    value={form.twenties}
+                                    value={Number(form.twenties)}
                                 />{' '}
                             </div>
                             <div> </div>
@@ -512,7 +536,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.twenties * 20}
+                                    value={Number(form.twenties * 20)}
                                     disabled
                                 />{' '}
                             </div>
@@ -530,7 +554,7 @@ const CaptureSafe = () => {
                                             fifties: e.target.value
                                         })
                                     }
-                                    value={form.fifties}
+                                    value={Number(form.fifties)}
                                 />{' '}
                             </div>
                             <div> </div>
@@ -540,7 +564,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.fifties * 50}
+                                    value={Number(form.fifties * 50)}
                                     disabled
                                 />{' '}
                             </div>
@@ -558,7 +582,7 @@ const CaptureSafe = () => {
                                             hundreads: e.target.value
                                         })
                                     }
-                                    value={form.hundreads}
+                                    value={Number(form.hundreads)}
                                 />{' '}
                             </div>
                             <div />
@@ -569,7 +593,7 @@ const CaptureSafe = () => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={form.hundreads * 100}
+                                    value={Number(form.hundreads * 100)}
                                     disabled
                                 />{' '}
                             </div>
@@ -628,6 +652,7 @@ const CaptureSafe = () => {
                                         style={{minWidth: '50px'}}
                                         value={
                                             Number(form.ones) +
+                                            Number(form.twos * 2) +
                                             Number(form.fives * 5) +
                                             Number(form.tens * 10) +
                                             Number(form.twenties * 20) +
@@ -702,23 +727,17 @@ const CaptureSafe = () => {
                                                 Number(
                                                     reduxValues
                                                         .wizardTotalExpected
-                                                        .nickels *
-                                                        5 *
-                                                        40
+                                                        .nickels * 5
                                                 ) +
                                                 Number(
                                                     reduxValues
                                                         .wizardTotalExpected
-                                                        .dimes *
-                                                        10 *
-                                                        50
+                                                        .dimes * 10
                                                 ) +
                                                 Number(
                                                     reduxValues
                                                         .wizardTotalExpected
-                                                        .quarters *
-                                                        25 *
-                                                        40
+                                                        .quarters * 25
                                                 )) /
                                                 100 +
                                             (Number(
@@ -728,17 +747,23 @@ const CaptureSafe = () => {
                                                 Number(
                                                     reduxValues
                                                         .wizardTotalExpected
-                                                        .nickelsRoll * 5
+                                                        .nickelsRoll *
+                                                        5 *
+                                                        40
                                                 ) +
                                                 Number(
                                                     reduxValues
                                                         .wizardTotalExpected
-                                                        .dimesRoll * 10
+                                                        .dimesRoll *
+                                                        10 *
+                                                        50
                                                 ) +
                                                 Number(
                                                     reduxValues
                                                         .wizardTotalExpected
-                                                        .quartersRoll * 25
+                                                        .quartersRoll *
+                                                        25 *
+                                                        40
                                                 )) /
                                                 100
                                         }
@@ -762,6 +787,10 @@ const CaptureSafe = () => {
                                             Number(
                                                 reduxValues.wizardTotalExpected
                                                     .ones
+                                            ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .twos * 2
                                             ) +
                                             Number(
                                                 reduxValues.wizardTotalExpected
@@ -804,6 +833,10 @@ const CaptureSafe = () => {
                                             Number(
                                                 reduxValues.wizardTotalExpected
                                                     .ones
+                                            ) +
+                                            Number(
+                                                reduxValues.wizardTotalExpected
+                                                    .twos * 2
                                             ) +
                                             Number(
                                                 reduxValues.wizardTotalExpected

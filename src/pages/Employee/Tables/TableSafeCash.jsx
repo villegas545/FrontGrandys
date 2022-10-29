@@ -60,21 +60,27 @@ function TableSafeCash({columns, data}) {
         dispatch(changeReactLoading(true));
 
         try {
+            const hoy = new Date();
             switch (action) {
                 case 'approve':
                     await approveRejectSafeCash({
+                        receivedHour: `${hoy.getHours()}:${hoy.getMinutes()}:${hoy.getSeconds()}`,
                         idRequestSafeCash: id,
                         approved: 'Approved'
                     });
                     break;
                 case 'reject':
                     await approveRejectSafeCash({
+                        receivedHour: `${hoy.getHours()}:${hoy.getMinutes()}:${hoy.getSeconds()}`,
                         idRequestSafeCash: id,
                         rejected: 'Rejected'
                     });
                     break;
                 case 'cancel':
-                    await cancelSafeCash({idRequestSafeCash: id});
+                    await cancelSafeCash({
+                        idRequestSafeCash: id,
+                        receivedHour: `${hoy.getHours()}:${hoy.getMinutes()}:${hoy.getSeconds()}`
+                    });
                     break;
                 default:
                     console.log('never');

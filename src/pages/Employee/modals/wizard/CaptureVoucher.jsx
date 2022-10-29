@@ -581,6 +581,7 @@ const CaptureVoucher = () => {
                                     style={{minWidth: '50px'}}
                                     value={(
                                         Number(form.ones) +
+                                        Number(form.twos * 2) +
                                         Number(form.fives * 5) +
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
