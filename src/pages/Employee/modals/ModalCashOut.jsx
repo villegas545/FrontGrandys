@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React, {useState, useEffect} from 'react';
 // eslint-disable-next-line no-unused-vars
@@ -10,7 +11,8 @@ import BlockUi from 'react-block-ui';
 import {
     addCashOutService,
     cashOutApiInfo,
-    getCashInByEmployeeAndDate
+    getCashInByEmployeeAndDate,
+    getCashRegisterEndupsByDayAndEmployeeAndRejected
 } from '@app/services/';
 import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
 import {getToday} from '@app/services/utils';
@@ -71,6 +73,8 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
     const [apiInfo, setApiInfo] = React.useState();
     const [cashIn, setCashIn] = React.useState(0);
     const [error, setError] = React.useState();
+    const [dateState, setDateState] = useState(getToday());
+    // eslint-disable-next-line no-unused-vars
     const getApiInfo = async (date) => {
         try {
             setBlock(true);
@@ -107,10 +111,59 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
             console.log(err);
         }
     };
-
+    // cargar si esta cancelado
     useEffect(() => {
+        (async () => {
+            const res = await getCashRegisterEndupsByDayAndEmployeeAndRejected(
+                dateState
+            );
+            await getApiInfo(dateState);
+            console.log(res);
+            if (res) {
+                const {
+                    pennies,
+                    nickels,
+                    dimes,
+                    quarters,
+                    penniesRoll,
+                    nickelsRoll,
+                    dimesRoll,
+                    quartersRoll,
+                    ones,
+                    twos,
+                    fives,
+                    tens,
+                    twenties,
+                    fifties,
+                    hundreds,
+                    comments
+                } = res;
+                setForm({
+                    ...form,
+                    pennies,
+                    nickels,
+                    dimes,
+                    quarters,
+                    penniesRoll,
+                    nickelsRoll,
+                    dimesRoll,
+                    quartersRoll,
+                    ones,
+                    twos,
+                    fives,
+                    tens,
+                    twenties,
+                    fifties,
+                    hundreds,
+                    comments
+                });
+            }
+        })();
+    }, [dateState]);
+
+    /*    useEffect(() => {
         getApiInfo(getToday());
-    }, []);
+    }, []); */
 
     useEffect(() => {
         console.log(cashIn);
@@ -122,7 +175,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
     useEffect(() => {
         const filtered = cashOut.data.find((element) => element.id === idRow);
         if (filtered) {
-            setForm({
+            /*  setForm({
                 pennies: filtered.pennies,
                 nickels: filtered.nickels,
                 dimes: filtered.dimes,
@@ -136,7 +189,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                 hundreds: filtered.hundreds,
                 coments: filtered.comentaries,
                 date: filtered.date
-            });
+            }); */
         }
         if (action) {
             switch (action) {
@@ -272,7 +325,8 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         ...form,
                                         date: e.target.value
                                     });
-                                    getApiInfo(e.target.value);
+                                    // getApiInfo(e.target.value);
+                                    setDateState(e.target.value);
                                 }}
                                 defaultValue={getToday()}
                             />
@@ -681,7 +735,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                     <div className="d-flex justify-content-around align-items-center">
                         <div className="flex-row p-2 justify-content-around">
                             {/* REAL */}
-                            Real:
+
                             <div className="d-flex justify-content-around mb-3">
                                 <div>
                                     <span
@@ -784,10 +838,10 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     />
                                 </div>
                             </div>
-                            {apiInfo ? (
+                            {/*   {apiInfo ? (
                                 <>
-                                    {/* EXPECTED */}
-                                    Expected:
+                             
+                                   Expected:
                                     <div className="d-flex justify-content-around mb-3">
                                         <div>
                                             <span
@@ -849,9 +903,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         </div>
                                     </div>
                                 </>
-                            ) : null}
+                            ) : null} */}
                             {/* CASH CUT */}
-                            Cash Cut:
+                            {/*  Cash Cut:
                             <div className="d-flex justify-content-around mb-3">
                                 <div>
                                     <span
@@ -939,7 +993,7 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         disabled
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex-row p-2 justify-content-around">
                             {/* Comentarios */}
@@ -954,7 +1008,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                     title="Comments"
                                     type="text"
                                     className="form-control input-sm mr-3"
-                                    style={{minWidth: '50px', height: '12rem'}}
+                                    style={{
+                                        minWidth: '50px' /* , height: '12rem' */
+                                    }}
                                     onChange={(e) =>
                                         setForm({
                                             ...form,

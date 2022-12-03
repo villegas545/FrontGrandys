@@ -10,6 +10,7 @@ import {Button, Input} from '@components';
 import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import * as Yup from 'yup';
+import {syncUsers} from '@app/store/reducers/usersDucks';
 import {url} from '../../config';
 
 import * as AuthService from '../../services/auth';
@@ -104,6 +105,7 @@ const Login = () => {
                     idUser: token2.data.idUser
                 })
             );
+            await dispatch(syncUsers());
             history.push('/');
             /* dispatch(loginUser(token2.data.token));
             history.push('/'); */

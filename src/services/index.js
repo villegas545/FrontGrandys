@@ -28,6 +28,8 @@ const patchFunction = async (route, data) => {
     });
     return {msg: 'success'};
 };
+export const getCashRegisterStartup = async (data) =>
+    (await getFunction(`getCashRegisterStartup${data}`)).response;
 
 export const getRestaurantByLevel = async () =>
     (await getFunction('getRestaurantByLevel')).restaurants;
@@ -84,3 +86,10 @@ export const approveRejectCashRegisterEndups = async (data) =>
 
 export const cancelCashRegisterEndups = async (data) =>
     patchFunction('cancelCashRegisterEndups', data);
+
+export const getCashRegisterEndupsByDayAndEmployeeAndRejected = async (data) =>
+    (
+        await getFunction(
+            `getCashRegisterEndupsByDayAndEmployeeAndRejected?date=${data}`
+        )
+    ).response;

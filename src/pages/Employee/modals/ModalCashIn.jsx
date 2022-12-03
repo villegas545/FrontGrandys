@@ -5,14 +5,14 @@ import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector, useDispatch} from 'react-redux';
-import {addCashInService} from '@app/services/';
+import {addCashInService, getCashRegisterStartup} from '@app/services/';
 import BlockUi from 'react-block-ui';
 import {
     ListBox,
     processListBoxDragAndDrop
 } from '@progress/kendo-react-listbox';
 import {getCashInAction} from '@app/store/reducers/cashInDucks';
-import {getToday} from '@app/services/utils';
+import {currencyFormat, getToday} from '@app/services/utils';
 
 const ModalCashIn = ({onHide, show, idRow, action, user, employees}) => {
     console.log(user);
@@ -65,11 +65,19 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
         date: '',
         idEmployee: user.id
     });
+    const [dateState, setDateState] = useState(getToday());
     const dispatch = useDispatch();
     const cashIn = useSelector((store) => store.cashIn);
     const [actionButton, setActionButton] = useState();
+    const [canceledList, setCanceledList] = useState();
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState();
+
+    // CODIGO PARA LLENAR FORMULARIO EN CASO DE TENER UN CANCELADO
+    useEffect(() => {
+        // vaya a la api y traiga la fecha actual y rellenar los campos
+    }, [dateState]);
+    // TERMINA CODIGO PARA LLENAR FORMULARIO EN CASO DE TENER UN CANCELADO
     useEffect(() => {
         const filtered = cashIn.details.find((element) => element.id === idRow);
         if (filtered) {
@@ -182,595 +190,746 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                 break;
         }
     };
+    const getCanceledCashIns = async (date) => {
+        const param = `?startDate=${date}&endDate=${date}&status=Rejected&employee=all`;
+        const list = await getCashRegisterStartup(param);
+        setCanceledList(list);
+        console.log(list);
+
+        console.log(canceledList);
+    };
+    const fillForm = (element) => {
+        const {
+            pennies,
+            nickels,
+            dimes,
+            quarters,
+            penniesRoll,
+            nickelsRoll,
+            dimesRoll,
+            quartersRoll,
+            ones,
+            twos,
+            fives,
+            tens,
+            twenties,
+            fifties,
+            hundreads,
+            comentaries
+        } = element;
+        setForm({
+            ...form,
+            pennies,
+            nickels,
+            dimes,
+            quarters,
+            penniesRoll,
+            nickelsRoll,
+            dimesRoll,
+            quartersRoll,
+            ones,
+            twos,
+            fives,
+            tens,
+            twenties,
+            fifties,
+            hundreads,
+            comentaries
+        });
+        setCanceledList();
+    };
     return (
         <>
             <BlockUi tag="div" blocking={block} message="Please Wait">
-                <div className="card-body">
-                    <div className="d-flex justify-content-end">
-                        <div className="d-flex align-items-center">
-                            <span
-                                className="input-group-text"
-                                style={{minWidth: '50px'}}
-                            >
-                                Date
-                            </span>
-                            <input
-                                type="date"
-                                className="form-control mr-3"
-                                onChange={(e) =>
-                                    setForm({
-                                        ...form,
-                                        date: e.target.value
-                                    })
-                                }
-                                value={form.date}
-                            />
-                        </div>
-                    </div>
-                    <div className="table_details">
-                        <div className="d-flex p-2 text-center">
-                            <div />
-                            <div>Coins</div>
-                            <div>Rolls</div>
-                            <div>Total</div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> Pennies</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            pennies: e.target.value
-                                        })
-                                    }
-                                    value={form.pennies}
-                                    className="form-control"
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            penniesRoll: e.target.value
-                                        })
-                                    }
-                                    value={form.penniesRoll}
-                                    className="form-control"
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={
-                                        form.pennies / 100 +
-                                        (form.penniesRoll * 50) / 100
-                                    }
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> Nickels</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            nickels: e.target.value
-                                        })
-                                    }
-                                    value={form.nickels}
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            nickelsRoll: e.target.value
-                                        })
-                                    }
-                                    value={form.nickelsRoll}
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={
-                                        (form.nickels * 5) / 100 +
-                                        (form.nickelsRoll * 5 * 40) / 100
-                                    }
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> Dimes</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            dimes: e.target.value
-                                        })
-                                    }
-                                    value={form.dimes}
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            dimesRoll: e.target.value
-                                        })
-                                    }
-                                    value={form.dimesRoll}
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={
-                                        (form.dimes * 10) / 100 +
-                                        (form.dimesRoll * 10 * 50) / 100
-                                    }
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> quarters</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            quarters: e.target.value
-                                        })
-                                    }
-                                    value={form.quarters}
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            quartersRoll: e.target.value
-                                        })
-                                    }
-                                    value={form.quartersRoll}
-                                />{' '}
-                            </div>
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={
-                                        (form.quarters * 25) / 100 +
-                                        (form.quartersRoll * 25 * 40) / 100
-                                    }
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2 text-center">
-                            <div />
-                            <div>Bills</div>
-                            <div />
-                            <div>Total</div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 1`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            ones: e.target.value
-                                        })
-                                    }
-                                    value={form.ones}
-                                />{' '}
-                            </div>
-                            <div />
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.ones}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 2`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            twos: e.target.value
-                                        })
-                                    }
-                                    value={form.twos}
-                                />{' '}
-                            </div>
-                            <div />
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.twos * 2}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 5`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            fives: e.target.value
-                                        })
-                                    }
-                                    value={form.fives}
-                                />{' '}
-                            </div>
-                            <div />
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.fives * 5}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 10`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            tens: e.target.value
-                                        })
-                                    }
-                                    value={form.tens}
-                                />{' '}
-                            </div>
-                            <div />
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.tens * 10}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 20`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            twenties: e.target.value
-                                        })
-                                    }
-                                    value={form.twenties}
-                                />{' '}
-                            </div>
-                            <div> </div>
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.twenties * 20}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 50`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            fifties: e.target.value
-                                        })
-                                    }
-                                    value={form.fifties}
-                                />{' '}
-                            </div>
-                            <div> </div>
-                            <div>
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.fifties * 50}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                        <div className="d-flex p-2">
-                            <div> 100`s</div>
-                            <div>
-                                {' '}
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            hundreads: e.target.value
-                                        })
-                                    }
-                                    value={form.hundreads}
-                                />{' '}
-                            </div>
-                            <div />
-                            <div>
-                                {' '}
-                                <CurrencyFormat
-                                    displayType="text"
-                                    thousandSeparator
-                                    prefix="$"
-                                    className="form-control"
-                                    value={form.hundreads * 100}
-                                    disabled
-                                />{' '}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-around">
-                        <div className="flex-row p-2 justify-content-around">
-                            <div className="d-flex justify-content-around mb-3">
-                                <div>
-                                    <span
-                                        className="input-group-text"
-                                        style={{minWidth: '100px'}}
+                {canceledList ? (
+                    <table className="table table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Coins Total</th>
+                            <th>Rolls Total</th>
+                            <th>Bills Total</th>
+                            <th>Total</th>
+                            <th>Select</th>
+                        </tr>
+                        {canceledList.map((element) => (
+                            <tr>
+                                <td>{element.User.name}</td>
+                                <td>
+                                    {currencyFormat(
+                                        (element.pennies +
+                                            element.nickels * 5 +
+                                            element.dimes * 10 +
+                                            element.quarters * 25) /
+                                            100
+                                    )}
+                                </td>
+                                <td>
+                                    {currencyFormat(
+                                        (element.penniesRoll * 50 +
+                                            element.nickelsRoll * 5 * 40 +
+                                            element.dimesRoll * 10 * 50 +
+                                            element.quartersRoll * 25 * 40) /
+                                            100
+                                    )}
+                                </td>
+                                <td>
+                                    {currencyFormat(
+                                        element.ones +
+                                            element.twos * 2 +
+                                            element.fives * 5 +
+                                            element.tens * 10 +
+                                            element.twenties * 20 +
+                                            element.fifties * 50 +
+                                            element.hundreads * 20
+                                    )}
+                                </td>
+                                <td>
+                                    {currencyFormat(
+                                        (element.pennies +
+                                            element.nickels * 5 +
+                                            element.dimes * 10 +
+                                            element.quarters * 25 +
+                                            element.penniesRoll * 50 +
+                                            element.nickelsRoll * 5 * 40 +
+                                            element.dimesRoll * 10 * 50 +
+                                            element.quartersRoll * 25 * 40) /
+                                            100 +
+                                            element.ones +
+                                            element.twos * 2 +
+                                            element.fives * 5 +
+                                            element.tens * 10 +
+                                            element.twenties * 20 +
+                                            element.fifties * 50 +
+                                            element.hundreads * 20
+                                    )}
+                                </td>
+                                <td>
+                                    <button
+                                        className="btn btn-danger"
+                                        type="button"
+                                        onClick={() => fillForm(element)}
                                     >
-                                        Coins Total
-                                    </span>
-                                    <CurrencyFormat
-                                        displayType="text"
-                                        thousandSeparator
-                                        prefix="$"
-                                        className="form-control input-sm mr-3"
-                                        style={{minWidth: '50px'}}
-                                        value={(
-                                            (Number(form.pennies) +
-                                                Number(form.nickels * 5) +
-                                                Number(form.dimes * 10) +
-                                                Number(form.quarters * 25)) /
-                                                100 +
-                                            (Number(form.penniesRoll * 50) +
-                                                Number(
-                                                    form.nickelsRoll * 5 * 40
-                                                ) +
-                                                Number(
-                                                    form.dimesRoll * 10 * 50
-                                                ) +
-                                                Number(
-                                                    form.quartersRoll * 25 * 40
-                                                )) /
-                                                100
-                                        ).toFixed(2)}
-                                        disabled
-                                    />
-                                </div>
-                                <div>
-                                    <span
-                                        className="input-group-text"
-                                        style={{minWidth: '100px'}}
-                                    >
-                                        Bills Total
-                                    </span>
-                                    <CurrencyFormat
-                                        displayType="text"
-                                        thousandSeparator
-                                        prefix="$"
-                                        className="form-control input-sm mr-3"
-                                        style={{minWidth: '50px'}}
-                                        value={(
-                                            Number(form.ones) +
-                                            Number(form.twos * 2) +
-                                            Number(form.fives * 5) +
-                                            Number(form.tens * 10) +
-                                            Number(form.twenties * 20) +
-                                            Number(form.fifties * 50) +
-                                            Number(form.hundreads * 100)
-                                        ).toFixed(2)}
-                                        disabled
-                                    />
-                                </div>
-                                <div>
-                                    <span
-                                        className="input-group-text"
-                                        style={{minWidth: '100px'}}
-                                    >
-                                        Grand Total
-                                    </span>
-                                    <CurrencyFormat
-                                        displayType="text"
-                                        thousandSeparator
-                                        prefix="$"
-                                        className="form-control input-sm mr-3"
-                                        style={{minWidth: '50px'}}
-                                        value={(
-                                            Number(form.ones) +
-                                            Number(form.twos * 2) +
-                                            Number(form.fives * 5) +
-                                            Number(form.tens * 10) +
-                                            Number(form.twenties * 20) +
-                                            Number(form.fifties * 50) +
-                                            Number(form.hundreads * 100) +
-                                            (Number(form.pennies) +
-                                                Number(form.nickels * 5) +
-                                                Number(form.dimes * 10) +
-                                                Number(form.quarters * 25)) /
-                                                100 +
-                                            (Number(form.penniesRoll * 50) +
-                                                Number(
-                                                    form.nickelsRoll * 5 * 40
-                                                ) +
-                                                Number(
-                                                    form.dimesRoll * 10 * 50
-                                                ) +
-                                                Number(
-                                                    form.quartersRoll * 25 * 40
-                                                )) /
-                                                100
-                                        ).toFixed(2)}
-                                        disabled
-                                    />
-                                </div>
-                            </div>
-                            <div style={{minWidth: '300px'}}>
+                                        Select
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </table>
+                ) : (
+                    <div className="card-body">
+                        <div className="d-flex justify-content-end">
+                            <div className="d-flex align-items-center">
                                 <span
                                     className="input-group-text"
-                                    style={{minWidth: '100px'}}
-                                >
-                                    Comments
-                                </span>
-                                <textarea
-                                    title="Comments"
-                                    type="text"
-                                    className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    defaultValue={form.comentaries}
-                                    onChange={(e) =>
+                                >
+                                    Date
+                                </span>
+                                <input
+                                    type="date"
+                                    className="form-control mr-3"
+                                    onChange={(e) => {
                                         setForm({
                                             ...form,
-                                            comentaries: e.target.value
-                                        })
-                                    }
+                                            date: e.target.value
+                                        });
+                                        setDateState(e.target.value);
+                                    }}
+                                    value={form.date}
                                 />
+                            </div>
+                            <div className="d-flex align-items-center">
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() =>
+                                        getCanceledCashIns(dateState)
+                                    }
+                                >
+                                    Fix canceled
+                                </button>
                             </div>
                         </div>
-
-                        {!idRow ? (
-                            <div className="d-flex flex-wrap justify-content-around">
-                                <span
-                                    style={{width: '100%', textAlign: 'center'}}
-                                >
-                                    Employees
-                                </span>
-                                <ListBox
-                                    data={state.notDiscontinued}
-                                    textField="name"
-                                    onDragStart={handleDragStart}
-                                    onDrop={handleDrop}
-                                />
-                                <ListBox
-                                    data={state.discontinued}
-                                    textField="name"
-                                    style={{
-                                        marginLeft: '12px'
-                                    }}
-                                    onDragStart={handleDragStart}
-                                    onDrop={handleDrop}
-                                />
+                        <div className="table_details">
+                            <div className="d-flex p-2 text-center">
+                                <div />
+                                <div>Coins</div>
+                                <div>Rolls</div>
+                                <div>Total</div>
                             </div>
+                            <div className="d-flex p-2">
+                                <div> Pennies</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                pennies: e.target.value
+                                            })
+                                        }
+                                        value={form.pennies}
+                                        className="form-control"
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                penniesRoll: e.target.value
+                                            })
+                                        }
+                                        value={form.penniesRoll}
+                                        className="form-control"
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={
+                                            form.pennies / 100 +
+                                            (form.penniesRoll * 50) / 100
+                                        }
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> Nickels</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                nickels: e.target.value
+                                            })
+                                        }
+                                        value={form.nickels}
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                nickelsRoll: e.target.value
+                                            })
+                                        }
+                                        value={form.nickelsRoll}
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={
+                                            (form.nickels * 5) / 100 +
+                                            (form.nickelsRoll * 5 * 40) / 100
+                                        }
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> Dimes</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                dimes: e.target.value
+                                            })
+                                        }
+                                        value={form.dimes}
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                dimesRoll: e.target.value
+                                            })
+                                        }
+                                        value={form.dimesRoll}
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={
+                                            (form.dimes * 10) / 100 +
+                                            (form.dimesRoll * 10 * 50) / 100
+                                        }
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> quarters</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                quarters: e.target.value
+                                            })
+                                        }
+                                        value={form.quarters}
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                quartersRoll: e.target.value
+                                            })
+                                        }
+                                        value={form.quartersRoll}
+                                    />{' '}
+                                </div>
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={
+                                            (form.quarters * 25) / 100 +
+                                            (form.quartersRoll * 25 * 40) / 100
+                                        }
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2 text-center">
+                                <div />
+                                <div>Bills</div>
+                                <div />
+                                <div>Total</div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 1`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                ones: e.target.value
+                                            })
+                                        }
+                                        value={form.ones}
+                                    />{' '}
+                                </div>
+                                <div />
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.ones}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 2`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                twos: e.target.value
+                                            })
+                                        }
+                                        value={form.twos}
+                                    />{' '}
+                                </div>
+                                <div />
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.twos * 2}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 5`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                fives: e.target.value
+                                            })
+                                        }
+                                        value={form.fives}
+                                    />{' '}
+                                </div>
+                                <div />
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.fives * 5}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 10`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                tens: e.target.value
+                                            })
+                                        }
+                                        value={form.tens}
+                                    />{' '}
+                                </div>
+                                <div />
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.tens * 10}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 20`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                twenties: e.target.value
+                                            })
+                                        }
+                                        value={form.twenties}
+                                    />{' '}
+                                </div>
+                                <div> </div>
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.twenties * 20}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 50`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                fifties: e.target.value
+                                            })
+                                        }
+                                        value={form.fifties}
+                                    />{' '}
+                                </div>
+                                <div> </div>
+                                <div>
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.fifties * 50}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                            <div className="d-flex p-2">
+                                <div> 100`s</div>
+                                <div>
+                                    {' '}
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                hundreads: e.target.value
+                                            })
+                                        }
+                                        value={form.hundreads}
+                                    />{' '}
+                                </div>
+                                <div />
+                                <div>
+                                    {' '}
+                                    <CurrencyFormat
+                                        displayType="text"
+                                        thousandSeparator
+                                        prefix="$"
+                                        className="form-control"
+                                        value={form.hundreads * 100}
+                                        disabled
+                                    />{' '}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-around">
+                            <div className="flex-row p-2 justify-content-around">
+                                <div className="d-flex justify-content-around mb-3">
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Coins Total
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={(
+                                                (Number(form.pennies) +
+                                                    Number(form.nickels * 5) +
+                                                    Number(form.dimes * 10) +
+                                                    Number(
+                                                        form.quarters * 25
+                                                    )) /
+                                                    100 +
+                                                (Number(form.penniesRoll * 50) +
+                                                    Number(
+                                                        form.nickelsRoll *
+                                                            5 *
+                                                            40
+                                                    ) +
+                                                    Number(
+                                                        form.dimesRoll * 10 * 50
+                                                    ) +
+                                                    Number(
+                                                        form.quartersRoll *
+                                                            25 *
+                                                            40
+                                                    )) /
+                                                    100
+                                            ).toFixed(2)}
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Bills Total
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={(
+                                                Number(form.ones) +
+                                                Number(form.twos * 2) +
+                                                Number(form.fives * 5) +
+                                                Number(form.tens * 10) +
+                                                Number(form.twenties * 20) +
+                                                Number(form.fifties * 50) +
+                                                Number(form.hundreads * 100)
+                                            ).toFixed(2)}
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            className="input-group-text"
+                                            style={{minWidth: '100px'}}
+                                        >
+                                            Grand Total
+                                        </span>
+                                        <CurrencyFormat
+                                            displayType="text"
+                                            thousandSeparator
+                                            prefix="$"
+                                            className="form-control input-sm mr-3"
+                                            style={{minWidth: '50px'}}
+                                            value={(
+                                                Number(form.ones) +
+                                                Number(form.twos * 2) +
+                                                Number(form.fives * 5) +
+                                                Number(form.tens * 10) +
+                                                Number(form.twenties * 20) +
+                                                Number(form.fifties * 50) +
+                                                Number(form.hundreads * 100) +
+                                                (Number(form.pennies) +
+                                                    Number(form.nickels * 5) +
+                                                    Number(form.dimes * 10) +
+                                                    Number(
+                                                        form.quarters * 25
+                                                    )) /
+                                                    100 +
+                                                (Number(form.penniesRoll * 50) +
+                                                    Number(
+                                                        form.nickelsRoll *
+                                                            5 *
+                                                            40
+                                                    ) +
+                                                    Number(
+                                                        form.dimesRoll * 10 * 50
+                                                    ) +
+                                                    Number(
+                                                        form.quartersRoll *
+                                                            25 *
+                                                            40
+                                                    )) /
+                                                    100
+                                            ).toFixed(2)}
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{minWidth: '300px'}}>
+                                    <span
+                                        className="input-group-text"
+                                        style={{minWidth: '100px'}}
+                                    >
+                                        Comments
+                                    </span>
+                                    <textarea
+                                        title="Comments"
+                                        type="text"
+                                        className="form-control input-sm mr-3"
+                                        style={{minWidth: '50px'}}
+                                        defaultValue={form.comentaries}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                comentaries: e.target.value
+                                            })
+                                        }
+                                    />
+                                </div>
+                            </div>
+
+                            {!idRow ? (
+                                <div className="d-flex flex-wrap justify-content-around">
+                                    <span
+                                        style={{
+                                            width: '100%',
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        Employees
+                                    </span>
+                                    <ListBox
+                                        data={state.notDiscontinued}
+                                        textField="name"
+                                        onDragStart={handleDragStart}
+                                        onDrop={handleDrop}
+                                    />
+                                    <ListBox
+                                        data={state.discontinued}
+                                        textField="name"
+                                        style={{
+                                            marginLeft: '12px'
+                                        }}
+                                        onDragStart={handleDragStart}
+                                        onDrop={handleDrop}
+                                    />
+                                </div>
+                            ) : null}
+                        </div>
+
+                        <p className="text-danger"> {error || null}</p>
+                        {!idRow ? (
+                            <>
+                                {' '}
+                                <div>
+                                    <input
+                                        type="submit"
+                                        className="btn btn-dark btn-lg"
+                                        value={actionButton}
+                                        onClick={() => submit()}
+                                    />
+                                </div>
+                            </>
                         ) : null}
                     </div>
-
-                    <p className="text-danger"> {error || null}</p>
-                    {!idRow ? (
-                        <>
-                            {' '}
-                            <div>
-                                <input
-                                    type="submit"
-                                    className="btn btn-dark btn-lg"
-                                    value={actionButton}
-                                    onClick={() => submit()}
-                                />
-                            </div>
-                        </>
-                    ) : null}
-                </div>
+                )}
             </BlockUi>
         </>
     );

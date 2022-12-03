@@ -4,7 +4,6 @@
 import React from 'react';
 /* import round from 'lodash/round'; */
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import {isMobile} from 'react-device-detect';
 import ChartModal from './ChartModal';
 
 // import JSPDF from 'jspdf';
@@ -177,15 +176,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('weatherTemp');
                                         setNameField('Weather');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('weatherTemp');
-                                                  setNameField('Weather');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.weatherTemp}
                                 </td>
@@ -196,17 +187,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('lySales');
                                         setNameField('Last Year Sales');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('lySales');
-                                                  setNameField(
-                                                      'Last Year Sales'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.lySales}
                                 </td>
@@ -216,17 +197,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('projectedSales');
                                         setNameField('Projected Sales');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('projectedSales');
-                                                  setNameField(
-                                                      'Projected Sales'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.projectedSales}
                                 </td>
@@ -236,15 +207,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('grossSales');
                                         setNameField('Gross Sales');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('grossSales');
-                                                  setNameField('Gross Sales');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.grossSales}
                                 </td>
@@ -254,15 +217,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('netSales');
                                         setNameField('Net Sales');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('netSales');
-                                                  setNameField('Net Sales');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.netSales}
                                 </td>
@@ -273,15 +228,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('netSalesComp');
                                         setNameField('Net $ales +/-');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('netSalesComp');
-                                                  setNameField('Net $ales +/-');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.netSalesComp}
                                 </td>
@@ -291,17 +238,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('lyPercent');
                                         setNameField('Last Year % +/-');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('lyPercent');
-                                                  setNameField(
-                                                      'Last Year % +/-'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.lyPercent}%
                                 </td>
@@ -311,17 +248,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('projSalesComp');
                                         setNameField('Projeted $ales +-');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('projSalesComp');
-                                                  setNameField(
-                                                      'Projeted $ales +-'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.projSalesComp}
                                 </td>
@@ -331,17 +258,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('psPercent');
                                         setNameField('% Projected Sales +/-');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('psPercent');
-                                                  setNameField(
-                                                      '% Projected Sales +/-'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.psPercent}%
                                 </td>
@@ -351,17 +268,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('projFoodCost');
                                         setNameField('Food Cost Projected');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('projFoodCost');
-                                                  setNameField(
-                                                      'Food Cost Projected'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.projFoodCost}
                                 </td>
@@ -371,15 +278,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('foodCost');
                                         setNameField('Food Cost');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('foodCost');
-                                                  setNameField('Food Cost');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.foodCost}
                                 </td>
@@ -389,17 +288,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('foodCostPerc');
                                         setNameField('% Food Cost +/-');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('foodCostPerc');
-                                                  setNameField(
-                                                      '% Food Cost +/-'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.foodCostPerc}%
                                 </td>
@@ -409,15 +298,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('salesTax');
                                         setNameField('Sales Tax');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('salesTax');
-                                                  setNameField('Sales Tax');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.salesTax}
                                 </td>
@@ -427,15 +308,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('taxExempt');
                                         setNameField('Tax Exempt');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('taxExempt');
-                                                  setNameField('Tax Exempt');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.taxExempt}
                                 </td>
@@ -445,15 +318,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('transCount');
                                         setNameField('Ts Count');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('transCount');
-                                                  setNameField('Ts Count');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.transCount}
                                 </td>
@@ -463,17 +328,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('averageTrans');
                                         setNameField('Averag Transaction');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('averageTrans');
-                                                  setNameField(
-                                                      'Averag Transaction'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.averageTrans}
                                 </td>
@@ -483,15 +338,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('coupons');
                                         setNameField('Coupons ($)');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('coupons');
-                                                  setNameField('Coupons ($)');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.coupons}
                                 </td>
@@ -501,15 +348,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('coupQuant');
                                         setNameField('Coupons');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('coupQuant');
-                                                  setNameField('Coupons');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.coupQuant}
                                 </td>
@@ -519,15 +358,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('discounts');
                                         setNameField('Discounts ($)');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('discounts');
-                                                  setNameField('Discounts ($)');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.discounts}
                                 </td>
@@ -537,15 +368,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('discQuant');
                                         setNameField('Discounts');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('discQuant');
-                                                  setNameField('Discounts');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.discQuant}
                                 </td>
@@ -555,15 +378,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('outOrderQuant');
                                         setNameField('Door Dash …');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('outOrderQuant');
-                                                  setNameField('Door Dash …');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.outOrderQuant}
                                 </td>
@@ -573,17 +388,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('outOrderAmm');
                                         setNameField('($) Door Dash …');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('outOrderAmm');
-                                                  setNameField(
-                                                      '($) Door Dash …'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.outOrderAmm}
                                 </td>
@@ -593,15 +398,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('dorDashPerc');
                                         setNameField('(%) Door Dash');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('dorDashPerc');
-                                                  setNameField('(%) Door Dash');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.dorDashPerc}%
                                 </td>
@@ -611,15 +408,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('singleSteaks');
                                         setNameField('Single Steaks');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('singleSteaks');
-                                                  setNameField('Single Steaks');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.singleSteaks}
                                 </td>
@@ -629,15 +418,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('doubleSteaks');
                                         setNameField('Double Steaks');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('doubleSteaks');
-                                                  setNameField('Double Steaks');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.doubleSteaks}
                                 </td>
@@ -647,15 +428,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('nuggetMeal');
                                         setNameField('Nugget Meal');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('nuggetMeal');
-                                                  setNameField('Nugget Meal');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.nuggetMeal}
                                 </td>
@@ -666,15 +439,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('quarterlyProm1');
                                         setNameField('Waste');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('quarterlyProm1');
-                                                  setNameField('Waste');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.quarterlyProm1}
                                 </td>
@@ -684,15 +449,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('cashReceived');
                                         setNameField('Cash Received');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('cashReceived');
-                                                  setNameField('Cash Received');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.cashReceived}
                                 </td>
@@ -702,15 +459,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('Dep1');
                                         setNameField('Tips');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('Dep1');
-                                                  setNameField('Tips');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.Dep1}
                                 </td>
@@ -720,15 +469,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('totalDep');
                                         setNameField('Total Deposit');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('totalDep');
-                                                  setNameField('Total Deposit');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.totalDep}
                                 </td>
@@ -738,15 +479,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('cash');
                                         setNameField('Cash');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('cash');
-                                                  setNameField('Cash');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.cash}
                                 </td>
@@ -756,15 +489,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('creditCards');
                                         setNameField('Credit Cards');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('creditCards');
-                                                  setNameField('Credit Cards');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.creditCards}
                                 </td>
@@ -774,17 +499,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('actualLabor');
                                         setNameField('Actual Labor Hrs.');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('actualLabor');
-                                                  setNameField(
-                                                      'Actual Labor Hrs.'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {row.actualLabor}
                                 </td>
@@ -794,15 +509,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('truck');
                                         setNameField('Truck');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('truck');
-                                                  setNameField('Truck');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.truck}
                                 </td>
@@ -812,15 +519,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('houseCharges');
                                         setNameField('House Charges');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('houseCharges');
-                                                  setNameField('House Charges');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.houseCharges}
                                 </td>
@@ -830,15 +529,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('paidOuts');
                                         setNameField('Paid Outs');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('paidOuts');
-                                                  setNameField('Paid Outs');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.paidOuts}
                                 </td>
@@ -848,15 +539,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('transfer');
                                         setNameField('Transfer');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField('transfer');
-                                                  setNameField('Transfer');
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.transfer}
                                 </td>
@@ -867,19 +550,7 @@ const TableReports = ({data, id, checks}) => {
                                         setField('storeCreditCardPursh');
                                         setNameField('Store CC Pursh');
                                     }}
-                                    onMouseEnter={
-                                        isMobile
-                                            ? () => false
-                                            : () => {
-                                                  setModalShow(true);
-                                                  setField(
-                                                      'storeCreditCardPursh'
-                                                  );
-                                                  setNameField(
-                                                      'Store CC Pursh'
-                                                  );
-                                              }
-                                    }
+                                    style={{cursor: 'pointer'}}
                                 >
                                     ${row.storeCreditCardPursh}
                                 </td>
