@@ -5,6 +5,7 @@ import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 
 const ModalDetailsCashIn = ({onHide, show, idRow}) => {
+    console.log(idRow);
     return (
         <Modal
             onHide={onHide}
@@ -13,6 +14,16 @@ const ModalDetailsCashIn = ({onHide, show, idRow}) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Drawer
+                    {idRow?.drawer ? (
+                        <>
+                            {` ${idRow.drawer}`} - {idRow.User.name}
+                        </>
+                    ) : null}
+                </Modal.Title>
+            </Modal.Header>
             <Modal.Body>
                 <BodyInfo idRow={idRow} onHide={onHide} />
             </Modal.Body>
@@ -27,6 +38,14 @@ const BodyInfo = ({idRow, onHide}) => {
             <div className="card-body">
                 <div className="d-flex justify-content-end">
                     <div className="d-flex align-items-center">
+                        {/* <span className="text" style={{minWidth: '50px'}}>
+                            <input
+                                type="text"
+                                disabled
+                                value={form.pennies}
+                                className="text"
+                            />
+                        </span> */}
                         <span
                             className="input-group-text"
                             style={{minWidth: '50px'}}
@@ -154,7 +173,7 @@ const BodyInfo = ({idRow, onHide}) => {
                         </div>
                     </div>
                     <div className="d-flex p-2">
-                        <div> quarters</div>
+                        <div> Quarters</div>
                         <div>
                             {' '}
                             <input

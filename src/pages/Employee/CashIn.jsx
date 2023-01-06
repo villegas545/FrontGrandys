@@ -34,6 +34,10 @@ const columns = [
         accessor: 'grandTotal'
     },
     {
+        Header: 'Drawer',
+        accessor: 'drawer'
+    },
+    {
         Header: 'Status',
         accessor: 'status'
     }

@@ -5,12 +5,14 @@ import {Modal} from 'react-bootstrap';
 import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 import {useSelector, useDispatch} from 'react-redux';
-import {addCashInService, getCashRegisterStartup} from '@app/services/';
-import BlockUi from 'react-block-ui';
 import {
-    ListBox,
-    processListBoxDragAndDrop
-} from '@progress/kendo-react-listbox';
+    addCashInService,
+    getCashRegisterStartup,
+    getRestaurantByLevel,
+    getUsersByRestaurant
+} from '@app/services/';
+import BlockUi from 'react-block-ui';
+
 import {getCashInAction} from '@app/store/reducers/cashInDucks';
 import {currencyFormat, getToday} from '@app/services/utils';
 
@@ -43,7 +45,7 @@ const ModalCashIn = ({onHide, show, idRow, action, user, employees}) => {
     );
 };
 
-const BodyInfo = ({idRow, action, user, employees, onHide}) => {
+const BodyInfo = ({idRow, action, user, onHide}) => {
     const [block, setBlock] = useState(false);
     const [form, setForm] = useState({
         pennies: 0,
@@ -72,6 +74,33 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
     const [canceledList, setCanceledList] = useState();
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState();
+    const [employees, setEmployees] = useState([]);
+
+    // obtener empleados por rol y restaruant
+    useEffect(() => {
+        (async () => {
+            try {
+                const resRestaurant = await getRestaurantByLevel();
+                if (
+                    localStorage.getItem('role') === 'Cash Manager' ||
+                    localStorage.getItem('role') === 'Cash Manager Assistant'
+                ) {
+                    if (resRestaurant.length === 1) {
+                        setEmployees(
+                            await getUsersByRestaurant(
+                                resRestaurant[0].idRestaurant
+                            )
+                        );
+                    }
+                }
+                if (localStorage.getItem('role') === 'Cash Employee') {
+                    console.log('hi');
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
 
     // CODIGO PARA LLENAR FORMULARIO EN CASO DE TENER UN CANCELADO
     useEffect(() => {
@@ -117,51 +146,10 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
         }
     }, []);
 
-    // LISTBOX DRAGANDDROP
-    const [state, setState] = React.useState({
-        notDiscontinued: [],
-        discontinued: [],
-        draggedItem: {}
-    });
-    useEffect(() => {
-        employees = employees.map((employee) => {
-            return {...employee, Discontinued: false};
-        });
-        employees.push({
-            idEmployee: 111111111111111,
-            name: 'Drop here the employee',
-            Discontinued: true
-        });
-        setState({
-            notDiscontinued: employees.filter(
-                (product) => !product.Discontinued
-            ),
-            discontinued: employees.filter((product) => product.Discontinued),
-            draggedItem: {}
-        });
-    }, []);
-    const handleDragStart = (e) => {
-        setState({...state, draggedItem: e.dataItem});
-    };
-
-    const handleDrop = (e) => {
-        const result = processListBoxDragAndDrop(
-            state.notDiscontinued,
-            state.discontinued,
-            state.draggedItem,
-            e.dataItem,
-            'idEmployee'
-        );
-        setState({
-            ...state,
-            notDiscontinued: result.listBoxOneData,
-            discontinued: result.listBoxTwoData
-        });
-    };
     const addCashIn = async () => {
         try {
             const request = form;
-            request.employees = state.discontinued;
+            /* request.employees = state.discontinued; */
             setBlock(true);
             const response = await addCashInService(request);
             setBlock(false);
@@ -215,7 +203,9 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
             twenties,
             fifties,
             hundreads,
-            comentaries
+            comentaries,
+            employee,
+            drawer
         } = element;
         setForm({
             ...form,
@@ -234,7 +224,9 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
             twenties,
             fifties,
             hundreads,
-            comentaries
+            comentaries,
+            employee,
+            drawer
         });
         setCanceledList();
     };
@@ -890,12 +882,73 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                     <span
                                         style={{
                                             width: '100%',
-                                            textAlign: 'center'
+                                            textAlign: 'left'
                                         }}
                                     >
-                                        Employees
+                                        Select Employee
                                     </span>
-                                    <ListBox
+                                    <select
+                                        className="form-control mr-3"
+                                        style={{minWidth: '100px'}}
+                                        onChange={async (e) =>
+                                            setForm({
+                                                ...form,
+                                                employee: e.target.value
+                                            })
+                                        }
+                                    >
+                                        {localStorage.getItem('role') !==
+                                        'Cash Employee' ? (
+                                            <option selected>
+                                                Select a value
+                                            </option>
+                                        ) : (
+                                            <option>
+                                                {localStorage.getItem('user')}
+                                            </option>
+                                        )}
+                                        {employees.map((employee) => (
+                                            <option value={employee.idEmployee}>
+                                                {employee.name}
+                                            </option>
+                                        ))}
+                                        {localStorage.getItem('role') !==
+                                        'Cash Employee' ? (
+                                            <option value="all">All</option>
+                                        ) : null}
+                                    </select>
+                                    <span
+                                        style={{
+                                            width: '100%',
+                                            textAlign: 'left'
+                                        }}
+                                    >
+                                        Select Drawer
+                                    </span>
+                                    <select
+                                        id="drawer"
+                                        name="drawer"
+                                        className="form-control mr-3"
+                                        style={{minWidth: '100px'}}
+                                        onChange={async (e) =>
+                                            setForm({
+                                                ...form,
+                                                drawer: e.target.value
+                                            })
+                                        }
+                                    >
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    {/* <ListBox
                                         data={state.notDiscontinued}
                                         textField="name"
                                         onDragStart={handleDragStart}
@@ -909,7 +962,7 @@ const BodyInfo = ({idRow, action, user, employees, onHide}) => {
                                         }}
                                         onDragStart={handleDragStart}
                                         onDrop={handleDrop}
-                                    />
+                                    /> */}
                                 </div>
                             ) : null}
                         </div>
