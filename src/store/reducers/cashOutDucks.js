@@ -67,7 +67,13 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
             element.owedToHouse = currencyFormat(element.expected);
             element.cashSales = currencyFormat(element.cashSales);
             element.creditSales = currencyFormat(element.creditSales);
-
+            element.drawerIn = currencyFormat(
+                Number(element.totalJson.drawerIn.grandTotal)
+            );
+            element.drawerOut = currencyFormat(
+                Number(element.totalJson.drawerOut.grandTotal)
+            );
+            console.log(element);
             return element;
         });
 

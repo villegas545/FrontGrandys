@@ -9,7 +9,8 @@ import {
     addCashInService,
     getCashRegisterStartup,
     getRestaurantByLevel,
-    getUsersByRestaurant
+    getUsersByRestaurant,
+    getDrawerToCashIn
 } from '@app/services/';
 import BlockUi from 'react-block-ui';
 
@@ -17,7 +18,8 @@ import {getCashInAction} from '@app/store/reducers/cashInDucks';
 import {currencyFormat, getToday} from '@app/services/utils';
 
 const ModalCashIn = ({onHide, show, idRow, action, user, employees}) => {
-    console.log(user);
+    console.log(employees);
+
     return (
         <Modal
             onHide={onHide}
@@ -186,6 +188,9 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
 
         console.log(canceledList);
     };
+    useEffect(() => {
+        console.log(form);
+    }, [form]);
     const fillForm = (element) => {
         const {
             pennies,
@@ -912,11 +917,8 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                 {employee.name}
                                             </option>
                                         ))}
-                                        {localStorage.getItem('role') !==
-                                        'Cash Employee' ? (
-                                            <option value="all">All</option>
-                                        ) : null}
                                     </select>
+
                                     <span
                                         style={{
                                             width: '100%',
@@ -930,13 +932,22 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         name="drawer"
                                         className="form-control mr-3"
                                         style={{minWidth: '100px'}}
-                                        onChange={async (e) =>
+                                        onChange={async (e) => {
+                                            const drawerInfo =
+                                                await getDrawerToCashIn(
+                                                    e.target.value
+                                                );
                                             setForm({
                                                 ...form,
-                                                drawer: e.target.value
-                                            })
-                                        }
+                                                drawer: e.target.value,
+                                                ...drawerInfo,
+                                                hundreads: drawerInfo.hundreds
+                                            });
+                                        }}
                                     >
+                                        <option value="0">
+                                            Select a drawer
+                                        </option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -948,21 +959,6 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                         <option value="9">9</option>
                                         <option value="10">10</option>
                                     </select>
-                                    {/* <ListBox
-                                        data={state.notDiscontinued}
-                                        textField="name"
-                                        onDragStart={handleDragStart}
-                                        onDrop={handleDrop}
-                                    />
-                                    <ListBox
-                                        data={state.discontinued}
-                                        textField="name"
-                                        style={{
-                                            marginLeft: '12px'
-                                        }}
-                                        onDragStart={handleDragStart}
-                                        onDrop={handleDrop}
-                                    /> */}
                                 </div>
                             ) : null}
                         </div>

@@ -1,10 +1,10 @@
-/* eslint-disable indent */
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import {Modal} from 'react-bootstrap';
-import './modalDetailsStyles.scss';
+import '../modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
+import {Modal} from 'react-bootstrap';
 
-const ModalDetailsCashIn = ({onHide, show, idRow}) => {
+const ModalDrawerOutDetails = ({onHide, show, idRow}) => {
     console.log(idRow);
     return (
         <Modal
@@ -18,7 +18,7 @@ const ModalDetailsCashIn = ({onHide, show, idRow}) => {
                 <Modal.Title id="contained-modal-title-vcenter">
                     {idRow ? (
                         <>
-                            <b>Cash In Details Balance </b>
+                            <b>Drawer Out Details Balance </b>
                             <br />
                             <h5>
                                 <b>User:</b> {idRow.User.name || null}{' '}
@@ -31,41 +31,25 @@ const ModalDetailsCashIn = ({onHide, show, idRow}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <BodyInfo idRow={idRow} onHide={onHide} />
+                {idRow ? (
+                    <>
+                        <Body
+                            idRow={idRow.totalJson.drawerOut}
+                            onHide={onHide}
+                        />
+                    </>
+                ) : null}
             </Modal.Body>
         </Modal>
     );
 };
 
-const BodyInfo = ({idRow, onHide}) => {
+const Body = ({idRow, onHide}) => {
+    const disabled = true;
     const form = idRow;
     return (
         <>
             <div className="card-body">
-                <div className="d-flex justify-content-end">
-                    <div className="d-flex align-items-center">
-                        {/* <span className="text" style={{minWidth: '50px'}}>
-                            <input
-                                type="text"
-                                disabled
-                                value={form.pennies}
-                                className="text"
-                            />
-                        </span> */}
-                        <span
-                            className="input-group-text"
-                            style={{minWidth: '50px'}}
-                        >
-                            Date
-                        </span>
-                        <input
-                            type="date"
-                            className="form-control mr-3"
-                            disabled
-                            value={form.date}
-                        />
-                    </div>
-                </div>
                 <div className="table_details">
                     <div className="d-flex p-2 text-center">
                         <div />
@@ -79,18 +63,18 @@ const BodyInfo = ({idRow, onHide}) => {
                             {' '}
                             <input
                                 type="text"
-                                disabled
                                 value={form.pennies}
                                 className="form-control"
+                                disabled
                             />{' '}
                         </div>
                         <div>
                             {' '}
                             <input
                                 type="text"
-                                disabled
                                 value={form.penniesRoll}
                                 className="form-control"
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -100,11 +84,11 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={Number(
                                     form.pennies / 100 +
-                                    (form.penniesRoll * 50) / 100
-                                }
-                                disabled
+                                        (form.penniesRoll * 50) / 100
+                                ).toFixed(2)}
+                                disabled={disabled}
                             />{' '}
                         </div>
                     </div>
@@ -115,8 +99,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.nickels}
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -124,8 +108,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.nickelsRoll}
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -135,10 +119,10 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={Number(
                                     (form.nickels * 5) / 100 +
-                                    (form.nickelsRoll * 5 * 40) / 100
-                                }
+                                        (form.nickelsRoll * 5 * 40) / 100
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -150,8 +134,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.dimes}
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -159,8 +143,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.dimesRoll}
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -170,23 +154,23 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={Number(
                                     (form.dimes * 10) / 100 +
-                                    (form.dimesRoll * 10 * 50) / 100
-                                }
+                                        (form.dimesRoll * 10 * 50) / 100
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
                     </div>
                     <div className="d-flex p-2">
-                        <div> Quarters</div>
+                        <div> quarters</div>
                         <div>
                             {' '}
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.quarters}
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -194,8 +178,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.quartersRoll}
+                                disabled
                             />{' '}
                         </div>
                         <div>
@@ -205,10 +189,10 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={
+                                value={Number(
                                     (form.quarters * 25) / 100 +
-                                    (form.quartersRoll * 25 * 40) / 100
-                                }
+                                        (form.quartersRoll * 25 * 40) / 100
+                                ).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -226,8 +210,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.ones}
+                                disabled
                             />{' '}
                         </div>
                         <div />
@@ -238,7 +222,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.ones}
+                                value={Number(form.ones).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -250,8 +234,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.twos}
+                                disabled
                             />{' '}
                         </div>
                         <div />
@@ -262,7 +246,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twos * 2}
+                                value={Number(form.twos * 2).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -274,8 +258,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.fives}
+                                disabled
                             />{' '}
                         </div>
                         <div />
@@ -286,7 +270,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.fives * 5}
+                                value={Number(form.fives * 5).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -298,8 +282,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.tens}
+                                disabled
                             />{' '}
                         </div>
                         <div />
@@ -310,7 +294,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.tens * 10}
+                                value={Number(form.tens * 10).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -322,8 +306,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.twenties}
+                                disabled
                             />{' '}
                         </div>
                         <div> </div>
@@ -334,7 +318,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twenties * 20}
+                                value={Number(form.twenties * 20).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -346,8 +330,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
-                                disabled
                                 value={form.fifties}
+                                disabled
                             />{' '}
                         </div>
                         <div> </div>
@@ -357,7 +341,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.fifties * 50}
+                                value={Number(form.fifties * 50).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -369,8 +353,8 @@ const BodyInfo = ({idRow, onHide}) => {
                             <input
                                 type="text"
                                 className="form-control"
+                                value={form.hundreds}
                                 disabled
-                                value={form.hundreads}
                             />{' '}
                         </div>
                         <div />
@@ -381,14 +365,16 @@ const BodyInfo = ({idRow, onHide}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.hundreads * 100}
+                                value={Number(form.hundreds * 100).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
                     </div>
                 </div>
-                <div className="d-flex justify-content-around">
+                <div className="d-flex justify-content-around align-items-center">
                     <div className="flex-row p-2 justify-content-around">
+                        {/* REAL */}
+
                         <div className="d-flex justify-content-around mb-3">
                             <div>
                                 <span
@@ -440,7 +426,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100)
+                                        Number(form.hundreds * 100)
                                     ).toFixed(2)}
                                     disabled
                                 />
@@ -465,7 +451,7 @@ const BodyInfo = ({idRow, onHide}) => {
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100) +
+                                        Number(form.hundreds * 100) +
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +
@@ -483,6 +469,8 @@ const BodyInfo = ({idRow, onHide}) => {
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className="flex-row p-2 justify-content-around">
                         <div style={{minWidth: '300px'}}>
                             <span
                                 className="input-group-text"
@@ -494,8 +482,10 @@ const BodyInfo = ({idRow, onHide}) => {
                                 title="Comments"
                                 type="text"
                                 className="form-control input-sm mr-3"
-                                style={{minWidth: '50px'}}
-                                defaultValue={form.comentaries}
+                                style={{
+                                    minWidth: '50px'
+                                }}
+                                value={form.comments}
                                 disabled
                             />
                         </div>
@@ -513,5 +503,4 @@ const BodyInfo = ({idRow, onHide}) => {
     );
 };
 
-export default React.memo(ModalDetailsCashIn);
-React.memo(BodyInfo);
+export default ModalDrawerOutDetails;

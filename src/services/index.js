@@ -93,3 +93,6 @@ export const getCashRegisterEndupsByDayAndEmployeeAndRejected = async (data) =>
             `getCashRegisterEndupsByDayAndEmployeeAndRejected?date=${data}`
         )
     ).response;
+
+export const getDrawerToCashIn = async (data) =>
+    (await getFunction(`getDrawerToCashIn/${data}`)).message;

@@ -4,7 +4,7 @@ import {getCashOutAction} from '@app/store/reducers/cashOutDucks';
 import React, {useEffect, useState} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
-import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalCashOut';
+import ModalDetailsCashOut from '@app/pages/Employee/modals/ModalCashOut/WizardComponent';
 import {getRestaurantByLevel, getUsersByRestaurant} from '@app/services/';
 import {currencyFormat, getToday} from '@app/services/utils';
 import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
@@ -23,12 +23,12 @@ const columns = [
         accessor: 'user'
     },
     {
-        Header: 'Coins Total',
-        accessor: 'coinsTotal'
+        Header: 'Drawer In',
+        accessor: 'drawerIn'
     },
     {
-        Header: 'Bills Total',
-        accessor: 'billsTotal'
+        Header: 'Drawer Out',
+        accessor: 'drawerOut'
     },
     {
         Header: 'Grand Total',
@@ -40,7 +40,7 @@ const columns = [
     },
     {
         Header: 'Owed to House',
-        accessor: 'expected'
+        accessor: 'owedToHouse'
     },
     {
         Header: 'Difference',
