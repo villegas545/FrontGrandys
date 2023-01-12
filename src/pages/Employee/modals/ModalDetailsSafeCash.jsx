@@ -8,6 +8,7 @@ import WizardComponent from '@app/pages/Employee/modals/wizard/WizardComponent';
 
 const ModalDetailsSafeCash = ({onHide, show}) => {
     const [count, setCount] = useState();
+    const [subTitle, setSubTitle] = useState('');
     useEffect(() => {
         if (show) {
             (async () => {
@@ -26,14 +27,19 @@ const ModalDetailsSafeCash = ({onHide, show}) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Safe Cash
+                    Details Balance
+                    <br />
+                    <h6>{subTitle}</h6>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {count ? (
                     <>
                         {count === 'allow' ? (
-                            <WizardComponent onHide={onHide} />
+                            <WizardComponent
+                                onHide={onHide}
+                                setSubTitle={setSubTitle}
+                            />
                         ) : (
                             <div>
                                 You must accept pending registrations before

@@ -20,6 +20,7 @@ function SelectCashIn() {
     const [block, setBlock] = useState(false);
     const [wizDate, setWizDate] = useState(getToday());
     const dispatch = useDispatch();
+
     handleStep(() => {
         console.log({
             type: 'wizardCashIns',
@@ -28,7 +29,6 @@ function SelectCashIn() {
         });
         dispatch(
             wizardVoucher({
-            
                 type: 'wizardCashIns',
                 date: wizDate,
                 cashIns: listCashIn

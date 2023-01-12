@@ -1,13 +1,13 @@
 /* eslint-disable indent */
 import {currencyFormat} from '@app/services/utils';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import CurrencyFormat from 'react-currency-format';
 import nextId from 'react-id-generator';
 import {useWizard} from 'react-use-wizard';
 import {useDispatch} from 'react-redux';
 import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 
-const CaptureVoucher = () => {
+const CaptureVoucher = ({setSubTitle}) => {
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -34,6 +34,9 @@ const CaptureVoucher = () => {
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState();
     const {nextStep, handleStep} = useWizard();
+    useEffect(() => {
+        setSubTitle('xxx');
+    }, [setSubTitle]);
     handleStep(() => {
         console.log({
             type: 'wizardCashIns',

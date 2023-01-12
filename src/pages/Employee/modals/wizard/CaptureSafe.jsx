@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import CurrencyFormat from 'react-currency-format';
 import {useWizard} from 'react-use-wizard';
 import BlockUi from 'react-block-ui';
@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getLastSafeCash} from '@app/services/index';
 import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 
-const CaptureSafe = () => {
+const CaptureSafe = ({setSubTitle}) => {
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -34,7 +34,10 @@ const CaptureSafe = () => {
     const [block, setBlock] = useState(false);
     const {nextStep, handleStep} = useWizard();
     const reduxValues = useSelector((state) => state.safeCash);
-    useEffect(() => {
+    useState(() => {
+        setSubTitle('xxxxx');
+    }, [setSubTitle]);
+    useState(() => {
         (async () => {
             console.log(reduxValues);
             setBlock(true);

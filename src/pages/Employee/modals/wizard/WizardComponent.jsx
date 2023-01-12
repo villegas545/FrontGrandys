@@ -6,16 +6,16 @@ import CaptureVoucher from '@app/pages/Employee/modals/wizard/CaptureVoucher';
 import CaptureSafe from '@app/pages/Employee/modals/wizard/CaptureSafe';
 import Resume from '@app/pages/Employee/modals/wizard/Resume';
 
-function WizardComponent({onHide}) {
+function WizardComponent({onHide, setSubTitle}) {
     return (
         <>
             {' '}
             <Wizard>
-                <SelectCashIn />
-                <SelectCashOut />
-                <CaptureVoucher />
-                <CaptureSafe />
-                <Resume onHide={onHide} />
+                <SelectCashIn setSubTitle={setSubTitle} />
+                <SelectCashOut setSubTitle={setSubTitle} />
+                <CaptureVoucher setSubTitle={setSubTitle} />
+                <CaptureSafe setSubTitle={setSubTitle} />
+                <Resume onHide={onHide} setSubTitle={setSubTitle} />
             </Wizard>
         </>
     );
