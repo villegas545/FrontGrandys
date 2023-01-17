@@ -6,10 +6,13 @@ import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
 import BlockUi from 'react-block-ui';
 import {toast} from 'react-toastify';
 
-const Resume = ({onHide}) => {
+const Summary = ({onHide, setSubtitle}) => {
     const reduxValues = useSelector((state) => state.safeCash);
     const [block, setBlock] = useState(false);
     const dispatch = useDispatch();
+    useState(() => {
+        setSubtitle('Summary');
+    }, [setSubtitle]);
     const getCoinsTotal = (data) => {
         return (
             (Number(data.pennies) +
@@ -506,5 +509,5 @@ const Resume = ({onHide}) => {
     );
 };
 
-export default Resume;
-React.memo(Resume);
+export default Summary;
+React.memo(Summary);

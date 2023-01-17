@@ -23,6 +23,10 @@ const columns = [
         accessor: 'user'
     },
     {
+        Header: 'Drawer',
+        accessor: 'drawer'
+    },
+    {
         Header: 'Drawer In',
         accessor: 'drawerIn'
     },

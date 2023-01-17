@@ -11,8 +11,8 @@ import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import * as Yup from 'yup';
 import {syncUsers} from '@app/store/reducers/usersDucks';
+import {changeReactLoading} from '@app/store/reducers/reactLoadingDucks';
 import {url} from '../../config';
-
 import * as AuthService from '../../services/auth';
 
 const Login = () => {
@@ -105,7 +105,10 @@ const Login = () => {
                     idUser: token2.data.idUser
                 })
             );
+            dispatch(changeReactLoading(true));
             await dispatch(syncUsers());
+            dispatch(changeReactLoading(false));
+
             history.push('/');
             /* dispatch(loginUser(token2.data.token));
             history.push('/'); */

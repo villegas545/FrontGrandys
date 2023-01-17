@@ -10,7 +10,7 @@ import {useDispatch} from 'react-redux';
 import BlockUi from 'react-block-ui';
 import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 
-function SelectCashIn() {
+const SelectCashIn=({setSubtitle}) =>{
     // eslint-disable-next-line no-unused-vars
     const {handleStep, previousStep, nextStep} = useWizard();
     // eslint-disable-next-line no-unused-vars
@@ -20,7 +20,9 @@ function SelectCashIn() {
     const [block, setBlock] = useState(false);
     const [wizDate, setWizDate] = useState(getToday());
     const dispatch = useDispatch();
-
+    useState(() => {
+        setSubtitle('Select Cash In');
+    }, [setSubtitle]);
     handleStep(() => {
         console.log({
             type: 'wizardCashIns',

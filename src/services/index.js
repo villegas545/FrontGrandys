@@ -63,6 +63,8 @@ export const cashOutApiInfo = async (data) =>
 
 export const getLastSafeCash = async (data) =>
     (await getFunction(`getLastSafeCash/${data}`)).safeCash;
+export const getDrawersInByManager = async (data) =>
+    (await getFunction(`getDrawersInByManager/${data}`)).safeCash;
 
 export const countSafeCash = async () =>
     (await getFunction('countSafeCash')).message;

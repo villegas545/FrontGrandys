@@ -8,7 +8,7 @@ import WizardComponent from '@app/pages/Employee/modals/wizard/WizardComponent';
 
 const ModalDetailsSafeCash = ({onHide, show}) => {
     const [count, setCount] = useState();
-    const [subTitle, setSubTitle] = useState('');
+    const [subTitle, setSubtitle] = useState('');
     useEffect(() => {
         if (show) {
             (async () => {
@@ -27,7 +27,7 @@ const ModalDetailsSafeCash = ({onHide, show}) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Details Balance
+                    <b>Safe Cash</b>
                     <br />
                     <h6>{subTitle}</h6>
                 </Modal.Title>
@@ -38,7 +38,7 @@ const ModalDetailsSafeCash = ({onHide, show}) => {
                         {count === 'allow' ? (
                             <WizardComponent
                                 onHide={onHide}
-                                setSubTitle={setSubTitle}
+                                setSubtitle={setSubtitle}
                             />
                         ) : (
                             <div>

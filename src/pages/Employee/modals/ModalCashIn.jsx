@@ -47,7 +47,7 @@ const ModalCashIn = ({onHide, show, idRow, action, user, employees}) => {
     );
 };
 
-const BodyInfo = ({idRow, action, user, onHide}) => {
+const BodyInfo = ({idRow, action, onHide}) => {
     const [block, setBlock] = useState(false);
     const [form, setForm] = useState({
         pennies: 0,
@@ -67,7 +67,8 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
         hundreads: 0,
         comentaries: '',
         date: '',
-        idEmployee: user.id
+        drawer: 'empty',
+        employee: 'empty'
     });
     const [dateState, setDateState] = useState(getToday());
     const dispatch = useDispatch();
@@ -152,6 +153,11 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
         try {
             const request = form;
             /* request.employees = state.discontinued; */
+            console.log(form);
+            if (form.employee === 'empty' || form.drawer === 'empty') {
+                setError(`Employee or drawer fields can't be empty`);
+                return;
+            }
             setBlock(true);
             const response = await addCashInService(request);
             setBlock(false);
@@ -902,16 +908,14 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                             })
                                         }
                                     >
-                                        {localStorage.getItem('role') !==
-                                        'Cash Employee' ? (
-                                            <option selected>
-                                                Select a value
-                                            </option>
-                                        ) : (
-                                            <option>
-                                                {localStorage.getItem('user')}
-                                            </option>
-                                        )}
+                                        <option selected value="empty">
+                                            Select a value
+                                        </option>
+
+                                        <option>
+                                            {localStorage.getItem('user')}
+                                        </option>
+
                                         {employees.map((employee) => (
                                             <option value={employee.idEmployee}>
                                                 {employee.name}
@@ -937,15 +941,25 @@ const BodyInfo = ({idRow, action, user, onHide}) => {
                                                 await getDrawerToCashIn(
                                                     e.target.value
                                                 );
-                                            setForm({
-                                                ...form,
-                                                drawer: e.target.value,
-                                                ...drawerInfo,
-                                                hundreads: drawerInfo.hundreds
-                                            });
+                                            console.log(drawerInfo);
+                                            if (drawerInfo !== 'Empty Drawer') {
+                                                setForm({
+                                                    ...form,
+                                                    drawer: e.target.value,
+                                                    ...drawerInfo,
+                                                    hundreads:
+                                                        drawerInfo.hundreds,
+                                                    date: form.date
+                                                });
+                                            } else {
+                                                setForm({
+                                                    ...form,
+                                                    drawer: e.target.value
+                                                });
+                                            }
                                         }}
                                     >
-                                        <option value="0">
+                                        <option value="empty">
                                             Select a drawer
                                         </option>
                                         <option value="1">1</option>

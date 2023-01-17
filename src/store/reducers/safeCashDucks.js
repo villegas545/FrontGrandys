@@ -12,6 +12,34 @@ const dataInitial = {
     wizardVouchers: [],
     wizardTotalExpected: [],
     wizardTotalReal: [],
+    wizardSafeDrawerIn: {
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreds: 0,
+        total: 0
+    },
+    wizardSafeDrawerOut: {
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreds: 0,
+        total: 0
+    },
     wizardSafeStart: {
         pennies: 0,
         nickels: 0,
@@ -154,6 +182,21 @@ export default function safeCashReducer(state = dataInitial, action) {
             return {
                 ...state,
                 wizardSafeStart: action.data.total
+            };
+        case 'wizardDate':
+            return {
+                ...state,
+                wizardDate: action.data.date
+            };
+        case 'wizardSafeDrawerIn':
+            return {
+                ...state,
+                wizardSafeDrawerIn: action.data.total
+            };
+        case 'wizardSafeDrawerOut':
+            return {
+                ...state,
+                wizardSafeDrawerOut: action.data.total
             };
         default:
             return state;

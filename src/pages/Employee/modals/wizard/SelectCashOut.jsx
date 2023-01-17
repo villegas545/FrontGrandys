@@ -1,6 +1,4 @@
 /* eslint-disable indent */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/button-has-type */
 import React, {useEffect, useState} from 'react';
 import {useWizard} from 'react-use-wizard';
 // eslint-disable-next-line no-unused-vars
@@ -10,17 +8,23 @@ import {useDispatch, useSelector} from 'react-redux';
 import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 import BlockUi from 'react-block-ui';
 
-function SelectCashOut() {
+const SelectCashOut = ({setSubtitle}) => {
     // eslint-disable-next-line no-unused-vars
     const {handleStep, previousStep, nextStep} = useWizard();
     // eslint-disable-next-line no-unused-vars
     const [tableInfo, setTableInfo] = useState([]);
-    const [totalState, setTotalState] = useState(0);
+    const [totalState, setTotalState] = useState({
+        drawerIn: 0,
+        drawerOut: 0,
+        drawerTotal: 0
+    });
     const [listCashOut, setListCashOut] = useState([]);
     const dispatch = useDispatch();
     const wizDate = useSelector((store) => store.safeCash.wizardDate);
     const [block, setBlock] = useState(false);
-
+    useState(() => {
+        setSubtitle('Select Cash Out');
+    }, [setSubtitle]);
     handleStep(() => {
         dispatch(
             wizardVoucher({
@@ -29,7 +33,7 @@ function SelectCashOut() {
             })
         );
     });
-    const getTotal = (element) => {
+    /*   const getTotal = (element) => {
         const coinsTotal =
             (element.pennies +
                 element.nickels * 5 +
@@ -50,7 +54,7 @@ function SelectCashOut() {
             element.fifties * 50 +
             element.hundreds * 100;
         return Number(coinsTotal) + Number(billsTotal);
-    };
+    }; */
     const initValues = async (date) => {
         setBlock(true);
         const resp = await getCashOutByDate(date);
@@ -73,26 +77,62 @@ function SelectCashOut() {
         }
     };
     useEffect(() => {
-        let totalTotal = 0;
+        let drawerInTotal = 0;
+        let drawerOutTotal = 0;
         listCashOut.forEach((row) => {
-            totalTotal += getTotal(row);
+            drawerInTotal += Number(row.totalJson.drawerIn.grandTotal);
+            drawerOutTotal += Number(row.totalJson.drawerOut.grandTotal);
         });
-        setTotalState(totalTotal);
+        setTotalState({
+            drawerIn: drawerInTotal,
+            drawerOut: drawerOutTotal,
+            drawerTotal: Number(drawerInTotal + drawerOutTotal)
+        });
     }, [listCashOut]);
     return (
         <>
             <BlockUi tag="div" blocking={block} message="Please Wait">
                 <div>
-                    <span>
-                        <b> CashOut Total: {currencyFormat(totalState)}</b>
-                    </span>{' '}
-                    <span>
-                        <b> CashOut Count: {listCashOut.length}</b>
-                    </span>{' '}
+                    <div className="row">
+                        <div className="col-6">
+                            <span>
+                                <b>
+                                    CashOut In Total:
+                                    {currencyFormat(totalState.drawerIn)}
+                                </b>
+                            </span>
+                        </div>
+                        <div className="col-6">
+                            <span>
+                                <b>
+                                    {' '}
+                                    CashOut Out Total:{' '}
+                                    {currencyFormat(totalState.drawerOut)}
+                                </b>
+                            </span>{' '}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-6">
+                            <span>
+                                <b>
+                                    {' '}
+                                    CashOut Grand Total:{' '}
+                                    {currencyFormat(totalState.drawerTotal)}
+                                </b>
+                            </span>{' '}
+                        </div>
+                        <div className="col-6">
+                            <span>
+                                <b> CashOut Count: {listCashOut.length}</b>
+                            </span>{' '}
+                        </div>
+                    </div>
                     <table className="table table-light">
                         <thead>
                             <tr>
-                                <th>Total</th>
+                                <th>Total Drawer In</th>
+                                <th>Total Drawer Out</th>
                                 <th>Employee</th>
                                 <th>Status</th>
                                 <th>Selected</th>
@@ -103,7 +143,21 @@ function SelectCashOut() {
                                 ? tableInfo.map((row) => (
                                       <tr key={row.id}>
                                           <td>
-                                              {currencyFormat(getTotal(row))}
+                                              {currencyFormat(
+                                                  Number(
+                                                      row.totalJson.drawerIn
+                                                          .grandTotal
+                                                  )
+                                              )}
+                                          </td>
+                                          <td>
+                                              {currencyFormat(
+                                                  Number(
+                                                      row.totalJson.drawerOut
+                                                          .grandTotal
+                                                  )
+                                              )}
+                                              {console.log(row)}
                                           </td>
                                           <td>{row.User.name}</td>
                                           <td>{row.status}</td>
@@ -133,11 +187,11 @@ function SelectCashOut() {
                                 : null}
                         </tbody>
                     </table>
-                    {/* <button className='btn btn-primary' onClick={() => previousStep()}>Previous ⏮️</button> */}
                     <div className="float-right">
                         <button
                             className="btn btn-primary"
                             onClick={() => nextStep()}
+                            type="submit"
                         >
                             Next
                         </button>
@@ -146,6 +200,6 @@ function SelectCashOut() {
             </BlockUi>
         </>
     );
-}
+};
 
 export default SelectCashOut;

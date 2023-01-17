@@ -4,6 +4,7 @@ import './modalDetailsStyles.scss';
 import CurrencyFormat from 'react-currency-format';
 
 const ModalDetailsCashOut = ({onHide, show, idRow, action, user}) => {
+    console.log(idRow);
     return (
         <Modal
             onHide={onHide}

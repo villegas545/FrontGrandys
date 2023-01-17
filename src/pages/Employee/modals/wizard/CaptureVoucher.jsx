@@ -7,7 +7,7 @@ import {useWizard} from 'react-use-wizard';
 import {useDispatch} from 'react-redux';
 import {wizardVoucher} from '@app/store/reducers/safeCashDucks';
 
-const CaptureVoucher = ({setSubTitle}) => {
+const CaptureVoucher = ({setSubtitle}) => {
     const [form, setForm] = useState({
         pennies: 0,
         nickels: 0,
@@ -23,7 +23,7 @@ const CaptureVoucher = ({setSubTitle}) => {
         tens: 0,
         twenties: 0,
         fifties: 0,
-        hundreads: 0,
+        hundreds: 0,
         total: 0,
         comentaries: '',
         type: 'In'
@@ -35,17 +35,258 @@ const CaptureVoucher = ({setSubTitle}) => {
     const [error, setError] = useState();
     const {nextStep, handleStep} = useWizard();
     useEffect(() => {
-        setSubTitle('xxx');
-    }, [setSubTitle]);
+        setSubtitle('Capture Vouchers');
+    }, [setSubtitle]);
     handleStep(() => {
         console.log({
             type: 'wizardCashIns',
             cashIns: vouchers
         });
+        let request = vouchers;
+        request = request.map((voucher) => {
+            const coinsTotalSummary =
+                (Number(voucher.pennies) +
+                    Number(voucher.nickels * 5) +
+                    Number(voucher.dimes * 10) +
+                    Number(voucher.quarters * 25)) /
+                    100 +
+                (Number(voucher.penniesRoll * 50) +
+                    Number(voucher.nickelsRoll * 5 * 40) +
+                    Number(voucher.dimesRoll * 10 * 50) +
+                    Number(voucher.quartersRoll * 25 * 40)) /
+                    100;
+            const billsTotalSummary =
+                Number(voucher.ones) +
+                Number(voucher.twos * 2) +
+                Number(voucher.fives * 5) +
+                Number(voucher.tens * 10) +
+                Number(voucher.twenties * 20) +
+                Number(voucher.fifties * 50) +
+                Number(voucher.hundreds * 100);
+
+            const grandTotalSummary =
+                Number(coinsTotalSummary) + Number(billsTotalSummary);
+            return {
+                ...voucher,
+                coinsTotal: coinsTotalSummary,
+                billsTotal: billsTotalSummary,
+                grandTotal: grandTotalSummary
+            };
+        });
+        //! vouchersin
+        const vouchersIns = {};
+        vouchersIns.arrays = request.filter((item) => item.type === 'In');
+
+        vouchersIns.penniesTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.pennies),
+            0
+        );
+        vouchersIns.nickelsTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.nickels),
+            0
+        );
+        vouchersIns.dimesTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.dimes),
+            0
+        );
+        vouchersIns.quartersTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.quarters),
+            0
+        );
+        vouchersIns.penniesRollTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.penniesRoll),
+            0
+        );
+        vouchersIns.nickelsRollTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.nickelsRoll),
+            0
+        );
+        vouchersIns.dimesRollTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.dimesRoll),
+            0
+        );
+        vouchersIns.quartersRollTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.dimesRoll),
+            0
+        );
+        vouchersIns.onesTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.ones),
+            0
+        );
+        vouchersIns.twosTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.twos),
+            0
+        );
+        vouchersIns.fivesTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.fives),
+            0
+        );
+        vouchersIns.tensTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.tens),
+            0
+        );
+        vouchersIns.twentiesTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.twenties),
+            0
+        );
+        vouchersIns.fiftiesTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.fifties),
+            0
+        );
+        vouchersIns.hundredsTotalTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.hundreds),
+            0
+        );
+        vouchersIns.coinsTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.coinsTotal),
+            0
+        );
+        vouchersIns.billsTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.billsTotal),
+            0
+        );
+        vouchersIns.grandTotal = vouchersIns.arrays.reduce(
+            (a, b) => Number(a) + Number(b.grandTotal),
+            0
+        );
+
+        //! vouchersout
+        const vouchersOuts = {};
+        vouchersOuts.arrays = request.filter((item) => item.type === 'Out');
+
+        vouchersOuts.penniesTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.pennies),
+            0
+        );
+        vouchersOuts.nickelsTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.nickels),
+            0
+        );
+        vouchersOuts.dimesTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.dimes),
+            0
+        );
+        vouchersOuts.quartersTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.quarters),
+            0
+        );
+        vouchersOuts.penniesRollTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.penniesRoll),
+            0
+        );
+        vouchersOuts.nickelsRollTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.nickelsRoll),
+            0
+        );
+        vouchersOuts.dimesRollTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.dimesRoll),
+            0
+        );
+        vouchersOuts.quartersRollTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.dimesRoll),
+            0
+        );
+        vouchersOuts.onesTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.ones),
+            0
+        );
+        vouchersOuts.twosTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.twos),
+            0
+        );
+        vouchersOuts.fivesTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.fives),
+            0
+        );
+        vouchersOuts.tensTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.tens),
+            0
+        );
+        vouchersOuts.twentiesTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.twenties),
+            0
+        );
+        vouchersOuts.fiftiesTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.fifties),
+            0
+        );
+        vouchersOuts.hundredsTotalTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.hundreds),
+            0
+        );
+        vouchersOuts.coinsTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.coinsTotal),
+            0
+        );
+        vouchersOuts.billsTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.billsTotal),
+            0
+        );
+        vouchersOuts.grandTotal = vouchersOuts.arrays.reduce(
+            (a, b) => Number(a) + Number(b.grandTotal),
+            0
+        );
+        const coinsTotalTotal =
+            Number(vouchersIns.coinsTotal) - Number(vouchersOuts.coinsTotal);
+        const billsTotalTotal =
+            Number(vouchersIns.billsTotal) - Number(vouchersOuts.billsTotal);
+        const grandTotalTotal =
+            Number(vouchersIns.grandTotal) - Number(vouchersOuts.grandTotal);
         dispatch(
             wizardVoucher({
                 type: 'wizardVouchers',
-                vouchers
+                vouchers: {
+                    pennies:
+                        Number(vouchersIns.penniesTotalTotal) -
+                        Number(vouchersOuts.penniesTotalTotal),
+                    nickels:
+                        Number(vouchersIns.nickelsTotalTotal) -
+                        Number(vouchersOuts.nickelsTotalTotal),
+                    dimes:
+                        Number(vouchersIns.dimesTotalTotal) -
+                        Number(vouchersOuts.dimesTotalTotal),
+                    quarters:
+                        Number(vouchersIns.quartersTotalTotal) -
+                        Number(vouchersOuts.quartersTotalTotal),
+                    penniesRoll:
+                        Number(vouchersIns.penniesRollTotalTotal) -
+                        Number(vouchersOuts.penniesRollTotalTotal),
+                    nickelsRoll:
+                        Number(vouchersIns.nickelsRollTotalTotal) -
+                        Number(vouchersOuts.nickelsRollTotalTotal),
+                    dimesRoll:
+                        Number(vouchersIns.dimesRollTotalTotal) -
+                        Number(vouchersOuts.dimesRollTotalTotal),
+                    quartersRoll:
+                        Number(vouchersIns.quartersRollTotalTotal) -
+                        Number(vouchersOuts.quartersRollTotalTotal),
+                    ones:
+                        Number(vouchersIns.onesTotalTotal) -
+                        Number(vouchersOuts.onesTotalTotal),
+                    twos:
+                        Number(vouchersIns.twosTotalTotal) -
+                        Number(vouchersOuts.twosTotalTotal),
+                    fives:
+                        Number(vouchersIns.fivesTotalTotal) -
+                        Number(vouchersOuts.fivesTotalTotal),
+                    tens:
+                        Number(vouchersIns.tensTotalTotal) -
+                        Number(vouchersOuts.tensTotalTotal),
+                    twenties:
+                        Number(vouchersIns.twentiesTotalTotal) -
+                        Number(vouchersOuts.twentiesTotalTotal),
+                    fifties:
+                        Number(vouchersIns.fiftiesTotalTotal) -
+                        Number(vouchersOuts.fiftiesTotalTotal),
+                    hundreds:
+                        Number(vouchersIns.hundredsTotalTotal) -
+                        Number(vouchersOuts.hundredsTotalTotal),
+                    coinsTotal: coinsTotalTotal,
+                    billsTotal: billsTotalTotal,
+                    grandTotal: grandTotalTotal,
+                    vouchersIns,
+                    vouchersOuts
+                }
             })
         );
     });
@@ -61,7 +302,7 @@ const CaptureVoucher = ({setSubTitle}) => {
                 Number(form.tens * 10) +
                 Number(form.twenties * 20) +
                 Number(form.fifties * 50) +
-                Number(form.hundreads * 100) +
+                Number(form.hundreds * 100) +
                 (Number(form.pennies) +
                     Number(form.nickels * 5) +
                     Number(form.dimes * 10) +
@@ -88,7 +329,7 @@ const CaptureVoucher = ({setSubTitle}) => {
                 tens: 0,
                 twenties: 0,
                 fifties: 0,
-                hundreads: 0,
+                hundreds: 0,
                 total: 0,
                 comentaries: '',
                 type: 'In'
@@ -516,10 +757,10 @@ const CaptureVoucher = ({setSubTitle}) => {
                                 onChange={(e) =>
                                     setForm({
                                         ...form,
-                                        hundreads: e.target.value
+                                        hundreds: e.target.value
                                     })
                                 }
-                                value={form.hundreads}
+                                value={form.hundreds}
                             />{' '}
                         </div>
                         <div />
@@ -530,7 +771,7 @@ const CaptureVoucher = ({setSubTitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.hundreads * 100}
+                                value={form.hundreds * 100}
                                 disabled
                             />{' '}
                         </div>
@@ -589,7 +830,7 @@ const CaptureVoucher = ({setSubTitle}) => {
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100)
+                                        Number(form.hundreds * 100)
                                     ).toFixed(2)}
                                     disabled
                                 />
@@ -614,7 +855,7 @@ const CaptureVoucher = ({setSubTitle}) => {
                                         Number(form.tens * 10) +
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
-                                        Number(form.hundreads * 100) +
+                                        Number(form.hundreds * 100) +
                                         (Number(form.pennies) +
                                             Number(form.nickels * 5) +
                                             Number(form.dimes * 10) +

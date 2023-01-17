@@ -26,6 +26,17 @@ const ModalDrawerTotalDetails = ({onHide, show, idRow}) => {
                             <h6>
                                 <b>Drawer:</b> {idRow.drawer}
                             </h6>
+                            <h6>
+                                {idRow.Manager ? (
+                                    <>
+                                        <b>Reviewed By:</b> {idRow.Manager.name}
+                                    </>
+                                ) : (
+                                    <>
+                                        <b>Review Status:</b> Pending
+                                    </>
+                                )}
+                            </h6>
                         </>
                     ) : null}
                 </Modal.Title>

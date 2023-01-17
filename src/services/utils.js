@@ -1,7 +1,10 @@
 export const currencyFormat = (num) => {
     try {
-        return `$${num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
+        return `$${Number(num)
+            .toFixed(2)
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
     } catch (error) {
+        console.log(error);
         return 'NAN';
     }
 };
