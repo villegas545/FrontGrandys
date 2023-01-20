@@ -321,17 +321,19 @@ const SafeCash = () => {
                         {localStorage.getItem('role') === 'Cash Manager' ||
                         localStorage.getItem('role') ===
                             'Cash Manager Assistant' ? (
-                            <input
-                                type="submit"
-                                value="Open Safe Cash"
-                                className="form-control btn btn-danger btn-xs mr-3 text-md ml-5"
-                                style={{
-                                    minWidth: '40px',
-                                    width: '20%',
-                                    float: 'right'
-                                }}
-                                onClick={() => setModalShow(true)}
-                            />
+                            <>
+                                <input
+                                    type="submit"
+                                    value="Open Safe Cash"
+                                    className="form-control btn btn-danger btn-xs mr-3 text-md ml-5"
+                                    style={{
+                                        minWidth: '40px',
+                                        width: '20%',
+                                        float: 'right'
+                                    }}
+                                    onClick={() => setModalShow(true)}
+                                />
+                            </>
                         ) : null}
                     </div>
                     {safeCash.data ? (

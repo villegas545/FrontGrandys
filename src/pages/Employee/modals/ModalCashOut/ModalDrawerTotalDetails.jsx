@@ -398,7 +398,7 @@ const Body = ({idRow, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={form.coinsTotal}
+                                    value={Number(form.coinsTotal).toFixed(2)}
                                     disabled
                                 />
                             </div>

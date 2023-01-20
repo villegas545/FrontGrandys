@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import {currencyFormat} from '@app/services/utils';
 import React, {useState, useEffect} from 'react';
 import CurrencyFormat from 'react-currency-format';
@@ -226,66 +225,298 @@ const CaptureVoucher = ({setSubtitle}) => {
             (a, b) => Number(a) + Number(b.grandTotal),
             0
         );
+
+        //        otro
+        //! Voucher drawertosafe
+        const vouchersDrawerToSafe = {};
+        vouchersDrawerToSafe.arrays = request.filter(
+            (item) => item.type === 'DrawerToSafe'
+        );
+
+        vouchersDrawerToSafe.penniesTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.pennies),
+                0
+            );
+        vouchersDrawerToSafe.nickelsTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.nickels),
+                0
+            );
+        vouchersDrawerToSafe.dimesTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.dimes),
+                0
+            );
+        vouchersDrawerToSafe.quartersTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.quarters),
+                0
+            );
+        vouchersDrawerToSafe.penniesRollTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.penniesRoll),
+                0
+            );
+        vouchersDrawerToSafe.nickelsRollTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.nickelsRoll),
+                0
+            );
+        vouchersDrawerToSafe.dimesRollTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.dimesRoll),
+                0
+            );
+        vouchersDrawerToSafe.quartersRollTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.dimesRoll),
+                0
+            );
+        vouchersDrawerToSafe.onesTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.ones),
+                0
+            );
+        vouchersDrawerToSafe.twosTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.twos),
+                0
+            );
+        vouchersDrawerToSafe.fivesTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.fives),
+                0
+            );
+        vouchersDrawerToSafe.tensTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.tens),
+                0
+            );
+        vouchersDrawerToSafe.twentiesTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.twenties),
+                0
+            );
+        vouchersDrawerToSafe.fiftiesTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.fifties),
+                0
+            );
+        vouchersDrawerToSafe.hundredsTotalTotal =
+            vouchersDrawerToSafe.arrays.reduce(
+                (a, b) => Number(a) + Number(b.hundreds),
+                0
+            );
+        vouchersDrawerToSafe.coinsTotal = vouchersDrawerToSafe.arrays.reduce(
+            (a, b) => Number(a) + Number(b.coinsTotal),
+            0
+        );
+        vouchersDrawerToSafe.billsTotal = vouchersDrawerToSafe.arrays.reduce(
+            (a, b) => Number(a) + Number(b.billsTotal),
+            0
+        );
+        vouchersDrawerToSafe.grandTotal = vouchersDrawerToSafe.arrays.reduce(
+            (a, b) => Number(a) + Number(b.grandTotal),
+            0
+        );
+
+        //! SafeToDrawer
+        const vouchersSafeToDrawer = {};
+        vouchersSafeToDrawer.arrays = request.filter(
+            (item) => item.type === 'SafeToDrawer'
+        );
+
+        vouchersSafeToDrawer.penniesTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.pennies),
+                0
+            );
+        vouchersSafeToDrawer.nickelsTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.nickels),
+                0
+            );
+        vouchersSafeToDrawer.dimesTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.dimes),
+                0
+            );
+        vouchersSafeToDrawer.quartersTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.quarters),
+                0
+            );
+        vouchersSafeToDrawer.penniesRollTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.penniesRoll),
+                0
+            );
+        vouchersSafeToDrawer.nickelsRollTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.nickelsRoll),
+                0
+            );
+        vouchersSafeToDrawer.dimesRollTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.dimesRoll),
+                0
+            );
+        vouchersSafeToDrawer.quartersRollTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.dimesRoll),
+                0
+            );
+        vouchersSafeToDrawer.onesTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.ones),
+                0
+            );
+        vouchersSafeToDrawer.twosTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.twos),
+                0
+            );
+        vouchersSafeToDrawer.fivesTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.fives),
+                0
+            );
+        vouchersSafeToDrawer.tensTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.tens),
+                0
+            );
+        vouchersSafeToDrawer.twentiesTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.twenties),
+                0
+            );
+        vouchersSafeToDrawer.fiftiesTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.fifties),
+                0
+            );
+        vouchersSafeToDrawer.hundredsTotalTotal =
+            vouchersSafeToDrawer.arrays.reduce(
+                (a, b) => Number(a) + Number(b.hundreds),
+                0
+            );
+        vouchersSafeToDrawer.coinsTotal = vouchersSafeToDrawer.arrays.reduce(
+            (a, b) => Number(a) + Number(b.coinsTotal),
+            0
+        );
+        vouchersSafeToDrawer.billsTotal = vouchersSafeToDrawer.arrays.reduce(
+            (a, b) => Number(a) + Number(b.billsTotal),
+            0
+        );
+        vouchersSafeToDrawer.grandTotal = vouchersSafeToDrawer.arrays.reduce(
+            (a, b) => Number(a) + Number(b.grandTotal),
+            0
+        );
+
         const coinsTotalTotal =
-            Number(vouchersIns.coinsTotal) - Number(vouchersOuts.coinsTotal);
+            Number(vouchersIns.coinsTotal) +
+            Number(vouchersDrawerToSafe.coinsTotal) -
+            Number(vouchersOuts.coinsTotal) -
+            Number(vouchersSafeToDrawer.coinsTotal);
         const billsTotalTotal =
-            Number(vouchersIns.billsTotal) - Number(vouchersOuts.billsTotal);
+            Number(vouchersIns.billsTotal) +
+            Number(vouchersDrawerToSafe.billsTotal) -
+            Number(vouchersOuts.billsTotal) -
+            Number(vouchersSafeToDrawer.billsTotal);
         const grandTotalTotal =
-            Number(vouchersIns.grandTotal) - Number(vouchersOuts.grandTotal);
+            Number(vouchersIns.grandTotal) +
+            Number(vouchersDrawerToSafe.grandTotal) -
+            Number(vouchersOuts.grandTotal) -
+            Number(vouchersSafeToDrawer.grandTotal);
+
         dispatch(
             wizardVoucher({
                 type: 'wizardVouchers',
                 vouchers: {
                     pennies:
-                        Number(vouchersIns.penniesTotalTotal) -
-                        Number(vouchersOuts.penniesTotalTotal),
+                        Number(vouchersIns.penniesTotalTotal) +
+                        Number(vouchersDrawerToSafe.penniesTotalTotal) -
+                        Number(vouchersOuts.penniesTotalTotal) -
+                        Number(vouchersSafeToDrawer.penniesTotalTotal),
                     nickels:
-                        Number(vouchersIns.nickelsTotalTotal) -
-                        Number(vouchersOuts.nickelsTotalTotal),
+                        Number(vouchersIns.nickelsTotalTotal) +
+                        Number(vouchersDrawerToSafe.nickelsTotalTotal) -
+                        Number(vouchersOuts.nickelsTotalTotal) -
+                        Number(vouchersSafeToDrawer.nickelsTotalTotal),
                     dimes:
-                        Number(vouchersIns.dimesTotalTotal) -
-                        Number(vouchersOuts.dimesTotalTotal),
+                        Number(vouchersIns.dimesTotalTotal) +
+                        Number(vouchersDrawerToSafe.dimesTotalTotal) -
+                        Number(vouchersOuts.dimesTotalTotal) -
+                        Number(vouchersSafeToDrawer.dimesTotalTotal),
                     quarters:
-                        Number(vouchersIns.quartersTotalTotal) -
-                        Number(vouchersOuts.quartersTotalTotal),
+                        Number(vouchersIns.quartersTotalTotal) +
+                        Number(vouchersDrawerToSafe.quartersTotalTotal) -
+                        Number(vouchersOuts.quartersTotalTotal) -
+                        Number(vouchersSafeToDrawer.quartersTotalTotal),
                     penniesRoll:
-                        Number(vouchersIns.penniesRollTotalTotal) -
-                        Number(vouchersOuts.penniesRollTotalTotal),
+                        Number(vouchersIns.quartersTotalTotal) +
+                        Number(vouchersDrawerToSafe.quartersTotalTotal) -
+                        Number(vouchersOuts.quartersTotalTotal) -
+                        Number(vouchersSafeToDrawer.quartersTotalTotal),
                     nickelsRoll:
-                        Number(vouchersIns.nickelsRollTotalTotal) -
-                        Number(vouchersOuts.nickelsRollTotalTotal),
+                        Number(vouchersIns.nickelsRollTotalTotal) +
+                        Number(vouchersDrawerToSafe.nickelsRollTotalTotal) -
+                        Number(vouchersOuts.nickelsRollTotalTotal) -
+                        Number(vouchersSafeToDrawer.nickelsRollTotalTotal),
                     dimesRoll:
-                        Number(vouchersIns.dimesRollTotalTotal) -
-                        Number(vouchersOuts.dimesRollTotalTotal),
+                        Number(vouchersIns.dimesRollTotalTotal) +
+                        Number(vouchersDrawerToSafe.dimesRollTotalTotal) -
+                        Number(vouchersOuts.dimesRollTotalTotal) -
+                        Number(vouchersSafeToDrawer.dimesRollTotalTotal),
                     quartersRoll:
-                        Number(vouchersIns.quartersRollTotalTotal) -
-                        Number(vouchersOuts.quartersRollTotalTotal),
+                        Number(vouchersIns.quartersRollTotalTotal) +
+                        Number(vouchersDrawerToSafe.quartersRollTotalTotal) -
+                        Number(vouchersOuts.quartersRollTotalTotal) -
+                        Number(vouchersSafeToDrawer.quartersRollTotalTotal),
                     ones:
-                        Number(vouchersIns.onesTotalTotal) -
-                        Number(vouchersOuts.onesTotalTotal),
+                        Number(vouchersIns.onesTotalTotal) +
+                        Number(vouchersDrawerToSafe.onesTotalTotal) -
+                        Number(vouchersOuts.onesTotalTotal) -
+                        Number(vouchersSafeToDrawer.onesTotalTotal),
                     twos:
-                        Number(vouchersIns.twosTotalTotal) -
-                        Number(vouchersOuts.twosTotalTotal),
+                        Number(vouchersIns.twosTotalTotal) +
+                        Number(vouchersDrawerToSafe.twosTotalTotal) -
+                        Number(vouchersOuts.twosTotalTotal) -
+                        Number(vouchersSafeToDrawer.twosTotalTotal),
                     fives:
-                        Number(vouchersIns.fivesTotalTotal) -
-                        Number(vouchersOuts.fivesTotalTotal),
+                        Number(vouchersIns.fivesTotalTotal) +
+                        Number(vouchersDrawerToSafe.fivesTotalTotal) -
+                        Number(vouchersOuts.fivesTotalTotal) -
+                        Number(vouchersSafeToDrawer.fivesTotalTotal),
                     tens:
-                        Number(vouchersIns.tensTotalTotal) -
-                        Number(vouchersOuts.tensTotalTotal),
+                        Number(vouchersIns.tensTotalTotal) +
+                        Number(vouchersDrawerToSafe.tensTotalTotal) -
+                        Number(vouchersOuts.tensTotalTotal) -
+                        Number(vouchersSafeToDrawer.tensTotalTotal),
                     twenties:
-                        Number(vouchersIns.twentiesTotalTotal) -
-                        Number(vouchersOuts.twentiesTotalTotal),
+                        Number(vouchersIns.twentiesTotalTotal) +
+                        Number(vouchersDrawerToSafe.twentiesTotalTotal) -
+                        Number(vouchersOuts.twentiesTotalTotal) -
+                        Number(vouchersSafeToDrawer.twentiesTotalTotal),
                     fifties:
-                        Number(vouchersIns.fiftiesTotalTotal) -
-                        Number(vouchersOuts.fiftiesTotalTotal),
+                        Number(vouchersIns.fiftiesTotalTotal) +
+                        Number(vouchersDrawerToSafe.fiftiesTotalTotal) -
+                        Number(vouchersOuts.fiftiesTotalTotal) -
+                        Number(vouchersSafeToDrawer.fiftiesTotalTotal),
                     hundreds:
-                        Number(vouchersIns.hundredsTotalTotal) -
-                        Number(vouchersOuts.hundredsTotalTotal),
+                        Number(vouchersIns.hundredsTotalTotal) +
+                        Number(vouchersDrawerToSafe.hundredsTotalTotal) -
+                        Number(vouchersOuts.hundredsTotalTotal) -
+                        Number(vouchersSafeToDrawer.hundredsTotalTotal),
                     coinsTotal: coinsTotalTotal,
                     billsTotal: billsTotalTotal,
                     grandTotal: grandTotalTotal,
                     vouchersIns,
-                    vouchersOuts
+                    vouchersOuts,
+                    vouchersDrawerToSafe,
+                    vouchersSafeToDrawer
                 }
             })
         );
@@ -346,14 +577,13 @@ const CaptureVoucher = ({setSubtitle}) => {
         console.log(vouchersTotal);
         let total = 0;
         vouchersTotal.forEach((voucher) => {
-            if (voucher.type === 'In') {
+            if (voucher.type === 'In' || voucher.type === 'DrawerToSafe') {
                 total += Number(voucher.total);
             } else {
                 total -= Number(voucher.total);
             }
         });
         return total;
-        //  const total = vouchers.forEach();
     };
     return (
         <>
@@ -378,6 +608,12 @@ const CaptureVoucher = ({setSubtitle}) => {
                         >
                             <option>In</option>
                             <option>Out</option>
+                            <option value="DrawerToSafe">
+                                Move Money From Drawer To Safe Cash
+                            </option>
+                            <option value="SafeToDrawer">
+                                Move Money From Safe Cash To Drawer
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -901,13 +1137,12 @@ const CaptureVoucher = ({setSubtitle}) => {
                             <thead>
                                 <tr>
                                     <th>Total</th>
-                                    <th>In/Out</th>
+                                    <th>Type</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {vouchers.map((voucher) => (
-                                    // eslint-disable-next-line react/no-array-index-key
                                     <tr key={voucher.id}>
                                         <td>{currencyFormat(voucher.total)}</td>
                                         <td>{voucher.type}</td>

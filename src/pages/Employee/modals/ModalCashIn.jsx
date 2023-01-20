@@ -911,11 +911,6 @@ const BodyInfo = ({idRow, action, onHide}) => {
                                         <option selected value="empty">
                                             Select a value
                                         </option>
-
-                                        <option>
-                                            {localStorage.getItem('user')}
-                                        </option>
-
                                         {employees.map((employee) => (
                                             <option value={employee.idEmployee}>
                                                 {employee.name}

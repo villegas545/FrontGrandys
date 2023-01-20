@@ -122,8 +122,172 @@ const DrawerInSummary = ({setSubtitle}) => {
                 initValues.hundreds += Number(
                     lastSafeCash.realAmount.drawerIn.hundreds
                 );
+            } else {
+                dispatch(
+                    wizardVoucher({
+                        type: 'wizardSafeStart',
+                        total: {
+                            realAmount: {
+                                drawerIn: {
+                                    ones: 0,
+                                    tens: 0,
+                                    twos: 0,
+                                    dimes: 0,
+                                    fives: 0,
+                                    fifties: 1,
+                                    nickels: 0,
+                                    pennies: 0,
+                                    hundreds: 0,
+                                    uarters: 0,
+                                    twenties: 0,
+                                    dimesRoll: 0,
+                                    billsTotal: 0,
+                                    coinsTotal: 0,
+                                    grandTotal: 0,
+                                    nickelsRoll: 0,
+                                    penniesRoll: 0,
+                                    quartersRoll: 0
+                                },
+                                drawerOut: {
+                                    ones: 0,
+                                    tens: 0,
+                                    twos: 0,
+                                    dimes: 0,
+                                    fives: 0,
+                                    fifties: 1,
+                                    nickels: 0,
+                                    pennies: 0,
+                                    hundreds: 0,
+                                    uarters: 0,
+                                    twenties: 0,
+                                    dimesRoll: 0,
+                                    billsTotal: 0,
+                                    coinsTotal: 0,
+                                    grandTotal: 0,
+                                    nickelsRoll: 0,
+                                    penniesRoll: 0,
+                                    quartersRoll: 0
+                                }
+                            }
+                        }
+                    })
+                );
             }
             // restar a safecash.drawer in el cash in (1,000 - 500 = 500) con 5 cajas abiertas de 100 dolares c/u
+
+            //! INCREMENTAR LOS VOUCHERS SAFETODRAWER
+            initValues.pennies += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .penniesTotalTotal
+            );
+            initValues.nickels += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .nickelsTotalTotal
+            );
+            initValues.dimes += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer.dimesTotalTotal
+            );
+            initValues.quarters += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .quartersTotalTotal
+            );
+            initValues.penniesRoll += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .penniesRollTotalTotal
+            );
+            initValues.nickelsRoll += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .nickelsRollTotalTotal
+            );
+            initValues.dimesRoll += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .dimesRollTotalTotal
+            );
+            initValues.quartersRoll += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .quartersRollTotalTotal
+            );
+            initValues.ones += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer.onesTotalTotal
+            );
+            initValues.twos += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer.twosTotalTotal
+            );
+            initValues.fives += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer.fivesTotalTotal
+            );
+            initValues.tens += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer.tensTotalTotal
+            );
+            initValues.twenties += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .twentiesTotalTotal
+            );
+            initValues.fifties += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .fiftiesTotalTotal
+            );
+            initValues.hundreds += Number(
+                reduxValues.wizardVouchers.vouchersSafeToDrawer
+                    .hundredsTotalTotal
+            );
+
+            //! Decrementar LOS VOUCHERS DRAWERTOSAFE
+            initValues.pennies -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .penniesTotalTotal
+            );
+            initValues.nickels -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .nickelsTotalTotal
+            );
+            initValues.dimes -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe.dimesTotalTotal
+            );
+            initValues.quarters -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .quartersTotalTotal
+            );
+            initValues.penniesRoll -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .penniesRollTotalTotal
+            );
+            initValues.nickelsRoll -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .nickelsRollTotalTotal
+            );
+            initValues.dimesRoll -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .dimesRollTotalTotal
+            );
+            initValues.quartersRoll -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .quartersRollTotalTotal
+            );
+            initValues.ones -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe.onesTotalTotal
+            );
+            initValues.twos -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe.twosTotalTotal
+            );
+            initValues.fives -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe.fivesTotalTotal
+            );
+            initValues.tens -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe.tensTotalTotal
+            );
+            initValues.twenties -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .twentiesTotalTotal
+            );
+            initValues.fifties -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .fiftiesTotalTotal
+            );
+            initValues.hundreds -= Number(
+                reduxValues.wizardVouchers.vouchersDrawerToSafe
+                    .hundredsTotalTotal
+            );
 
             const cashInByManagerAndDate = await getCashInByDate(dateState);
 
@@ -208,7 +372,6 @@ const DrawerInSummary = ({setSubtitle}) => {
             initValues.fifties -= Number(totalCashIn.fifties);
             initValues.hundreds -= Number(totalCashIn.hundreds);
 
-            const cashOutByManagerAndDate = await getCashOutByDate(dateState);
             const totalCashOut = {
                 pennies: 0,
                 nickels: 0,
@@ -263,7 +426,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                     hundreds: 0
                 }
             };
-
+            const cashOutByManagerAndDate = await getCashOutByDate(dateState);
             cashOutByManagerAndDate.forEach((item) => {
                 // DRAWER IN
                 totalCashOut.drawerIn.pennies += Number(
@@ -943,7 +1106,9 @@ const DrawerInSummary = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={Number(form.coinsTotal)}
+                                        value={Number(form.coinsTotal).toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>
@@ -960,7 +1125,9 @@ const DrawerInSummary = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={Number(form.billsTotal)}
+                                        value={Number(form.billsTotal).toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>
@@ -977,7 +1144,9 @@ const DrawerInSummary = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={Number(form.grandTotal)}
+                                        value={Number(form.grandTotal).toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>

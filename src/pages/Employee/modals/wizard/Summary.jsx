@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {saveCashSafe} from '@app/services/';
@@ -14,6 +15,7 @@ const Summary = ({onHide, setSubtitle}) => {
     useState(() => {
         setSubtitle('Summary');
     }, [setSubtitle]);
+
     const getCoinsTotal = (data) => {
         return (
             (Number(data.pennies) +
@@ -214,301 +216,545 @@ const Summary = ({onHide, setSubtitle}) => {
     useEffect(() => {
         console.log(reduxValues);
     }, [reduxValues]);
+
+    const expectedDrawerBackCoins =
+        Number(reduxValues.wizardSafeStart.realAmount.drawerIn.coinsTotal) -
+        Number(reduxValues.wizardCashIns.coinsTotal) +
+        Number(reduxValues.wizardCashOuts.drawerIn.coinsTotal) +
+        Number(reduxValues.wizardVouchers.vouchersSafeToDrawer.coinsTotal) -
+        Number(reduxValues.wizardVouchers.vouchersDrawerToSafe.coinsTotal);
+
+    const expectedDrawerBackBills =
+        Number(reduxValues.wizardSafeStart.realAmount.drawerIn.billsTotal) -
+        Number(reduxValues.wizardCashIns.billsTotal) +
+        Number(reduxValues.wizardCashOuts.drawerIn.billsTotal) +
+        Number(reduxValues.wizardVouchers.vouchersSafeToDrawer.billsTotal) -
+        Number(reduxValues.wizardVouchers.vouchersDrawerToSafe.billsTotal);
+
+    const expectedDrawerBackGrandTotal =
+        Number(reduxValues.wizardSafeStart.realAmount.drawerIn.grandTotal) -
+        Number(reduxValues.wizardCashIns.grandTotal) +
+        Number(reduxValues.wizardCashOuts.drawerIn.grandTotal) +
+        Number(reduxValues.wizardVouchers.vouchersSafeToDrawer.grandTotal) -
+        Number(reduxValues.wizardVouchers.vouchersDrawerToSafe.grandTotal);
+
+    //! DIFERENCE
+    const drawerBackDifferenceCoins =
+        Number(expectedDrawerBackCoins) -
+        Number(reduxValues.wizardSafeDrawerIn.coinsTotal);
+    const drawerBackDifferenceBills =
+        Number(expectedDrawerBackBills) -
+        Number(reduxValues.wizardSafeDrawerIn.billsTotal);
+    const drawerBackDifferenceGrandTotal =
+        Number(drawerBackDifferenceCoins) + Number(drawerBackDifferenceBills);
+
+    const earingsDifferenceCoins =
+        Number(reduxValues.wizardTotalExpected.expected.coinsTotal) -
+        Number(reduxValues.wizardSafeDrawerOut.real.coinsTotal);
+    const earingsDifferenceBills =
+        Number(reduxValues.wizardTotalExpected.expected.billsTotal) -
+        Number(reduxValues.wizardSafeDrawerOut.real.billsTotal);
+    const earingsDifferenceGrandTotal =
+        Number(earingsDifferenceCoins) + Number(earingsDifferenceBills);
+
+    const endTotalDifferenceCoins =
+        Number(drawerBackDifferenceCoins) + Number(earingsDifferenceCoins);
+    const endTotalDifferenceBills =
+        Number(drawerBackDifferenceBills) + Number(earingsDifferenceBills);
+    const endTotalDifferenceGrandTotal =
+        Number(endTotalDifferenceCoins) + Number(endTotalDifferenceBills);
     return (
         <>
             <BlockUi tag="div" blocking={block} message="Please Wait">
-                <div className="card-body">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>---</th>
-                                <th>Drawers Start</th>
-                                <th>Cash Start</th>
-                                <th>Start Total</th>
-                                <th>Drawer Out</th>
-                                <th>Drawer Back</th>
-                                <th>Earnings</th>
-                                <th>End Total</th>
-                                <th>Vouchers In</th>
-                                <th>Vouchers Out</th>
-                                <th>Vouchers Total</th>
-                                <th>Expected Drawer Back</th>
-                                <th>Expected Earnings</th>
-                                <th>Expected End Total</th>
-                                <th>Drawer Back Difference</th>
-                                <th>Earings Difference</th>
-                                <th>End Total Difference</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                //! COMIENZA LA PRIMERA FILA
-                            }
-
-                            <tr>
-                                <td>
-                                    <b>Coins Total</b>
-                                </td>
-                                {
-                                    // Safe Start
-                                }
-                                <td>
-                                    {currencyFormat(
+                <table className="table">
+                    <thead>
+                        <tr className="bg-dark text-color-white">
+                            <th>
+                                <b>Descriptions</b>
+                            </th>
+                            <th>
+                                <b>Coins Total</b>
+                            </th>
+                            <th>
+                                <b>Bills Total</b>
+                            </th>
+                            <th>
+                                <b>Grand Total</b>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Drawers Start</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeStart.realAmount
+                                        .drawerIn.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeStart.realAmount
+                                        .drawerIn.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeStart.realAmount
+                                        .drawerIn.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Safe Cash Start</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeStart.realAmount
+                                        .drawerOut.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeStart.realAmount
+                                        .drawerOut.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeStart.realAmount
+                                        .drawerOut.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr className="bg-secondary text-color-white">
+                            <th>Safe Total (Safe Cash Start+Drawers Start)</th>
+                            <td>
+                                {currencyFormat(
+                                    Number(
                                         reduxValues.wizardSafeStart.realAmount
                                             .drawerIn.coinsTotal
-                                    )}
-                                </td>
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardSafeStart.realAmount
-                                            .drawerOut.coinsTotal
-                                    )}
-                                </td>
-                                <td>
-                                    {currencyFormat(
+                                    ) +
                                         Number(
                                             reduxValues.wizardSafeStart
-                                                .realAmount.drawerIn.coinsTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardSafeStart
-                                                    .realAmount.drawerOut
-                                                    .coinsTotal
-                                            )
-                                    )}
-                                </td>
-                                {
-                                    // Cash In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashIns.coinsTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashOuts.drawerIn
-                                            .coinsTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer Out
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashOuts.drawerOut
-                                            .coinsTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer In+DrawerOut
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        Number(
-                                            reduxValues.wizardCashOuts.drawerOut
-                                                .coinsTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardCashOuts
-                                                    .drawerIn.coinsTotal
-                                            )
-                                    )}
-                                </td>
-                                {
-                                    //
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        Number(
-                                            reduxValues.wizardCashOuts.drawerOut
-                                                .coinsTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardCashOuts
-                                                    .drawerIn.coinsTotal
-                                            )
-                                    )}
-                                </td>
-                            </tr>
-                            {
-                                //! COMIENZA LA SEGUNDA FILA
-                            }
-                            <tr>
-                                <td>
-                                    <b>Bills Total</b>
-                                </td>
-
-                                {
-                                    // Safe Start
-                                }
-                                <td>
-                                    {currencyFormat(
+                                                .realAmount.drawerOut.coinsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(
                                         reduxValues.wizardSafeStart.realAmount
                                             .drawerIn.billsTotal
-                                    )}
-                                </td>
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardSafeStart.realAmount
-                                            .drawerOut.billsTotal
-                                    )}
-                                </td>
-                                <td>
-                                    {currencyFormat(
+                                    ) +
                                         Number(
                                             reduxValues.wizardSafeStart
-                                                .realAmount.drawerIn.billsTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardSafeStart
-                                                    .realAmount.drawerOut
-                                                    .billsTotal
-                                            )
-                                    )}
-                                </td>
-                                {
-                                    // Cash In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashIns.billsTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashOuts.drawerIn
-                                            .billsTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer Out
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashOuts.drawerOut
-                                            .billsTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer In+DrawerOut
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        Number(
-                                            reduxValues.wizardCashOuts.drawerOut
-                                                .billsTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardCashOuts
-                                                    .drawerIn.billsTotal
-                                            )
-                                    )}
-                                </td>
-                                {
-                                    // Vouchers In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardVouchers.filter(
-                                            (item) => item.type === 'In'
-                                        ).billsTotal
-                                    )}
-                                </td>
-                            </tr>
-                            {
-                                //! COMIENZA LA TERCERA FILA
-                            }
-                            <tr>
-                                <td>
-                                    <b>Grand Total</b>
-                                </td>
-                                {
-                                    // Safe Start
-                                }
-                                <td>
-                                    {currencyFormat(
+                                                .realAmount.drawerOut.billsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(
                                         reduxValues.wizardSafeStart.realAmount
                                             .drawerIn.grandTotal
-                                    )}
-                                </td>
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardSafeStart.realAmount
-                                            .drawerOut.grandTotal
-                                    )}
-                                </td>
-                                <td>
-                                    {currencyFormat(
+                                    ) +
                                         Number(
                                             reduxValues.wizardSafeStart
-                                                .realAmount.drawerIn.grandTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardSafeStart
-                                                    .realAmount.drawerOut
-                                                    .grandTotal
-                                            )
-                                    )}
-                                </td>
-                                {
-                                    // Cash In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashIns.grandTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer In
-                                }
-                                <td>
-                                    {currencyFormat(
-                                        reduxValues.wizardCashOuts.drawerIn
-                                            .grandTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer Out
-                                }
-                                <td>
-                                    {currencyFormat(
+                                                .realAmount.drawerOut.grandTotal
+                                        )
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cash In Summary</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashIns.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashIns.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashIns.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cash Out (Drawer In) Summary</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashOuts.drawerIn
+                                        .coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashOuts.drawerIn
+                                        .billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashOuts.drawerIn
+                                        .grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cash Out (Drawer Out) Summary</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashOuts.drawerOut
+                                        .coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashOuts.drawerOut
+                                        .billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardCashOuts.drawerOut
+                                        .grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr className="bg-secondary text-color-white">
+                            <th>
+                                Cash Out Summary( Cash Out DrawerIn + Cash Out
+                                DrawerOut)
+                            </th>
+                            <td>
+                                {currencyFormat(
+                                    Number(
+                                        reduxValues.wizardCashOuts.drawerOut
+                                            .coinsTotal
+                                    ) +
+                                        Number(
+                                            reduxValues.wizardCashOuts.drawerIn
+                                                .coinsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(
+                                        reduxValues.wizardCashOuts.drawerOut
+                                            .billsTotal
+                                    ) +
+                                        Number(
+                                            reduxValues.wizardCashOuts.drawerIn
+                                                .billsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(
                                         reduxValues.wizardCashOuts.drawerOut
                                             .grandTotal
-                                    )}
-                                </td>
-                                {
-                                    // Cash Out Drawer In+DrawerOut
-                                }
-                                <td>
-                                    {currencyFormat(
+                                    ) +
                                         Number(
-                                            reduxValues.wizardCashOuts.drawerOut
+                                            reduxValues.wizardCashOuts.drawerIn
                                                 .grandTotal
-                                        ) +
-                                            Number(
-                                                reduxValues.wizardCashOuts
-                                                    .drawerIn.grandTotal
-                                            )
-                                    )}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button
-                        className="btn btn-primary w-100"
-                        type="button"
-                        onClick={() => onSubmit()}
-                    >
-                        Save{' '}
-                    </button>
-                </div>
+                                        )
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Vouchers In</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.vouchersIns
+                                        .coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.vouchersIns
+                                        .billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.vouchersIns
+                                        .grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Vouchers Out</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.vouchersOuts
+                                        .coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.vouchersOuts
+                                        .billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.vouchersOuts
+                                        .grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Vouchers Safe To Drawer</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers
+                                        .vouchersSafeToDrawer.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers
+                                        .vouchersSafeToDrawer.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers
+                                        .vouchersSafeToDrawer.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Vouchers Drawer To Safe</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers
+                                        .vouchersDrawerToSafe.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers
+                                        .vouchersDrawerToSafe.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers
+                                        .vouchersDrawerToSafe.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr className="bg-secondary text-color-white">
+                            <th>Vouchers Total</th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardVouchers.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Expected Drawer(Ammount supposed to be in to
+                                drawers)
+                            </th>
+                            <td>{currencyFormat(expectedDrawerBackCoins)}</td>
+                            <td>{currencyFormat(expectedDrawerBackBills)}</td>
+                            <td>
+                                {currencyFormat(expectedDrawerBackGrandTotal)}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Expected Safe Cash(Ammount supposed to be in to
+                                Safe Cash)
+                            </th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardTotalExpected.expected
+                                        .coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardTotalExpected.expected
+                                        .billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardTotalExpected.expected
+                                        .grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr className="bg-secondary text-color-white">
+                            <th>Expected End Total</th>
+                            <td>
+                                {currencyFormat(
+                                    Number(expectedDrawerBackCoins) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .expected.coinsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(expectedDrawerBackBills) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .expected.billsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(expectedDrawerBackGrandTotal) +
+                                        Number(
+                                            reduxValues.wizardTotalExpected
+                                                .expected.grandTotal
+                                        )
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Real Drawers (Real Ammount Values in drawers)
+                            </th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeDrawerIn.coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeDrawerIn.billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeDrawerIn.grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Real Drawer Safe Cash (Real Values captured by
+                                the manager in safe Cash)
+                            </th>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeDrawerOut.real
+                                        .coinsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeDrawerOut.real
+                                        .billsTotal
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    reduxValues.wizardSafeDrawerOut.real
+                                        .grandTotal
+                                )}
+                            </td>
+                        </tr>
+                        <tr className="bg-secondary text-color-white">
+                            <th>Real Total</th>
+                            <td>
+                                {currencyFormat(
+                                    Number(
+                                        reduxValues.wizardSafeDrawerIn
+                                            .coinsTotal
+                                    ) +
+                                        Number(
+                                            reduxValues.wizardSafeDrawerOut.real
+                                                .coinsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(
+                                        reduxValues.wizardSafeDrawerIn
+                                            .billsTotal
+                                    ) +
+                                        Number(
+                                            reduxValues.wizardSafeDrawerOut.real
+                                                .billsTotal
+                                        )
+                                )}
+                            </td>
+                            <td>
+                                {currencyFormat(
+                                    Number(
+                                        reduxValues.wizardSafeDrawerIn
+                                            .grandTotal
+                                    ) +
+                                        Number(
+                                            reduxValues.wizardSafeDrawerOut.real
+                                                .grandTotal
+                                        )
+                                )}
+                            </td>
+                        </tr>
+                        {/*   <tr>
+                            <th>Drawer Back Difference</th>
+                            <td>{currencyFormat(drawerBackDifferenceCoins)}</td>
+                            <td>{currencyFormat(drawerBackDifferenceBills)}</td>
+                            <td>
+                                {currencyFormat(drawerBackDifferenceGrandTotal)}
+                            </td>
+                        </tr> */}
+                        <tr className="bg-dark text-color-white">
+                            <td colSpan="4" className="text-center">
+                                <b>Total</b>
+                            </td>
+                        </tr>
+                        <tr className="bg-secondary text-color-white">
+                            <th>Total Difference</th>
+                            <td> {currencyFormat(earingsDifferenceCoins)}</td>
+                            <td> {currencyFormat(earingsDifferenceBills)}</td>
+                            <td>
+                                {currencyFormat(earingsDifferenceGrandTotal)}
+                            </td>
+                        </tr>
+                        {/* <tr className="bg-secondary text-color-white">
+                            <th>End Total Difference</th>
+                            <td> {currencyFormat(endTotalDifferenceCoins)}</td>
+                            <td> {currencyFormat(endTotalDifferenceBills)}</td>
+                            <td>
+                                {currencyFormat(endTotalDifferenceGrandTotal)}
+                            </td>
+                        </tr> */}
+                    </tbody>
+                </table>
+                <button
+                    className="btn btn-danger w-100"
+                    type="button"
+                    onClick={() => onSubmit()}
+                >
+                    Save{' '}
+                </button>
             </BlockUi>
         </>
     );

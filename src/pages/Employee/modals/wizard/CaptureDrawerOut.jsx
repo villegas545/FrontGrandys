@@ -206,7 +206,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                 initValues.hundreds += Number(
                     reduxValues.wizardVouchers.hundreds
                 );
-
+                //! TERMINA DE AGREGAR LOS VOUCHESRS
                 initValues.expected.coinsTotal =
                     (Number(initValues.pennies) +
                         Number(initValues.nickels * 5) +
