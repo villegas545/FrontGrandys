@@ -774,7 +774,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     value={Number(
                                         (form.nickels * 5) / 100 +
                                             (form.nickelsRoll * 5 * 40) / 100
-                                    )}
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -821,7 +821,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     value={Number(
                                         (form.dimes * 10) / 100 +
                                             (form.dimesRoll * 10 * 50) / 100
-                                    )}
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -868,7 +868,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     value={Number(
                                         (form.quarters * 25) / 100 +
                                             (form.quartersRoll * 25 * 40) / 100
-                                    )}
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -904,7 +904,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.ones)}
+                                    value={Number(form.ones).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -934,7 +934,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.twos * 2)}
+                                    value={Number(form.twos * 2).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -964,7 +964,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.fives * 5)}
+                                    value={Number(form.fives * 5).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -994,7 +994,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.tens * 10)}
+                                    value={Number(form.tens * 10).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -1024,7 +1024,9 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.twenties * 20)}
+                                    value={Number(form.twenties * 20).toFixed(
+                                        2
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -1053,7 +1055,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.fifties * 50)}
+                                    value={Number(form.fifties * 50).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -1083,7 +1085,9 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.hundreds * 100)}
+                                    value={Number(form.hundreds * 100).toFixed(
+                                        2
+                                    )}
                                     disabled
                                 />{' '}
                             </div>

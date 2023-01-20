@@ -384,7 +384,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     value={Number(
                                         (form.nickels * 5) / 100 +
                                             (form.nickelsRoll * 5 * 40) / 100
-                                    )}
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -429,7 +429,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     value={Number(
                                         (form.dimes * 10) / 100 +
                                             (form.dimesRoll * 10 * 50) / 100
-                                    )}
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -474,7 +474,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     value={Number(
                                         (form.quarters * 25) / 100 +
                                             (form.quartersRoll * 25 * 40) / 100
-                                    )}
+                                    ).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -509,7 +509,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.ones)}
+                                    value={Number(form.ones).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -538,7 +538,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.twos * 2)}
+                                    value={Number(form.twos * 2).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -567,7 +567,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.fives * 5)}
+                                    value={Number(form.fives * 5).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -596,7 +596,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.tens * 10)}
+                                    value={Number(form.tens * 10).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -625,7 +625,9 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.twenties * 20)}
+                                    value={Number(form.twenties * 20).toFixed(
+                                        2
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -653,7 +655,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.fifties * 50)}
+                                    value={Number(form.fifties * 50).toFixed(2)}
                                     disabled
                                 />{' '}
                             </div>
@@ -682,7 +684,9 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                     thousandSeparator
                                     prefix="$"
                                     className="form-control"
-                                    value={Number(form.hundreds * 100)}
+                                    value={Number(form.hundreds * 100).toFixed(
+                                        2
+                                    )}
                                     disabled
                                 />{' '}
                             </div>
@@ -705,7 +709,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             (Number(form.pennies) +
                                                 Number(form.nickels * 5) +
                                                 Number(form.dimes * 10) +
@@ -722,7 +726,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                                     form.quartersRoll * 25 * 40
                                                 )) /
                                                 100
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -739,7 +743,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             Number(form.ones) +
                                             Number(form.twos * 2) +
                                             Number(form.fives * 5) +
@@ -747,7 +751,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                             Number(form.twenties * 20) +
                                             Number(form.fifties * 50) +
                                             Number(form.hundreds * 100)
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -764,7 +768,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={
+                                        value={(
                                             Number(form.ones) +
                                             Number(form.twos * 2) +
                                             Number(form.fives * 5) +
@@ -788,7 +792,7 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                                     form.quartersRoll * 25 * 40
                                                 )) /
                                                 100
-                                        }
+                                        ).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -808,7 +812,9 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={form.expected.coinsTotal}
+                                        value={form.expected.coinsTotal.toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>
@@ -825,7 +831,9 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={form.expected.billsTotal}
+                                        value={form.expected.billsTotal.toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>
@@ -842,7 +850,9 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={form.expected.grandTotal}
+                                        value={form.expected.grandTotal.toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>

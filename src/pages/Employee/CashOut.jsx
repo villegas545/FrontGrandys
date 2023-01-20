@@ -28,27 +28,27 @@ const columns = [
     },
     {
         Header: 'Drawer In',
-        accessor: 'drawerIn'
+        accessor: 'drawerInCurrency'
     },
     {
         Header: 'Drawer Out',
-        accessor: 'drawerOut'
+        accessor: 'drawerOutCurrency'
     },
     {
         Header: 'Grand Total',
-        accessor: 'grandTotal'
+        accessor: 'grandTotalCurrency'
     },
     {
         Header: 'PIPO',
-        accessor: 'pipo'
+        accessor: 'pipoCurrency'
     },
     {
         Header: 'Owed to House',
-        accessor: 'owedToHouse'
+        accessor: 'owedToHouseCurrency'
     },
     {
         Header: 'Difference',
-        accessor: 'difference'
+        accessor: 'differenceCurrency'
     },
     {
         Header: 'Strike',

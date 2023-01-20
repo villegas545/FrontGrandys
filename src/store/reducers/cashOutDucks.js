@@ -59,18 +59,18 @@ export const getCashOutAction = (formData) => async (dispatch, getState) => {
             }
             element.user = element.User.name;
             element.restaurant = element.Restaurant.name;
-            element.coinsTotal = currencyFormat(element.coinsTotal);
-            element.billsTotal = currencyFormat(element.billsTotal);
-            element.grandTotal = currencyFormat(element.grandTotal);
-            element.pipo = currencyFormat(element.pipo);
-            element.difference = currencyFormat(element.difference);
-            element.owedToHouse = currencyFormat(element.expected);
-            element.cashSales = currencyFormat(element.cashSales);
-            element.creditSales = currencyFormat(element.creditSales);
-            element.drawerIn = currencyFormat(
+            element.coinsTotalCurrency = currencyFormat(element.coinsTotal);
+            element.billsTotalCurrency = currencyFormat(element.billsTotal);
+            element.grandTotalCurrency = currencyFormat(element.grandTotal);
+            element.pipoCurrency = currencyFormat(element.pipo);
+            element.differenceCurrency = currencyFormat(element.difference);
+            element.owedToHouseCurrency = currencyFormat(element.expected);
+            element.cashSalesCurrency = currencyFormat(element.cashSales);
+            element.creditSalesCurrency = currencyFormat(element.creditSales);
+            element.drawerInCurrency = currencyFormat(
                 Number(element.totalJson.drawerIn.grandTotal)
             );
-            element.drawerOut = currencyFormat(
+            element.drawerOutCurrency = currencyFormat(
                 Number(element.totalJson.drawerOut.grandTotal)
             );
             console.log(element);

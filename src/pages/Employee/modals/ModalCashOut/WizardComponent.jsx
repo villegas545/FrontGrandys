@@ -129,6 +129,8 @@ function Body({idRow, user, onHide, setDrawer, setSubTitle, drawer}) {
                 setDrawer(resCashIn.drawer);
                 setCashIn(totalTotal);
             } else {
+                alert("Cash In hasn't been approved or is not available");
+                onHide();
                 setCashIn(0);
             }
 

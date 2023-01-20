@@ -209,7 +209,7 @@ const BodyInfo = ({onHide, vouchers}) => {
                         <div>Total</div>
                     </div>
                     <div className="d-flex p-2">
-                        <div> 1`s</div>
+                        <div> no se que es</div>
                         <div>
                             {' '}
                             <input
@@ -227,7 +227,7 @@ const BodyInfo = ({onHide, vouchers}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.ones}
+                                value={Number(form.ones).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>

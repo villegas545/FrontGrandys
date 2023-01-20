@@ -834,7 +834,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.ones}
+                                value={form.ones.toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -863,7 +863,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twos * 2}
+                                value={(form.twos * 2).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -892,7 +892,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.fives * 5}
+                                value={(form.fives * 5).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -921,7 +921,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.tens * 10}
+                                value={(form.tens * 10).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -950,7 +950,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twenties * 20}
+                                value={(form.twenties * 20).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -978,7 +978,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.fifties * 50}
+                                value={(form.fifties * 50).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -1007,7 +1007,7 @@ const CaptureVoucher = ({setSubtitle}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.hundreds * 100}
+                                value={(form.hundreds * 100).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>

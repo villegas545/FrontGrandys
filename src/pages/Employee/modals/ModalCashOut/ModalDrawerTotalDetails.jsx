@@ -415,7 +415,7 @@ const Body = ({idRow, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={Number(form.billsTotal)}
+                                    value={Number(form.billsTotal).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -432,7 +432,9 @@ const Body = ({idRow, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={form.grandTotal}
+                                    value={Number(
+                                        form.billsTotal + form.coinsTotal
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -454,7 +456,7 @@ const Body = ({idRow, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={form.pipo}
+                                        value={Number(form.pipo).toFixed(2)}
                                         disabled
                                     />
                                 </div>
@@ -471,7 +473,9 @@ const Body = ({idRow, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={form.cashSales}
+                                        value={Number(form.cashSales).toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>
@@ -488,7 +492,9 @@ const Body = ({idRow, onHide}) => {
                                         prefix="$"
                                         className="form-control input-sm mr-3"
                                         style={{minWidth: '50px'}}
-                                        value={form.creditSales}
+                                        value={Number(form.creditSales).toFixed(
+                                            2
+                                        )}
                                         disabled
                                     />
                                 </div>
@@ -544,7 +550,11 @@ const Body = ({idRow, onHide}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={form.difference}
+                                    value={Number(
+                                        Number(form.billsTotal) +
+                                            Number(form.coinsTotal) -
+                                            Number(form.expected)
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>

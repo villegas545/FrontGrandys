@@ -214,7 +214,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.ones}
+                                value={form.ones.toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -238,7 +238,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twos * 2}
+                                value={(form.twos * 2).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -262,7 +262,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.fives * 5}
+                                value={(form.fives * 5).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -286,7 +286,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.tens * 10}
+                                value={(form.tens * 10).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -310,7 +310,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.twenties * 20}
+                                value={(form.twenties * 20).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -333,7 +333,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.fifties * 50}
+                                value={(form.fifties * 50).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -357,7 +357,7 @@ const BodyInfo = ({onHide, money}) => {
                                 thousandSeparator
                                 prefix="$"
                                 className="form-control"
-                                value={form.hundreds * 100}
+                                value={(form.hundreds * 100).toFixed(2)}
                                 disabled
                             />{' '}
                         </div>
@@ -409,7 +409,7 @@ const BodyInfo = ({onHide, money}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
                                         Number(form.twos * 2) +
                                         Number(form.fives * 5) +
@@ -417,7 +417,7 @@ const BodyInfo = ({onHide, money}) => {
                                         Number(form.twenties * 20) +
                                         Number(form.fifties * 50) +
                                         Number(form.hundreds * 100)
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
@@ -434,7 +434,7 @@ const BodyInfo = ({onHide, money}) => {
                                     prefix="$"
                                     className="form-control input-sm mr-3"
                                     style={{minWidth: '50px'}}
-                                    value={
+                                    value={(
                                         Number(form.ones) +
                                         Number(form.twos * 2) +
                                         Number(form.fives * 5) +
@@ -454,7 +454,7 @@ const BodyInfo = ({onHide, money}) => {
                                                 form.quartersRoll * 25 * 40
                                             )) /
                                             100
-                                    }
+                                    ).toFixed(2)}
                                     disabled
                                 />
                             </div>
