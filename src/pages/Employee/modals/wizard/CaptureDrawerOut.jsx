@@ -77,49 +77,49 @@ const CaptureDrawerOut = ({setSubtitle}) => {
                 );
                 if (lastSafeCash) {
                     initValues.pennies += Number(
-                        lastSafeCash.realAmount.drawerOut.pennies
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.pennies
                     );
                     initValues.nickels += Number(
-                        lastSafeCash.realAmount.drawerOut.nickels
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.nickels
                     );
                     initValues.dimes += Number(
-                        lastSafeCash.realAmount.drawerOut.dimes
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.dimes
                     );
                     initValues.quarters += Number(
-                        lastSafeCash.realAmount.drawerOut.quarters
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.quarters
                     );
                     initValues.penniesRoll += Number(
-                        lastSafeCash.realAmount.drawerOut.penniesRoll
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.penniesRoll
                     );
                     initValues.nickelsRoll += Number(
-                        lastSafeCash.realAmount.drawerOut.nickelsRoll
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.nickelsRoll
                     );
                     initValues.dimesRoll += Number(
-                        lastSafeCash.realAmount.drawerOut.dimesRoll
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.dimesRoll
                     );
                     initValues.quartersRoll += Number(
-                        lastSafeCash.realAmount.drawerOut.quartersRoll
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.quartersRoll
                     );
                     initValues.ones += Number(
-                        lastSafeCash.realAmount.drawerOut.ones
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.ones
                     );
                     initValues.twos += Number(
-                        lastSafeCash.realAmount.drawerOut.twos
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.twos
                     );
                     initValues.fives += Number(
-                        lastSafeCash.realAmount.drawerOut.fives
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.fives
                     );
                     initValues.tens += Number(
-                        lastSafeCash.realAmount.drawerOut.tens
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.tens
                     );
                     initValues.twenties += Number(
-                        lastSafeCash.realAmount.drawerOut.twenties
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.twenties
                     );
                     initValues.fifties += Number(
-                        lastSafeCash.realAmount.drawerOut.fifties
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.fifties
                     );
                     initValues.hundreds += Number(
-                        lastSafeCash.realAmount.drawerOut.hundreds
+                        lastSafeCash.jsonValues.wizardSafeDrawerOut.hundreds
                     );
                 }
                 // restar a safecash.drawer in el cash in (1,000 - 500 = 500) con 5 cajas abiertas de 100 dolares c/u

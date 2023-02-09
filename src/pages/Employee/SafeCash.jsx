@@ -16,11 +16,11 @@ const columns = [
     },
     {
         Header: 'Restaurant',
-        accessor: 'restaurant'
+        accessor: 'Restaurant.name'
     },
     {
         Header: 'Created',
-        accessor: 'user'
+        accessor: 'User.name'
     },
     {
         Header: 'Received',
@@ -40,7 +40,7 @@ const columns = [
     },
     {
         Header: 'Cash Ins',
-        accessor: 'currencyCashIn'
+        accessor: 'jsonValues.wizardCashIns.grandTotalCurrency'
     },
     {
         Header: 'Cash Outs',

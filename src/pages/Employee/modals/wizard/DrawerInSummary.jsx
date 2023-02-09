@@ -74,53 +74,61 @@ const DrawerInSummary = ({setSubtitle}) => {
                 dispatch(
                     wizardVoucher({
                         type: 'wizardSafeStart',
-                        total: lastSafeCash
+                        total: {
+                            realAmount: {
+                                drawerIn:
+                                    lastSafeCash.jsonValues.wizardSafeDrawerIn,
+
+                                drawerOut:
+                                    lastSafeCash.jsonValues.wizardSafeDrawerOut
+                            }
+                        }
                     })
                 );
                 initValues.pennies += Number(
-                    lastSafeCash.realAmount.drawerIn.pennies
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.pennies
                 );
                 initValues.nickels += Number(
-                    lastSafeCash.realAmount.drawerIn.nickels
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.nickels
                 );
                 initValues.dimes += Number(
-                    lastSafeCash.realAmount.drawerIn.dimes
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.dimes
                 );
                 initValues.quarters += Number(
-                    lastSafeCash.realAmount.drawerIn.quarters
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.quarters
                 );
                 initValues.penniesRoll += Number(
-                    lastSafeCash.realAmount.drawerIn.penniesRoll
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.penniesRoll
                 );
                 initValues.nickelsRoll += Number(
-                    lastSafeCash.realAmount.drawerIn.nickelsRoll
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.nickelsRoll
                 );
                 initValues.dimesRoll += Number(
-                    lastSafeCash.realAmount.drawerIn.dimesRoll
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.dimesRoll
                 );
                 initValues.quartersRoll += Number(
-                    lastSafeCash.realAmount.drawerIn.quartersRoll
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.quartersRoll
                 );
                 initValues.ones += Number(
-                    lastSafeCash.realAmount.drawerIn.ones
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.ones
                 );
                 initValues.twos += Number(
-                    lastSafeCash.realAmount.drawerIn.twos
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.twos
                 );
                 initValues.fives += Number(
-                    lastSafeCash.realAmount.drawerIn.fives
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.fives
                 );
                 initValues.tens += Number(
-                    lastSafeCash.realAmount.drawerIn.tens
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.tens
                 );
                 initValues.twenties += Number(
-                    lastSafeCash.realAmount.drawerIn.twenties
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.twenties
                 );
                 initValues.fifties += Number(
-                    lastSafeCash.realAmount.drawerIn.fifties
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.fifties
                 );
                 initValues.hundreds += Number(
-                    lastSafeCash.realAmount.drawerIn.hundreds
+                    lastSafeCash.jsonValues.wizardSafeDrawerIn.hundreds
                 );
             } else {
                 dispatch(
@@ -134,11 +142,11 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     twos: 0,
                                     dimes: 0,
                                     fives: 0,
-                                    fifties: 1,
+                                    fifties: 0,
                                     nickels: 0,
                                     pennies: 0,
                                     hundreds: 0,
-                                    uarters: 0,
+                                    quarters: 0,
                                     twenties: 0,
                                     dimesRoll: 0,
                                     billsTotal: 0,
@@ -154,11 +162,11 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     twos: 0,
                                     dimes: 0,
                                     fives: 0,
-                                    fifties: 1,
+                                    fifties: 0,
                                     nickels: 0,
                                     pennies: 0,
                                     hundreds: 0,
-                                    uarters: 0,
+                                    quarters: 0,
                                     twenties: 0,
                                     dimesRoll: 0,
                                     billsTotal: 0,

@@ -1,6 +1,7 @@
 /* eslint-disable indent */
-import axios from 'axios';
 import {currencyFormat} from '@app/services/utils';
+import axios from 'axios';
+// import {currencyFormat} from '@app/services/utils';
 import {url as urlconf} from '../../config/index';
 
 const url = `${urlconf}getSafeCash`;
@@ -88,8 +89,8 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             })
         ).data.response;
         console.log(res);
-        let totalTotal = 0;
-        res = res.map((element) => {
+        const totalTotal = 0;
+        /* res = res.map((element) => {
             console.log(element);
             const coinsTotal =
                 (element.pennies +
@@ -130,7 +131,28 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             element.restaurant = element.Restaurant.name;
             element.user = element.User.name;
             return element;
+        }); */
+
+        res = res.map((item) => {
+            item.jsonValues.wizardCashIns.grandTotalCurrency = currencyFormat(
+                item.jsonValues.wizardCashIns.grandTotal
+            );
+            item.jsonValues.wizardCashOuts.grandTotalCurrency = currencyFormat(
+                item.jsonValues.wizardCashOuts.grandTotal
+            );
+            item.jsonValues.wizardSafeStart.grandTotalCurrency = currencyFormat(
+                item.jsonValues.wizardSafeStart.grandTotal
+            );
+            item.jsonValues.wizardSafeDrawerIn.grandTotalCurrency =
+                currencyFormat(item.jsonValues.wizardSafeDrawerIn.grandTotal);
+            item.jsonValues.wizardSafeDrawerOut.grandTotalCurrency =
+                currencyFormat(item.jsonValues.wizardSafeDrawerOut.grandTotal);
+            item.jsonValues.wizardTotalExpected.grandTotalCurrency =
+                currencyFormat(item.jsonValues.wizardTotalExpected.grandTotal);
+
+            return item;
         });
+
         res.totalTotal = totalTotal;
         dispatch({
             type: GET_SAFE_CASH_SUCCESS,
