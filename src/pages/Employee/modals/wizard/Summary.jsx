@@ -60,15 +60,6 @@ const Summary = ({onHide, setSubtitle}) => {
         Number(reduxValues.wizardVouchers.vouchersDrawerToSafe.grandTotal);
 
     //! DIFERENCE
-    const drawerBackDifferenceCoins =
-        Number(expectedDrawerBackCoins) -
-        Number(reduxValues.wizardSafeDrawerIn.coinsTotal);
-    const drawerBackDifferenceBills =
-        Number(expectedDrawerBackBills) -
-        Number(reduxValues.wizardSafeDrawerIn.billsTotal);
-    const drawerBackDifferenceGrandTotal =
-        Number(drawerBackDifferenceCoins) + Number(drawerBackDifferenceBills);
-
     const earingsDifferenceCoins =
         Number(reduxValues.wizardTotalExpected.expected.coinsTotal) -
         Number(reduxValues.wizardSafeDrawerOut.real.coinsTotal);

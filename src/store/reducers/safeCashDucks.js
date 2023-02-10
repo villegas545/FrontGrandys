@@ -150,6 +150,83 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             item.jsonValues.wizardTotalExpected.grandTotalCurrency =
                 currencyFormat(item.jsonValues.wizardTotalExpected.grandTotal);
 
+            // Cashout Dwr In & Dwr Out Columns
+            item.jsonValues.wizardCashOuts.drawerIn.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardCashOuts.drawerIn.grandTotal
+                );
+            item.jsonValues.wizardCashOuts.drawerOut.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardCashOuts.drawerOut.grandTotal
+                );
+            item.jsonValues.wizardCashOuts.cashOutSummary = currencyFormat(
+                Number(item.jsonValues.wizardCashOuts.drawerIn.grandTotal) +
+                    Number(item.jsonValues.wizardCashOuts.drawerOut.grandTotal)
+            );
+            // Vouchers 5 columns
+            item.jsonValues.wizardVouchers.vouchersIns.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardVouchers.vouchersIns.grandTotal
+                );
+            item.jsonValues.wizardVouchers.vouchersOuts.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardVouchers.vouchersOuts.grandTotal
+                );
+            item.jsonValues.wizardVouchers.vouchersDrawerToSafe.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardVouchers.vouchersDrawerToSafe
+                        .grandTotal
+                );
+            item.jsonValues.wizardVouchers.vouchersSafeToDrawer.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardVouchers.vouchersDrawerToSafe
+                        .grandTotal
+                );
+            item.jsonValues.wizardVouchers.grandTotalCurrency = currencyFormat(
+                item.jsonValues.wizardVouchers.grandTotal
+            );
+            item.jsonValues.wizardTotalExpected.expected.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardTotalExpected.expected.grandTotal
+                );
+
+            //! EXPECTED
+            const expectedDrawerBackGrandTotal =
+                Number(
+                    item.jsonValues.wizardSafeStart.realAmount.drawerIn
+                        .grandTotal
+                ) -
+                Number(item.jsonValues.wizardCashIns.grandTotal) +
+                Number(item.jsonValues.wizardCashOuts.drawerIn.grandTotal) +
+                Number(
+                    item.jsonValues.wizardVouchers.vouchersSafeToDrawer
+                        .grandTotal
+                ) -
+                Number(
+                    item.jsonValues.wizardVouchers.vouchersDrawerToSafe
+                        .grandTotal
+                );
+            item.jsonValues.wizardExpected = {};
+            item.jsonValues.wizardExpected.grandTotalCurrency = currencyFormat(
+                expectedDrawerBackGrandTotal
+            );
+
+            //! DIFERENCE(Real Total)
+            const earningsDifferenceCoins =
+                Number(
+                    item.jsonValues.wizardTotalExpected.expected.coinsTotal
+                ) - Number(item.jsonValues.wizardSafeDrawerOut.real.coinsTotal);
+            const earingsDifferenceBills =
+                Number(
+                    item.jsonValues.wizardTotalExpected.expected.billsTotal
+                ) - Number(item.jsonValues.wizardSafeDrawerOut.real.billsTotal);
+            const earningsDifferenceGrandTotal =
+                Number(earningsDifferenceCoins) +
+                Number(earingsDifferenceBills);
+            item.jsonValues.wizardDifference = {};
+            item.jsonValues.wizardDifference.grandTotalCurrency =
+                currencyFormat(earningsDifferenceGrandTotal);
+
             return item;
         });
 

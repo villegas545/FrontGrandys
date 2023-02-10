@@ -27,32 +27,70 @@ const columns = [
         accessor: 'received'
     },
     {
-        Header: 'Initial Safe',
-        accessor: 'currencyinitSafe'
-    },
-    {
-        Header: 'Vouchers In',
-        accessor: 'currencyVouchersIn'
-    },
-    {
-        Header: 'Vouchers Out',
-        accessor: 'currencyVouchersOut'
-    },
-    {
         Header: 'Cash Ins',
         accessor: 'jsonValues.wizardCashIns.grandTotalCurrency'
     },
     {
-        Header: 'Cash Outs',
-        accessor: 'currencyCashOut'
+        Header: 'Cash Outs DI',
+        accessor: 'jsonValues.wizardCashOuts.drawerIn.grandTotalCurrency'
+    },
+    {
+        Header: 'Cash Outs DO',
+        accessor: 'jsonValues.wizardCashOuts.drawerOut.grandTotalCurrency'
+    },
+    {
+        Header: 'Cash Outs Total',
+        accessor: 'jsonValues.wizardCashOuts.cashOutSummary'
+    },
+    {
+        Header: 'Vouchers In',
+        accessor: 'jsonValues.wizardVouchers.vouchersIns.grandTotalCurrency'
+    },
+    {
+        Header: 'Vouchers Out',
+        accessor: 'jsonValues.wizardVouchers.vouchersOuts.grandTotalCurrency'
+    },
+    {
+        Header: 'Vouchers S2D',
+        accessor:
+            'jsonValues.wizardVouchers.vouchersSafeToDrawer.grandTotalCurrency'
+    },
+    {
+        Header: 'Vouchers D2S',
+        accessor:
+            'jsonValues.wizardVouchers.vouchersDrawerToSafe.grandTotalCurrency'
+    },
+    {
+        Header: 'Vouchers Total',
+        accessor: 'jsonValues.wizardVouchers.grandTotalCurrency'
+    },
+    {
+        Header: 'Expected Drawers',
+        accessor: 'jsonValues.wizardExpected.grandTotalCurrency'
+    },
+    {
+        Header: 'Expected Safe Cash',
+        accessor: 'jsonValues.wizardTotalExpected.expected.grandTotalCurrency'
+    },
+    {
+        Header: 'Expected Total',
+        accessor: 'expectedAmountCurrency'
+    },
+    {
+        Header: 'Real Drawers',
+        accessor: 'realDrawersCurrency'
+    },
+    {
+        Header: 'Real Safe Cash',
+        accessor: 'realSafeCashCurrency'
+    },
+    {
+        Header: 'real Total',
+        accessor: 'realAmountCurrency'
     },
     {
         Header: 'Grand Total',
         accessor: 'grandTotal'
-    },
-    {
-        Header: 'Expected Total',
-        accessor: 'currencyExpectedAmount'
     },
     {
         Header: 'Diference Total',
