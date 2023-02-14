@@ -257,7 +257,6 @@ const Csv = () => {
                             <div className="form-group">
                                 <label htmlFor="WeatherTemp">Temperature</label>
                                 <input
-                                    onBlur={(e) => alert(e.target.value)}
                                     onChange={(e) =>
                                         setRestTemp(e.target.value)
                                     }
