@@ -26,6 +26,7 @@ const Csv = () => {
     const [qPromo, setQPromo] = useState(null);
     const [tips, setTips] = useState(null);
     const [transfer, setTransfer] = useState('+');
+    const [restCash, setRestCash] = useState(null);
 
     const rest = useSelector((store) => store.rest.array);
     const urlFile = `${urlconf}csvToJson`;
@@ -124,6 +125,7 @@ const Csv = () => {
                 restDate == null ||
                 restTemp == null ||
                 restWeat == null ||
+                restCash == null ||
                 restTruck == null ||
                 restTrans == null ||
                 restCCP == null ||
@@ -140,6 +142,7 @@ const Csv = () => {
                     date: restDate,
                     weatherTemp: restTemp,
                     weatherW: restWeat,
+                    cash: restCash,
                     truck: restTruck,
                     transfer: restTrans,
                     storeCreditCardPursh: restCCP,
@@ -279,6 +282,22 @@ const Csv = () => {
                                     className="form-control"
                                     placeholder="Weather"
                                     value={restWeat}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="ownform">
+                            <div className="form-group">
+                                <label htmlFor="Cash">Cash +/-</label>
+                                <input
+                                    onChange={(e) =>
+                                        setRestCash(e.target.value)
+                                    }
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Cash +/-"
+                                    value={restCash}
+                                    step="0.01"
                                     required
                                 />
                             </div>
