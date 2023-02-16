@@ -179,16 +179,45 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
                 );
             item.jsonValues.wizardVouchers.vouchersSafeToDrawer.grandTotalCurrency =
                 currencyFormat(
-                    item.jsonValues.wizardVouchers.vouchersDrawerToSafe
+                    item.jsonValues.wizardVouchers.vouchersSafeToDrawer
                         .grandTotal
                 );
             item.jsonValues.wizardVouchers.grandTotalCurrency = currencyFormat(
                 item.jsonValues.wizardVouchers.grandTotal
             );
+
+            // Expected Safe Cash
             item.jsonValues.wizardTotalExpected.expected.grandTotalCurrency =
                 currencyFormat(
                     item.jsonValues.wizardTotalExpected.expected.grandTotal
                 );
+            //! REAL
+            // Real drawers
+            item.jsonValues.wizardSafeDrawerIn.grandTotalCurrency =
+                currencyFormat(item.jsonValues.wizardSafeDrawerIn.grandTotal);
+
+            // Real drawers Safe Cash
+            item.jsonValues.wizardSafeDrawerOut.real.grandTotalCurrency =
+                currencyFormat(
+                    item.jsonValues.wizardSafeDrawerOut.real.grandTotal
+                );
+
+            // Real Total
+            const realGrandTotal =
+                Number(item.jsonValues.wizardSafeDrawerOut.real.grandTotal) +
+                Number(item.jsonValues.wizardSafeDrawerIn.grandTotal);
+            item.jsonValues.wizardRealTotal = {};
+            item.jsonValues.wizardRealTotal.realGrandTotalCurrency =
+                currencyFormat(realGrandTotal);
+
+            //! Difference
+            const totalDifference =
+                Number(
+                    item.jsonValues.wizardTotalExpected.expected.grandTotal
+                ) - Number(item.jsonValues.wizardSafeDrawerOut.real.grandTotal);
+            item.jsonValues.wizardTotalDifference = {};
+            item.jsonValues.wizardTotalDifference.grandTotalDifferenceCurrency =
+                currencyFormat(totalDifference);
 
             //! EXPECTED
             const expectedDrawerBackGrandTotal =
@@ -210,6 +239,14 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
             item.jsonValues.wizardExpected.grandTotalCurrency = currencyFormat(
                 expectedDrawerBackGrandTotal
             );
+
+            const expectedGrandTotal =
+                Number(
+                    item.jsonValues.wizardTotalExpected.expected.grandTotal
+                ) + Number(expectedDrawerBackGrandTotal);
+            item.jsonValues.wizardExpectedGrandTotal = {};
+            item.jsonValues.wizardExpectedGrandTotal.expectedGrandTotalCurrency =
+                currencyFormat(expectedGrandTotal);
 
             //! DIFERENCE(Real Total)
             const earningsDifferenceCoins =
