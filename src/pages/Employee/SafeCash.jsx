@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable indent */
 import TableSafeCash from '@app/pages/Employee/Tables/TableSafeCash';
 import {getSafeCashAction} from '@app/store/reducers/safeCashDucks';
@@ -61,40 +62,56 @@ const columns = [
             'jsonValues.wizardVouchers.vouchersDrawerToSafe.grandTotalCurrency'
     },
     {
-        Header: 'Vouchers Total',
+        Header: (
+            <label title="(VouchersIn + VouchersD2S) - (VouchersOut + VouchersS2D)">
+                Vouchers Total
+            </label>
+        ),
         accessor: 'jsonValues.wizardVouchers.grandTotalCurrency'
     },
     {
-        Header: 'Expected Drawers',
+        Header: (
+            <label title="Ammount supposed to be into drawers">
+                Expected Drawer
+            </label>
+        ),
         accessor: 'jsonValues.wizardExpected.grandTotalCurrency'
     },
     {
-        Header: 'Expected Safe Cash',
+        Header: (
+            <label title="Ammount supposed to be into Safecash">
+                Expected Safe Cash
+            </label>
+        ),
         accessor: 'jsonValues.wizardTotalExpected.expected.grandTotalCurrency'
     },
     {
         Header: 'Expected Total',
-        accessor: 'expectedAmountCurrency'
+        accessor:
+            'jsonValues.wizardExpectedGrandTotal.expectedGrandTotalCurrency'
     },
     {
-        Header: 'Real Drawers',
-        accessor: 'realDrawersCurrency'
+        Header: (
+            <label title="Real ammount values in drawers">Real Drawers</label>
+        ),
+        accessor: 'jsonValues.wizardSafeDrawerIn.grandTotalCurrency'
     },
     {
-        Header: 'Real Safe Cash',
-        accessor: 'realSafeCashCurrency'
+        Header: (
+            <label title="Real values captured by the manager in the safecash">
+                Real Safe Cash
+            </label>
+        ),
+        accessor: 'jsonValues.wizardSafeDrawerOut.real.grandTotalCurrency'
     },
     {
         Header: 'real Total',
-        accessor: 'realAmountCurrency'
-    },
-    {
-        Header: 'Grand Total',
-        accessor: 'grandTotal'
+        accessor: 'jsonValues.wizardRealTotal.realGrandTotalCurrency'
     },
     {
         Header: 'Diference Total',
-        accessor: 'currencyDiference'
+        accessor:
+            'jsonValues.wizardTotalDifference.grandTotalDifferenceCurrency'
     },
     {
         Header: 'Status',

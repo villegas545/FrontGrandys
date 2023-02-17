@@ -362,6 +362,10 @@ const Summary = ({onHide, setSubtitle}) => {
                         </tr>
                         <tr className="bg-secondary text-color-white">
                             <th>Vouchers Total</th>
+                            {
+                                // it the operation of adding vouchersIn plus VouchersD2S minus the summatory of VouchersOut and VouchersS2D
+                                // (VouchersIn + VouchersD2S) - (VouchersOut + VouchersS2D)
+                            }
                             <td>
                                 {currencyFormat(
                                     reduxValues.wizardVouchers.coinsTotal
