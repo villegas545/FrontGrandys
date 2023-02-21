@@ -42,8 +42,8 @@ const ModalDetailsSafeCash = ({onHide, show}) => {
                             />
                         ) : (
                             <div>
-                                You must accept pending registrations before
-                                continuing
+                                You must approve whole pending Cash In, Cash Out
+                                or Safe Cash
                             </div>
                         )}
                     </>

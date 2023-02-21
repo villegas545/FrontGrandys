@@ -10,7 +10,8 @@ import {
     getCashRegisterStartup,
     getRestaurantByLevel,
     getUsersByRestaurant,
-    getDrawerToCashIn
+    getDrawerToCashIn,
+    getCashOutByEmployeeAndDate
 } from '@app/services/';
 import BlockUi from 'react-block-ui';
 
@@ -108,6 +109,15 @@ const BodyInfo = ({idRow, action, onHide}) => {
     // CODIGO PARA LLENAR FORMULARIO EN CASO DE TENER UN CANCELADO
     useEffect(() => {
         // vaya a la api y traiga la fecha actual y rellenar los campos
+        (async () => {
+            try {
+                await getCashOutByEmployeeAndDate(dateState);
+            } catch (err) {
+                alert(err.response.data.message);
+                console.log(err.response.data.message);
+                onHide();
+            }
+        })();
     }, [dateState]);
     // TERMINA CODIGO PARA LLENAR FORMULARIO EN CASO DE TENER UN CANCELADO
     useEffect(() => {
@@ -173,6 +183,9 @@ const BodyInfo = ({idRow, action, onHide}) => {
             }
         } catch (err) {
             console.log(err);
+            alert(err.response.data.message);
+            setBlock(false);
+            onHide();
         }
         console.log('click en add');
     };
