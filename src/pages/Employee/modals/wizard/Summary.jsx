@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -133,7 +134,11 @@ const Summary = ({onHide, setSubtitle}) => {
                             </td>
                         </tr>
                         <tr className="bg-secondary text-color-white">
-                            <th>Safe Total (Safe Cash Start+Drawers Start)</th>
+                            <th>
+                                <label title="(Safe Cash Start + Drawers Start)">
+                                    Safe Total
+                                </label>
+                            </th>
                             <td>
                                 {currencyFormat(
                                     Number(
@@ -193,7 +198,7 @@ const Summary = ({onHide, setSubtitle}) => {
                             </td>
                         </tr>
                         <tr>
-                            <th>Cash Out (Drawer In) Summary</th>
+                            <th>Cash Out From Drawer In</th>
                             <td>
                                 {currencyFormat(
                                     reduxValues.wizardCashOuts.drawerIn
@@ -214,7 +219,7 @@ const Summary = ({onHide, setSubtitle}) => {
                             </td>
                         </tr>
                         <tr>
-                            <th>Cash Out (Drawer Out) Summary</th>
+                            <th>Cash Out From Drawer Out</th>
                             <td>
                                 {currencyFormat(
                                     reduxValues.wizardCashOuts.drawerOut
@@ -236,8 +241,12 @@ const Summary = ({onHide, setSubtitle}) => {
                         </tr>
                         <tr className="bg-secondary text-color-white">
                             <th>
-                                Cash Out Summary( Cash Out DrawerIn + Cash Out
-                                DrawerOut)
+                                <label
+                                    title="( Cash Out DrawerIn + Cash Out
+                                        DrawerOut)"
+                                >
+                                    Cash Out Summary
+                                </label>
                             </th>
                             <td>
                                 {currencyFormat(
@@ -384,8 +393,12 @@ const Summary = ({onHide, setSubtitle}) => {
                         </tr>
                         <tr>
                             <th>
-                                Expected Drawer(Ammount supposed to be in to
-                                drawers)
+                                <label
+                                    title="(Ammount supposed to be in to
+                                        drawers)"
+                                >
+                                    Expected Drawer
+                                </label>
                             </th>
                             <td>{currencyFormat(expectedDrawerBackCoins)}</td>
                             <td>{currencyFormat(expectedDrawerBackBills)}</td>
@@ -395,8 +408,12 @@ const Summary = ({onHide, setSubtitle}) => {
                         </tr>
                         <tr>
                             <th>
-                                Expected Safe Cash(Ammount supposed to be in to
-                                Safe Cash)
+                                <label
+                                    title="(Ammount supposed to be in to
+                                Safe Cash)"
+                                >
+                                    Expected Safe Cash
+                                </label>
                             </th>
                             <td>
                                 {currencyFormat(
@@ -449,7 +466,9 @@ const Summary = ({onHide, setSubtitle}) => {
                         </tr>
                         <tr>
                             <th>
-                                Real Drawers (Real Ammount Values in drawers)
+                                <label title="(Real Ammount Values in drawers)">
+                                    Real Drawers
+                                </label>
                             </th>
                             <td>
                                 {currencyFormat(
@@ -469,8 +488,12 @@ const Summary = ({onHide, setSubtitle}) => {
                         </tr>
                         <tr>
                             <th>
-                                Real Drawer Safe Cash (Real Values captured by
-                                the manager in safe Cash)
+                                <label
+                                    title="(Real Values captured by
+                                the manager in Safe Cash)"
+                                >
+                                    Real Drawer Safe Cash
+                                </label>
                             </th>
                             <td>
                                 {currencyFormat(
