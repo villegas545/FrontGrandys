@@ -394,7 +394,7 @@ const Summary = ({onHide, setSubtitle}) => {
                         <tr>
                             <th>
                                 <label
-                                    title="(Ammount supposed to be in to
+                                    title="(Ammount supposed to be into
                                         drawers)"
                                 >
                                     Expected Drawer
@@ -409,7 +409,7 @@ const Summary = ({onHide, setSubtitle}) => {
                         <tr>
                             <th>
                                 <label
-                                    title="(Ammount supposed to be in to
+                                    title="(Ammount supposed to be into
                                 Safe Cash)"
                                 >
                                     Expected Safe Cash
