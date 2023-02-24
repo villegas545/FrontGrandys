@@ -7,7 +7,7 @@ import {useWizard} from 'react-use-wizard';
 const ModalDrawerOut = ({idRow, block, setForm, form, error, setSubTitle}) => {
     const {nextStep} = useWizard();
     useEffect(() => {
-        setSubTitle('Please Register The Drawer Out');
+        setSubTitle('Please register the Owed To The House Ammount!');
     }, []);
     return (
         <>

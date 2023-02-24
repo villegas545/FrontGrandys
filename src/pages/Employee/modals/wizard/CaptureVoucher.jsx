@@ -74,154 +74,154 @@ const CaptureVoucher = ({setSubtitle}) => {
         });
         //! vouchersin
         const vouchersIns = {};
-        vouchersIns.arrays = request.filter((item) => item.type === 'In');
+        vouchersIns.array = request.filter((item) => item.type === 'In');
 
-        vouchersIns.penniesTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.penniesTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.pennies),
             0
         );
-        vouchersIns.nickelsTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.nickelsTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.nickels),
             0
         );
-        vouchersIns.dimesTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.dimesTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.dimes),
             0
         );
-        vouchersIns.quartersTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.quartersTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.quarters),
             0
         );
-        vouchersIns.penniesRollTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.penniesRollTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.penniesRoll),
             0
         );
-        vouchersIns.nickelsRollTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.nickelsRollTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.nickelsRoll),
             0
         );
-        vouchersIns.dimesRollTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.dimesRollTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.dimesRoll),
             0
         );
-        vouchersIns.quartersRollTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.quartersRollTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.dimesRoll),
             0
         );
-        vouchersIns.onesTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.onesTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.ones),
             0
         );
-        vouchersIns.twosTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.twosTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.twos),
             0
         );
-        vouchersIns.fivesTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.fivesTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.fives),
             0
         );
-        vouchersIns.tensTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.tensTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.tens),
             0
         );
-        vouchersIns.twentiesTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.twentiesTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.twenties),
             0
         );
-        vouchersIns.fiftiesTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.fiftiesTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.fifties),
             0
         );
-        vouchersIns.hundredsTotalTotal = vouchersIns.arrays.reduce(
+        vouchersIns.hundredsTotalTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.hundreds),
             0
         );
-        vouchersIns.coinsTotal = vouchersIns.arrays.reduce(
+        vouchersIns.coinsTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.coinsTotal),
             0
         );
-        vouchersIns.billsTotal = vouchersIns.arrays.reduce(
+        vouchersIns.billsTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.billsTotal),
             0
         );
-        vouchersIns.grandTotal = vouchersIns.arrays.reduce(
+        vouchersIns.grandTotal = vouchersIns.array.reduce(
             (a, b) => Number(a) + Number(b.grandTotal),
             0
         );
 
         //! vouchersout
         const vouchersOuts = {};
-        vouchersOuts.arrays = request.filter((item) => item.type === 'Out');
+        vouchersOuts.array = request.filter((item) => item.type === 'Out');
 
-        vouchersOuts.penniesTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.penniesTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.pennies),
             0
         );
-        vouchersOuts.nickelsTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.nickelsTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.nickels),
             0
         );
-        vouchersOuts.dimesTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.dimesTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.dimes),
             0
         );
-        vouchersOuts.quartersTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.quartersTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.quarters),
             0
         );
-        vouchersOuts.penniesRollTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.penniesRollTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.penniesRoll),
             0
         );
-        vouchersOuts.nickelsRollTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.nickelsRollTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.nickelsRoll),
             0
         );
-        vouchersOuts.dimesRollTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.dimesRollTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.dimesRoll),
             0
         );
-        vouchersOuts.quartersRollTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.quartersRollTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.dimesRoll),
             0
         );
-        vouchersOuts.onesTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.onesTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.ones),
             0
         );
-        vouchersOuts.twosTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.twosTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.twos),
             0
         );
-        vouchersOuts.fivesTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.fivesTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.fives),
             0
         );
-        vouchersOuts.tensTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.tensTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.tens),
             0
         );
-        vouchersOuts.twentiesTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.twentiesTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.twenties),
             0
         );
-        vouchersOuts.fiftiesTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.fiftiesTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.fifties),
             0
         );
-        vouchersOuts.hundredsTotalTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.hundredsTotalTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.hundreds),
             0
         );
-        vouchersOuts.coinsTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.coinsTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.coinsTotal),
             0
         );
-        vouchersOuts.billsTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.billsTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.billsTotal),
             0
         );
-        vouchersOuts.grandTotal = vouchersOuts.arrays.reduce(
+        vouchersOuts.grandTotal = vouchersOuts.array.reduce(
             (a, b) => Number(a) + Number(b.grandTotal),
             0
         );
@@ -229,188 +229,182 @@ const CaptureVoucher = ({setSubtitle}) => {
         //        otro
         //! Voucher drawertosafe
         const vouchersDrawerToSafe = {};
-        vouchersDrawerToSafe.arrays = request.filter(
+        vouchersDrawerToSafe.array = request.filter(
             (item) => item.type === 'DrawerToSafe'
         );
 
         vouchersDrawerToSafe.penniesTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.pennies),
                 0
             );
         vouchersDrawerToSafe.nickelsTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.nickels),
                 0
             );
         vouchersDrawerToSafe.dimesTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.dimes),
                 0
             );
         vouchersDrawerToSafe.quartersTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.quarters),
                 0
             );
         vouchersDrawerToSafe.penniesRollTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.penniesRoll),
                 0
             );
         vouchersDrawerToSafe.nickelsRollTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.nickelsRoll),
                 0
             );
         vouchersDrawerToSafe.dimesRollTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.dimesRoll),
                 0
             );
         vouchersDrawerToSafe.quartersRollTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.dimesRoll),
                 0
             );
-        vouchersDrawerToSafe.onesTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
-                (a, b) => Number(a) + Number(b.ones),
-                0
-            );
-        vouchersDrawerToSafe.twosTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
-                (a, b) => Number(a) + Number(b.twos),
-                0
-            );
+        vouchersDrawerToSafe.onesTotalTotal = vouchersDrawerToSafe.array.reduce(
+            (a, b) => Number(a) + Number(b.ones),
+            0
+        );
+        vouchersDrawerToSafe.twosTotalTotal = vouchersDrawerToSafe.array.reduce(
+            (a, b) => Number(a) + Number(b.twos),
+            0
+        );
         vouchersDrawerToSafe.fivesTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.fives),
                 0
             );
-        vouchersDrawerToSafe.tensTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
-                (a, b) => Number(a) + Number(b.tens),
-                0
-            );
+        vouchersDrawerToSafe.tensTotalTotal = vouchersDrawerToSafe.array.reduce(
+            (a, b) => Number(a) + Number(b.tens),
+            0
+        );
         vouchersDrawerToSafe.twentiesTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.twenties),
                 0
             );
         vouchersDrawerToSafe.fiftiesTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.fifties),
                 0
             );
         vouchersDrawerToSafe.hundredsTotalTotal =
-            vouchersDrawerToSafe.arrays.reduce(
+            vouchersDrawerToSafe.array.reduce(
                 (a, b) => Number(a) + Number(b.hundreds),
                 0
             );
-        vouchersDrawerToSafe.coinsTotal = vouchersDrawerToSafe.arrays.reduce(
+        vouchersDrawerToSafe.coinsTotal = vouchersDrawerToSafe.array.reduce(
             (a, b) => Number(a) + Number(b.coinsTotal),
             0
         );
-        vouchersDrawerToSafe.billsTotal = vouchersDrawerToSafe.arrays.reduce(
+        vouchersDrawerToSafe.billsTotal = vouchersDrawerToSafe.array.reduce(
             (a, b) => Number(a) + Number(b.billsTotal),
             0
         );
-        vouchersDrawerToSafe.grandTotal = vouchersDrawerToSafe.arrays.reduce(
+        vouchersDrawerToSafe.grandTotal = vouchersDrawerToSafe.array.reduce(
             (a, b) => Number(a) + Number(b.grandTotal),
             0
         );
 
         //! SafeToDrawer
         const vouchersSafeToDrawer = {};
-        vouchersSafeToDrawer.arrays = request.filter(
+        vouchersSafeToDrawer.array = request.filter(
             (item) => item.type === 'SafeToDrawer'
         );
 
         vouchersSafeToDrawer.penniesTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.pennies),
                 0
             );
         vouchersSafeToDrawer.nickelsTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.nickels),
                 0
             );
         vouchersSafeToDrawer.dimesTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.dimes),
                 0
             );
         vouchersSafeToDrawer.quartersTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.quarters),
                 0
             );
         vouchersSafeToDrawer.penniesRollTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.penniesRoll),
                 0
             );
         vouchersSafeToDrawer.nickelsRollTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.nickelsRoll),
                 0
             );
         vouchersSafeToDrawer.dimesRollTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.dimesRoll),
                 0
             );
         vouchersSafeToDrawer.quartersRollTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.dimesRoll),
                 0
             );
-        vouchersSafeToDrawer.onesTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
-                (a, b) => Number(a) + Number(b.ones),
-                0
-            );
-        vouchersSafeToDrawer.twosTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
-                (a, b) => Number(a) + Number(b.twos),
-                0
-            );
+        vouchersSafeToDrawer.onesTotalTotal = vouchersSafeToDrawer.array.reduce(
+            (a, b) => Number(a) + Number(b.ones),
+            0
+        );
+        vouchersSafeToDrawer.twosTotalTotal = vouchersSafeToDrawer.array.reduce(
+            (a, b) => Number(a) + Number(b.twos),
+            0
+        );
         vouchersSafeToDrawer.fivesTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.fives),
                 0
             );
-        vouchersSafeToDrawer.tensTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
-                (a, b) => Number(a) + Number(b.tens),
-                0
-            );
+        vouchersSafeToDrawer.tensTotalTotal = vouchersSafeToDrawer.array.reduce(
+            (a, b) => Number(a) + Number(b.tens),
+            0
+        );
         vouchersSafeToDrawer.twentiesTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.twenties),
                 0
             );
         vouchersSafeToDrawer.fiftiesTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.fifties),
                 0
             );
         vouchersSafeToDrawer.hundredsTotalTotal =
-            vouchersSafeToDrawer.arrays.reduce(
+            vouchersSafeToDrawer.array.reduce(
                 (a, b) => Number(a) + Number(b.hundreds),
                 0
             );
-        vouchersSafeToDrawer.coinsTotal = vouchersSafeToDrawer.arrays.reduce(
+        vouchersSafeToDrawer.coinsTotal = vouchersSafeToDrawer.array.reduce(
             (a, b) => Number(a) + Number(b.coinsTotal),
             0
         );
-        vouchersSafeToDrawer.billsTotal = vouchersSafeToDrawer.arrays.reduce(
+        vouchersSafeToDrawer.billsTotal = vouchersSafeToDrawer.array.reduce(
             (a, b) => Number(a) + Number(b.billsTotal),
             0
         );
-        vouchersSafeToDrawer.grandTotal = vouchersSafeToDrawer.arrays.reduce(
+        vouchersSafeToDrawer.grandTotal = vouchersSafeToDrawer.array.reduce(
             (a, b) => Number(a) + Number(b.grandTotal),
             0
         );

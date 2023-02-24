@@ -16,7 +16,7 @@ const ModalDrawerIn = ({
 }) => {
     const {nextStep} = useWizard();
     useEffect(() => {
-        setSubTitle('Please Register The Drawer In');
+        setSubTitle('Please Register Whats Left In The Drawer!');
     }, []);
     return (
         <>

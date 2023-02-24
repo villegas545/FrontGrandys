@@ -55,6 +55,62 @@ const dataInitial = {
         hundreds: 0,
         total: 0
     },
+    wizardExpectedDrawer: {
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreds: 0,
+        total: 0
+    },
+    wizardExpectedEndTotal: {
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreds: 0,
+        total: 0
+    },
+    wizardRealTotalValues: {
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreds: 0,
+        total: 0
+    },
+    wizardDiferenceTotal: {
+        pennies: 0,
+        nickels: 0,
+        dimes: 0,
+        quarters: 0,
+        ones: 0,
+        twos: 0,
+        fives: 0,
+        tens: 0,
+        twenties: 0,
+        fifties: 0,
+        hundreds: 0,
+        total: 0
+    },
     wizardDate: '',
     totalTotal: 0
 };
@@ -90,48 +146,6 @@ export const getSafeCashAction = (formData) => async (dispatch, getState) => {
         ).data.response;
         console.log(res);
         const totalTotal = 0;
-        /* res = res.map((element) => {
-            console.log(element);
-            const coinsTotal =
-                (element.pennies +
-                    element.nickels * 5 +
-                    element.dimes * 10 +
-                    element.quarters * 25) /
-                100;
-            console.log(coinsTotal);
-            const billsTotal =
-                element.ones +
-                element.twos * 2 +
-                element.fives * 5 +
-                element.tens * 10 +
-                element.twenties * 20 +
-                element.fifties * 50 +
-                element.hundreds * 100;
-            console.log(billsTotal);
-
-            totalTotal =
-                Number(totalTotal) + Number(coinsTotal) + Number(billsTotal);
-            console.log(totalTotal);
-            console.log(currencyFormat(coinsTotal));
-            element.coinsTotal = currencyFormat(coinsTotal);
-            element.billsTotal = currencyFormat(billsTotal);
-            element.currencyinitSafe = currencyFormat(element.initSafe);
-            element.currencyVouchersIn = currencyFormat(element.vouchersIn);
-            element.currencyVouchersOut = currencyFormat(element.vouchersOut);
-            element.currencyDiference = currencyFormat(
-                element.expectedAmount - element.realAmount
-            );
-            element.currencyExpectedAmount = currencyFormat(
-                element.expectedAmount
-            );
-            element.currencyCashIn = element.cashIn;
-            element.currencyCashOut = element.cashOut;
-
-            element.grandTotal = currencyFormat(element.realAmount);
-            element.restaurant = element.Restaurant.name;
-            element.user = element.User.name;
-            return element;
-        }); */
 
         res = res.map((item) => {
             item.jsonValues.wizardCashIns.grandTotalCurrency = currencyFormat(
@@ -334,6 +348,27 @@ export default function safeCashReducer(state = dataInitial, action) {
                 ...state,
                 wizardSafeDrawerOut: action.data.total
             };
+        case 'wizardExpectedDrawer':
+            return {
+                ...state,
+                wizardExpectedDrawer: action.data.expectedValues
+            };
+        case 'wizardExpectedEndTotal':
+            return {
+                ...state,
+                wizardExpectedEndTotal: action.data.expectedValues
+            };
+        case 'wizardRealTotalValues':
+            return {
+                ...state,
+                wizardRealTotalValues: action.data.expectedValues
+            };
+        case 'wizardDiferenceTotal':
+            return {
+                ...state,
+                wizardDiferenceTotal: action.data.expectedValues
+            };
+
         default:
             return state;
     }

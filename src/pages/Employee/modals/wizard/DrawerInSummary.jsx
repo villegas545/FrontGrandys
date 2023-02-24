@@ -297,8 +297,36 @@ const DrawerInSummary = ({setSubtitle}) => {
                     .hundredsTotalTotal
             );
 
-            const cashInByManagerAndDate = await getCashInByDate(dateState);
-
+            let cashInByManagerAndDate = await getCashInByDate(dateState);
+            cashInByManagerAndDate = cashInByManagerAndDate.map((item) => {
+                const coinsTotalArray =
+                    (Number(item.pennies) +
+                        Number(item.nickels * 5) +
+                        Number(item.dimes * 10) +
+                        Number(item.quarters * 25)) /
+                        100 +
+                    (Number(item.penniesRoll * 50) +
+                        Number(item.nickelsRoll * 5 * 40) +
+                        Number(item.dimesRoll * 10 * 50) +
+                        Number(item.quartersRoll * 25 * 40)) /
+                        100;
+                const billsTotalArray =
+                    Number(item.ones) +
+                    Number(item.twos * 2) +
+                    Number(item.fives * 5) +
+                    Number(item.tens * 10) +
+                    Number(item.twenties * 20) +
+                    Number(item.fifties * 50) +
+                    Number(item.hundreads * 100);
+                return {
+                    ...item,
+                    coinsTotal: coinsTotalArray,
+                    billsTotal: billsTotalArray,
+                    grandTotal:
+                        Number(coinsTotalArray) + Number(billsTotalArray),
+                    hundreds: item.hundreads
+                };
+            });
             const totalCashIn = {
                 pennies: 0,
                 nickels: 0,
@@ -357,7 +385,7 @@ const DrawerInSummary = ({setSubtitle}) => {
                 Number(totalCashIn.hundreds * 100);
             totalCashIn.grandTotal =
                 Number(totalCashIn.coinsTotal) + Number(totalCashIn.billsTotal);
-            totalCashIn.cashInArray = cashInByManagerAndDate;
+            totalCashIn.array = cashInByManagerAndDate;
             dispatch(
                 wizardVoucher({
                     type: 'wizardCashIns',
@@ -579,8 +607,58 @@ const DrawerInSummary = ({setSubtitle}) => {
                 Number(totalCashOut.drawerOut.coinsTotal) +
                 Number(totalCashOut.drawerOut.billsTotal);
             // termina drawer out
-            totalCashOut.cashOutArray = cashOutByManagerAndDate;
-            console.log(totalCashOut);
+            totalCashOut.array = cashOutByManagerAndDate;
+            totalCashOut.nickels =
+                Number(totalCashOut.drawerIn.nickels) +
+                Number(totalCashOut.drawerOut.nickels);
+            totalCashOut.dimes =
+                Number(totalCashOut.drawerIn.dimes) +
+                Number(totalCashOut.drawerOut.dimes);
+            totalCashOut.quarters =
+                Number(totalCashOut.drawerIn.quarters) +
+                Number(totalCashOut.drawerOut.quarters);
+            totalCashOut.penniesRoll =
+                Number(totalCashOut.drawerIn.penniesRoll) +
+                Number(totalCashOut.drawerOut.penniesRoll);
+            totalCashOut.nickelsRoll =
+                Number(totalCashOut.drawerIn.nickelsRoll) +
+                Number(totalCashOut.drawerOut.nickelsRoll);
+            totalCashOut.dimesRoll =
+                Number(totalCashOut.drawerIn.dimesRoll) +
+                Number(totalCashOut.drawerOut.dimesRoll);
+            totalCashOut.quartersRoll =
+                Number(totalCashOut.drawerIn.quartersRoll) +
+                Number(totalCashOut.drawerOut.quartersRoll);
+            totalCashOut.ones =
+                Number(totalCashOut.drawerIn.ones) +
+                Number(totalCashOut.drawerOut.ones);
+            totalCashOut.twos =
+                Number(totalCashOut.drawerIn.twos) +
+                Number(totalCashOut.drawerOut.twos);
+            totalCashOut.fives =
+                Number(totalCashOut.drawerIn.fives) +
+                Number(totalCashOut.drawerOut.fives);
+            totalCashOut.tens =
+                Number(totalCashOut.drawerIn.tens) +
+                Number(totalCashOut.drawerOut.tens);
+            totalCashOut.twenties =
+                Number(totalCashOut.drawerIn.twenties) +
+                Number(totalCashOut.drawerOut.twenties);
+            totalCashOut.fifties =
+                Number(totalCashOut.drawerIn.fifties) +
+                Number(totalCashOut.drawerOut.fifties);
+            totalCashOut.hundreds =
+                Number(totalCashOut.drawerIn.hundreds) +
+                Number(totalCashOut.drawerOut.hundreds);
+            totalCashOut.coinsTotal =
+                Number(totalCashOut.drawerIn.coinsTotal) +
+                Number(totalCashOut.drawerOut.coinsTotal);
+            totalCashOut.billsTotal =
+                Number(totalCashOut.drawerIn.billsTotal) +
+                Number(totalCashOut.drawerOut.billsTotal);
+            totalCashOut.grandTotal =
+                Number(totalCashOut.drawerIn.grandTotal) +
+                Number(totalCashOut.drawerOut.grandTotal);
             dispatch(
                 wizardVoucher({
                     type: 'wizardCashOuts',

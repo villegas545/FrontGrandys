@@ -105,7 +105,7 @@ const columns = [
         accessor: 'jsonValues.wizardSafeDrawerOut.real.grandTotalCurrency'
     },
     {
-        Header: 'real Total',
+        Header: 'Real Total',
         accessor: 'jsonValues.wizardRealTotal.realGrandTotalCurrency'
     },
     {
