@@ -174,7 +174,12 @@ const DrawerInSummary = ({setSubtitle}) => {
                                     grandTotal: 0,
                                     nickelsRoll: 0,
                                     penniesRoll: 0,
-                                    quartersRoll: 0
+                                    quartersRoll: 0,
+                                    real: {
+                                        coinsTotal: 0,
+                                        billsTotal: 0,
+                                        grandTotal: 0
+                                    }
                                 }
                             }
                         }
